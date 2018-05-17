@@ -45,10 +45,10 @@ app.get('/home', function(req,res,next){
 });
 app.get('/home', home.homepage);
 app.post('/authenticate', 
- passport.authenticate('local', {
-     successRedirect: '/home',
-     failureRedirect: '/'
- })
+    passport.authenticate('local', {
+        successRedirect: '/home',
+        failureRedirect: '/'
+    })
 );
 app.get('/logout', application.destroySession);
 app.get('/signup', user.signUp);
@@ -56,6 +56,13 @@ app.post('/register', user.register);
 app.get('/hihi', (req,res)=>{
     res.render('hihi', {user:req.user});
 })
+app.get('/kakao', passport.authenticate('kakao'));
+app.get('/oauth/kakao', 
+    passport.authenticate('kakao',{
+        successRedirect : '/home',
+        failureRedirect : '/'
+    })
+);
 
 db
 .sequelize 
@@ -66,13 +73,3 @@ app.listen(app.get('port'), ()=>{
 })
 
 
-// .then(function(err){
-//     if(err){
-//         console.log('here');
-//         throw err[0]
-//     }else {
-//         http.createServer(app).listen(app.get('port'), function(){
-//             console.log('Express is listening on port' + app.get('port'));
-//         });
-//     }
-// })
