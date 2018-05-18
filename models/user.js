@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
    
   User.validPassword = function(password, passwd, done, user){
     bcrypt.compare(password, passwd, function(err, res){
-      if(err) console.log(err);
+      if(err){
+        // return done(null, false, { message: '잘못된 패스워드입니다' });
+      }
       if(res){
           return done(null, user);
       }else {

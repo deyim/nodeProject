@@ -1,5 +1,8 @@
-<a href="/kakao"> 카카오 계정 </a>
-<form action="/authenticate" method="POST">
+{{!-- <a href="/auth/kakao"> 카카오 계정 </a> --}}
+{{#if errorMsg}}
+    <p>{{errorMsg}}</p>
+{{/if}}
+<form action="/auth/authenticate" method="POST">
     <div>
         <label>Username:</label>
         <input type="text" name="username"/>
