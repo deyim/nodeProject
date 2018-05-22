@@ -1,18 +1,20 @@
+const vhost = require('vhost');
 var app = require('./config/express.js')();
-var passport = require('./config/passport.js')(app);
-var db = require('./models/index');
+const passport = require('./config/passport.js')(app);
+const db = require('./models/index');
+
+const master = require('./master/index.js');
+const admin = require('./admin/index.js');
 
 app.use(function(req, res, next) {
     res.locals.user = req.user; // This is the important line
-    console.log('res locals\n\n',res.locals);
-    console.log('res locals user\n\n',res.locals.user);
     next();
 });
+app.use(vhost('master.sosohang.com',master));
+app.use(vhost('admin.sosohang.com', admin));
 
 var authRoutes = require('./app/routes/auth_routes')(passport);
 app.use('/auth', authRoutes);
-// var indexRoutes = require('./app/routes/index_routes');
-// app.use('/',indexRoutes);
 
 app.get('/', (req,res)=>{
     console.log(res.locals.user);
@@ -22,9 +24,6 @@ app.get('/', (req,res)=>{
 app.get('/failure', (req,res)=>{
     res.send("Login failed");
 })
-
-
-
 
 db
 .sequelize 

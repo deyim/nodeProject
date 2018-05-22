@@ -8,13 +8,7 @@ module.exports = (passport) => {
     route.get('/login', (req,res)=>{
         res.render('auth/login');
     });
-    // route.post('/authenticate', 
-    //     passport.authenticate('local', {
-    //         successRedirect: '/',
-    //         failureFlash: true,
-    //         failureRedirect: '/auth/login'   
-    //     })
-    // );
+    
     route.post('/authenticate', function(req, res, next) {
         passport.authenticate('local', function(err, user, info) {
           if (err) {
