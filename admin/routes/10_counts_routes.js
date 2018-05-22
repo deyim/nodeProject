@@ -3,7 +3,7 @@ module.exports = ()=>{
     const route = express.Router();
 
     route.get('/', (req,res)=>{
-        res.send('MASTER');
+        
     });
 
     return route;
