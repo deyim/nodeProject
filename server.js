@@ -17,9 +17,12 @@ var authRoutes = require('./app/routes/auth_routes')(passport);
 app.use('/auth', authRoutes);
 
 app.get('/', (req,res)=>{
-    console.log(res.locals.user);
-    res.render('index/home', {user:req.user});
+    res.render('index/home');
 })
+// app.get('/', (req,res)=>{
+//     console.log(res.locals.user);
+//     res.render('index/home', {user:req.user});
+// })
 
 app.get('/failure', (req,res)=>{
     res.send("Login failed");
