@@ -1,0 +1,16 @@
+<ul>
+    <li><a href="/">Home</a></li>
+</ul>
+
+<ul>
+    <li>
+        {{!-- <p>{{user}}</p> --}}
+       {{#if user }}
+            <p>{{user.nickname}}</p>
+            <a href="/auth/logout">logout</a>
+        {{else}}
+             <a href="/auth/login">Login</a>
+             <a href="/auth/signup">Signup</a>
+       {{/if}}        
+    </li>
+</ul>

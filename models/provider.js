@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
   Provider.associate = function(models) {
-    // associations can be defined here
+      Provider.belongsTo(models.User);
   };
   return Provider;
 };

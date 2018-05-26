@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const app = express();
+const passport = require('../config/passport.js')(app);
 const bodyParser = require('body-parser');
 
 var hbs = exphbs.create({
@@ -16,8 +17,12 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req,res)=>{
-    res.send('index');
-})
+    res.render('index');
+});
+app.get('/main', (req,res)=>{
+    res.render('main');
+});
+const authRoutes = require('./routes/auth_routes')(passport);
 const membersRoutes = require('./routes/1_members_routes')();
 const approvalsRoutes = require('./routes/2_approvals_routes')();
 const storesRoutes = require('./routes/3_stores_routes')();
@@ -28,6 +33,7 @@ const codesRoutes = require('./routes/7_codes_routes')();
 const categoriesRoutes = require('./routes/8_categories_routes')();
 const contentsRoutes = require('./routes/9_contents_routes')();
 const countsRoutes = require('./routes/10_counts_routes')();
+app.use('/auth', authRoutes);
 app.use('/members', membersRoutes);
 app.use('/approvals', approvalsRoutes);
 app.use('/stores', storesRoutes);
