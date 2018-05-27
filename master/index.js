@@ -8,20 +8,21 @@ const bodyParser = require('body-parser');
 var hbs = exphbs.create({
     defaultLayout: 'main',
     partialsDir: path.join(__dirname, './views/partials'),
-    layoutsDir: './master/views/layouts'
+    layoutsDir: path.join(__dirname, './views/layouts'),
 });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, './views'));
-app.use(express.static('public'));
+// app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '/views/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req,res)=>{
-    res.render('index');
+    res.render('index', {layout: false, error:req.session.error});
 });
-app.get('/main', (req,res)=>{
-    res.render('main');
-});
+// app.get('/main', (req,res)=>{
+//     res.render('main');
+// });
 const authRoutes = require('./routes/auth_routes')(passport);
 const membersRoutes = require('./routes/1_members_routes')();
 const approvalsRoutes = require('./routes/2_approvals_routes')();

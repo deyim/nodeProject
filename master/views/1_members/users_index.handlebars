@@ -1,1 +1,9 @@
 <h1>USERS_INDEX</h1>
+{{#each users}}
+    {{this.id}}
+    <a href="users/{{this.id}}">{{this.nickname}}</a>
+    {{this.createdAt}}
+    {{this.loginDate}}
+    {{this.loginCnt}}
+    <br>
+{{/each}}
