@@ -1,49 +1,37 @@
 module.exports = ()=>{
     const express = require('express');
     const route = express.Router();
-    const membersController = require('../controllers/1_members_controller');
+    const controller = require('../controllers/1_members_controller');
 
     //users - index
-    route.get('/users', membersController.usersIndex);
-    //users - search
-    // route.get('/users/', membersController.usersSearch);
+    route.get('/users', controller.usersIndex);
     //users - show
-    route.get('/users/:user_id', membersController.findUser, membersController.usersShow);    
+    route.get('/users/:user_id', controller.findUser, controller.usersShow);    
     //users - update
-    route.post('/users/:user_id', membersController.findUser, membersController.usersUpdate);
+    route.post('/users/:user_id', controller.findUser, controller.usersUpdate);
     //users - delete
-    route.get('/users/:user_id/delete', membersController.findUser, membersController.usersDelete);
+    route.get('/users/:user_id/delete', controller.findUser, controller.usersDelete);
     //users - send messages
     //공통인데 어떻게 구현할지 생각해보자. 
 
     //providers - index
-    route.get('/providers', membersController.providersIndex);
-    //providers - search
-    route.get('/1', membersController.providersSearch);
-    //providers - create
-    // route.post('/providers/create', membersController.providersCreate);
+    route.get('/providers', controller.providersIndex);
     //providers - show
-    // route.get('/providers/:id', membersController.providersShow);
-    //providers - edit
-    route.get('/providers/:id/edit', membersController.providersEdit);
+    route.get('/providers/:provider_id',  controller.findProvider, controller.providersShow);
     //providers - update
-    route.put('/providers/:id/update', membersController.providersUpdate);
+    route.post('/providers/:provider_id/', controller.findProvider, controller.providersUpdate);
     //providers - delete
-    // route.delete('/providers/:id/delete', membersController.providersDelete);
+    route.get('/providers/:provider_id/delete', controller.findProvider, controller.providersDelete);
     // //providers - send messages
 
     //stores - index
-    route.get('/stores', membersController.storesIndex);
-    //stores - search
-    route.get('/1', membersController.storesSearch);
+    route.get('/stores', controller.storesIndex);
     //stores - show
-    route.get('/stores/:id', membersController.storesShow);
-    //stores - edit
-    route.get('/stores/:id/edit', membersController.storesEdit);
+    route.get('/stores/:id', controller.findStore, controller.storesShow);
     //stores - update
-    route.put('/stores/:id/update', membersController.storesUpdate);
+    route.post('/stores/:id/', controller.findStore, controller.storesUpdate);
     //stores - delete
-    // route.delete('/stores/:id/delete', membersController.storesDelete);
+    route.get('/stores/:id/delete', controller.findStore, controller.storesDelete);
     
-    return route;
+    return route; 
 }

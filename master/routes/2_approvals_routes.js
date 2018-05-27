@@ -1,10 +1,17 @@
 module.exports = ()=>{
     const express = require('express');
     const route = express.Router();
+    const controller = require('../controllers/2_approvals_controller');
 
-    route.get('/', (req,res)=>{
-        
-    });
+    //stores - index
+    route.get('/stores', controller.storesIndex);
+    //stores - show
+    route.get('/stores/:id', controller.findStore, controller.storesShow);
+    //stores - update
+    route.post('/stores/:id/', controller.findStore, controller.storesUpdate);
+    //stores - delete
+    route.get('/stores/:id/delete', controller.findStore, controller.storesDelete);
+    
 
     return route;
 }

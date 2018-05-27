@@ -30,28 +30,17 @@ module.exports = {
             let q = req.query;
             db.User.findAll({
                 where:{
-                    [Op.or]:[
-                        {
-                            createdAt: {
+                    [Op.or]:
+                    [
+                        {createdAt: {
                                 [Op.gte]: q.startdate ? q.startdate : null,
                                 [Op.lte]: q.enddate ? q.enddate : null,
                             }
                         },
-                        {
-                            username: q.username 
-                            // q.username ? ["username = ?", q.username] : null
-                            // username: q.username
-                        },
-                        {
-                            nickname: q.nickname
-                            // nickname: q.nickname ? ["username = ?", q.nickname] : null
-                        },
-                        {
-                            recEmail: q.recEmail
-                        },
-                        {
-                            recSMS: q.recSMS
-                        }
+                        { username: q.username },
+                        { nickname: q.nickname },
+                        { recEmail: q.recEmail },
+                        { recSMS: q.recSMS }
                     ]                    
                 }
             })
@@ -60,8 +49,7 @@ module.exports = {
             })
         }
            
-    },
-    
+    },    
     //users - show
     usersShow: (req,res)=>{     
         res.render('1_members/users_show', {user:req.user, today:Date.now()});
@@ -82,25 +70,25 @@ module.exports = {
     //users - send messages
     //공통인데 어떻게 구현할지 생각해보자. 
 
+    findProvider: (req,res,next)=>{
+        db.Provider.findById(req.params.provider_id)
+        .then(provider=>{
+            if(!provider){
+                req.flash('error', '없는 유저입니다.');
+                res.redirect('/members/providers');
+            }
+            req.provider = provider;
+            next();
+        })
+    },
+
     //providers - index
     providersIndex: (req,res)=>{
         res.render('1_members/providers_index');
     },
-    //providers - search
-    providersSearch: (req,res)=>{
-        console.log("aa");
-    },
-    //providers - create
-    providersCreate: (req,res)=>{
-        ;
-    },
     //providers - show
     rprovidersShow: (req,res)=>{
         res.render('1_members/providers_show');
-    },
-    //providers - edit
-    providersEdit: (req,res)=>{
-        res.render('1_members/providers_edit');
     },
     //providers - update
     providersUpdate: (req,res)=>{
@@ -112,21 +100,25 @@ module.exports = {
     },
     //providers - send messages
 
+
+    findStore: (req,res,next)=>{
+        db.Store.findById(req.params.store_id)
+        .then(store=>{
+            if(!store){
+                req.flash('error', '없는 유저입니다.');
+                res.redirect('/members/stores');
+            }
+            req.store = store;
+            next();
+        })
+    },
     //stores - index
     storesIndex: (req,res)=>{
         res.render('1_members/stores_index');
     },
-    //stores - search
-    storesSearch: (req,res)=>{
-        
-    },
     //stores - show
     storesShow: (req,res)=>{
         res.render('1_members/stores_show');
-    },
-    //stores - edit
-    storesEdit: (req,res)=>{
-        res.render('1_members/stores_edit');
     },
     //stores - update
     storesUpdate: (req,res)=>{
