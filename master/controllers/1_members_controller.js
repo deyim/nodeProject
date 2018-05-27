@@ -2,6 +2,8 @@
 // const route = express.Router();
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
+const Op = db.Sequelize.Op
+// const queryString = require('query-string');
 
 module.exports = {
     findUser: (req,res,next)=>{
@@ -17,18 +19,52 @@ module.exports = {
     },
     //users - index
     usersIndex: (req,res)=>{
-        db.User.findAll()
-        .then(users=>{
-            res.render('1_members/users_index', {users});
-        });            
+        console.log('\n\n\n\n*******\n\n',req.query);
+        if(Object.keys(req.query).length === 0){
+            db.User.findAll()
+            .then(users=>{
+                res.render('1_members/users_index', {users});
+            });   
+        }      
+        else{
+            let q = req.query;
+            db.User.findAll({
+                where:{
+                    [Op.or]:[
+                        {
+                            createdAt: {
+                                [Op.gte]: q.startdate ? q.startdate : null,
+                                [Op.lte]: q.enddate ? q.enddate : null,
+                            }
+                        },
+                        {
+                            username: q.username 
+                            // q.username ? ["username = ?", q.username] : null
+                            // username: q.username
+                        },
+                        {
+                            nickname: q.nickname
+                            // nickname: q.nickname ? ["username = ?", q.nickname] : null
+                        },
+                        {
+                            recEmail: q.recEmail
+                        },
+                        {
+                            recSMS: q.recSMS
+                        }
+                    ]                    
+                }
+            })
+            .then(users=>{
+                res.render('1_members/users_index', {users});
+            })
+        }
+           
     },
-    //users - search
-    usersSearch: (req,res)=>{
-        ;
-    },
+    
     //users - show
     usersShow: (req,res)=>{     
-        res.render('1_members/users_show', {user:req.user});
+        res.render('1_members/users_show', {user:req.user, today:Date.now()});
     },   
     //users - update
     usersUpdate: (req,res)=>{

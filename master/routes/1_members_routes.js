@@ -6,7 +6,7 @@ module.exports = ()=>{
     //users - index
     route.get('/users', membersController.usersIndex);
     //users - search
-    // route.get('/users/1000', membersController.usersSearch);
+    // route.get('/users/', membersController.usersSearch);
     //users - show
     route.get('/users/:user_id', membersController.findUser, membersController.usersShow);    
     //users - update
