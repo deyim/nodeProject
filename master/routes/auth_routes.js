@@ -12,8 +12,9 @@ module.exports = (passport) => {
           }
           // Generate a JSON response reflecting authentication status
           if (!user) {
-            req.session.error = '잘못된 아이디 혹은 비밀번호입니다.';
-            return res.redirect('/');
+            // req.flash('error','잘못된 아이디 혹은 비밀번호입니다.');
+            // req.session.error = '잘못된 아이디 혹은 비밀번호입니다.';
+            return res.redirect('/login-failure');
           }
           req.login(user, function(err){
             if(err){
@@ -21,15 +22,14 @@ module.exports = (passport) => {
             }
             console.log('\n\n\n*****\n\n',user.providerChk)
             if(db.User.ifMaster(user)){ 
-                if(req.session.error){
-                  delete req.session.error;
-                }               
-                return res.redirect('/members/users');
+                // if(req.session.error){
+                //   delete req.session.error;
+                // }               
+                return res.redirect('/main');
             }
             else{
                 return next("관리자가 아닙니다.");
-            }
-            // return res.redirect('/');        
+            }    
           });
         })(req, res, next);
       });

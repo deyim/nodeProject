@@ -12,6 +12,7 @@ module.exports = {
             }
             req.store = store;
             next();
+            
         });
     },
     storesIndex: (req,res)=>{

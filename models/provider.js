@@ -47,8 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     rateType: {
-      type: DataTypes.STRING(1),
-      allowNull: false
+      type: DataTypes.STRING(1)
     },
     monthFee: {
       type: DataTypes.INTEGER,

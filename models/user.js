@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
 
 
   User.associate = function(models) {
-    User.hasOne(models.Provider);
+    User.hasOne(models.Provider, {as: 'Provider'});
   };
 
   User.validPassword = function(password, passwd, done, user){

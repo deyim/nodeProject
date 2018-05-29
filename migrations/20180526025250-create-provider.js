@@ -65,7 +65,6 @@ module.exports = {
       },
       rateType: {
         type: Sequelize.STRING(1),
-        allowNull: false
       },
       monthFee: {
         type: Sequelize.INTEGER,

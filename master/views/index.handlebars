@@ -9,6 +9,6 @@
     </div>
     <input type="submit" value="login"/>
 </form>
-{{#if error}}
-    <p>{{error}}</p>
+{{#if sessionFlash.sessionFlash}}
+    <p>{{sessionFlash.sessionFlash}}</p>
 {{/if}}

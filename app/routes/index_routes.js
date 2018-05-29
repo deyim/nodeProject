@@ -7,6 +7,7 @@ module.exports =() => {
         console.log("render index home page!!!")
         res.render('index/home');
     })
-        
+
+          
     return route;
 }

@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 const passport = require('../config/passport.js')(app);
 const bodyParser = require('body-parser');
+const flash = require('connect-flash');
 
 var hbs = exphbs.create({
     defaultLayout: 'main',
@@ -16,9 +17,32 @@ app.set('views', path.join(__dirname, './views'));
 // app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, '/views/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(flash());
+
+app.use(function(req, res, next){
+    // if there's a flash message in the session request, make it available in the response, then delete it
+    res.locals.sessionFlash = req.session.sessionFlash;
+    delete req.session.sessionFlash;
+    next();
+});
+
+app.all('/login-failure', function( req, res ) {
+    req.session.sessionFlash = {
+        type: 'success',
+        message: 'This is a flash message using custom middleware and express-session.'
+    }
+    console.log(req.session.sessionFlash);
+    res.redirect(301, '/');
+});
 
 app.get('/', (req,res)=>{
-    res.render('index', {layout: false, error:req.session.error});
+    console.log('\n\n\n',res.locals.sessionFlash);
+    res.render('index', {layout: false, });
+    // res.render('index', {layout: false, error:req.session.error});
+});
+app.get('/main', (req,res)=>{
+    res.render('dashboard');
+    // res.render('index', {layout: false, error:req.session.error});
 });
 // app.get('/main', (req,res)=>{
 //     res.render('main');

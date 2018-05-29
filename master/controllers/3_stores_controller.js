@@ -3,29 +3,29 @@ const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
 
 module.exports = {
-    findStore: (req,res,next)=>{
-        db.Store.findById(req.params.store_id)
-        .then(store=>{
-            if(!store){
-                req.flash('error', '없는 유저입니다.');
-                res.redirect('/members/stores');
+    findProduct: (req,res,next)=>{
+        db.Product.findById(req.params.product_id)
+        .then(product=>{
+            if(!product){
+                req.flash('error', '없는 상품입니다.');
+                res.redirect('/stores/products');
             }
-            req.store = store;
+            req.product = product;
             next();
         });
     },
-    storesIndex: (req,res)=>{
+    productsIndex: (req,res)=>{
 
     },
 
-    storesShow: (req,res)=>{
+    productsShow: (req,res)=>{
 
     },
-    storesUpdate: (req,res)=>{
+    productsUpdate: (req,res)=>{
         
     },
     //stores - delete
-    storesDelete: (req,res)=>{
+    productsDelete: (req,res)=>{
         
     },
 
@@ -66,18 +66,18 @@ module.exports = {
             next();
         });
     },
-    messageIndex: (req,res)=>{
+    messagesIndex: (req,res)=>{
 
     },
 
-    messageShow: (req,res)=>{
+    messagesShow: (req,res)=>{
 
     },
-    messageUpdate: (req,res)=>{
+    messagesUpdate: (req,res)=>{
         
     },
     //stores - delete
-    messageDelete: (req,res)=>{
+    messagesDelete: (req,res)=>{
         
     },
 
