@@ -57,7 +57,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       defaultValue: 0
     },
-  }, {});
+  }, {
+    paranoid: true,
+  });
   Provider.associate = function(models) {
       Provider.belongsTo(models.User);
   };

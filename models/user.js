@@ -44,11 +44,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-  }, {});
+  }, {
+    paranoid: true,
+  });
 
 
   User.associate = function(models) {
-    User.hasOne(models.Provider, {as: 'Provider'});
+    User.hasOne(models.Provider);
   };
 
   User.validPassword = function(password, passwd, done, user){

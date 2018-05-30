@@ -44,9 +44,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     }
-  }, {});
+  }, {
+    paranoid: true,
+  });
   Store.associate = function(models) {
-    // associations can be defined here
+    Store.hasOne(models.Categoryfill, {as: Category});
+    Store.hasOne(models.Market);
+    Store.hasMany(models.Board);
   };
   return Store;
 };

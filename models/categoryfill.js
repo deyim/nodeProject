@@ -37,9 +37,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     }
-  }, {});
+  }, {
+    paranoid: true,
+  });
   Categoryfill.associate = function(models) {
-    // associations can be defined here
+   Categoryfill.belongsTo(models.Store);
   };
   return Categoryfill;
 };

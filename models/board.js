@@ -6,9 +6,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     introduction: DataTypes.STRING(50)
-  }, {});
+  }, {
+    paranoid: true,    
+  });
   Board.associate = function(models) {
-    // associations can be defined here
+     Board.belongsTo(models.Store);
   };
   return Board;
 };
