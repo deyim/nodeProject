@@ -19,22 +19,6 @@ app.use(express.static(path.join(__dirname, '/views/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 
-app.use(function(req, res, next){
-    // if there's a flash message in the session request, make it available in the response, then delete it
-    res.locals.sessionFlash = req.session.sessionFlash;
-    delete req.session.sessionFlash;
-    next();
-});
-
-app.all('/login-failure', function( req, res ) {
-    req.session.sessionFlash = {
-        type: 'success',
-        message: 'This is a flash message using custom middleware and express-session.'
-    }
-    console.log(req.session.sessionFlash);
-    res.redirect(301, '/');
-});
-
 app.get('/', (req,res)=>{
     var errorMsg = null;
     if(res.locals.message.error!=undefined){
@@ -45,11 +29,8 @@ app.get('/', (req,res)=>{
 });
 app.get('/main', (req,res)=>{
     res.render('dashboard');
-    // res.render('index', {layout: false, error:req.session.error});
 });
-// app.get('/main', (req,res)=>{
-//     res.render('main');
-// });
+
 const authRoutes = require('./routes/auth_routes')(passport);
 const membersRoutes = require('./routes/1_members_routes')();
 const approvalsRoutes = require('./routes/2_approvals_routes')();

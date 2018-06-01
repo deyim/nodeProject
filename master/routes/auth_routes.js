@@ -16,7 +16,7 @@ module.exports = (passport) => {
             req.session.message = req.flash();   
             return res.redirect('/');
           }
-          console.log('\n\n\n***', db.User.checkStatus(user));
+          
           if(db.User.checkStatus(user)==='M'){
             user.update({
               loginDate: new Date(),
@@ -39,21 +39,6 @@ module.exports = (passport) => {
             req.session.message = req.flash();   
             return res.redirect('/');
           }
-          // req.login(user, function(err){
-          //   if(err){
-          //     return next(err);
-          //   }
-          //   // console.log('\n\n\n*****\n\n',user.providerChk)
-          //   // if(db.User.ifMaster(user)){ 
-          //   //     // if(req.session.error){
-          //   //     //   delete req.session.error;
-          //   //     // }               
-          //   //     return res.redirect('/main');
-          //   // }
-          //   // else{
-          //   //     return next("관리자가 아닙니다.");
-          //   // }    
-          // });
         })(req, res, next);
       });
 
