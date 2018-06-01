@@ -10,26 +10,26 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       username: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },
       email: {
-        type: Sequelize.STRING(40),
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },
       password: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING,
         allowNull: false
       },
       nickname: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },
       phone: {
-        type: Sequelize.STRING(15)
+        type: Sequelize.STRING
       },
       loginDate: {
         type: Sequelize.DATE
@@ -47,15 +47,12 @@ module.exports = {
         defaultValue: true
       },
       photoPath: {
-        type: Sequelize.STRING(150)
-      },
-      providerChk: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-      },
-      masterChk: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+        type: Sequelize.STRING
+      },      
+      userStatus:{
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'U'
       },
       createdAt: {
         allowNull: false,
@@ -63,6 +60,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt: {
         type: Sequelize.DATE
       }
     });

@@ -1,7 +1,6 @@
 module.exports = function(app){
     const passport = require('passport')
     const LocalStrategy = require('passport-local').Strategy
-    const KakaoStrategy = require('passport-kakao').Strategy
     const db = require('../models/index');
     const bcrypt = require('bcrypt');
     app.use(passport.initialize());
@@ -27,9 +26,7 @@ module.exports = function(app){
             db.User.find({where: {username: username}})
             .then((user)=>{
                 if(!user){
-                    console.log('no username');
-                    return done(null, false, { message: '잘못된 메일입니다.' });
-                    // return done(null, false, req.flash('잘못된 이메일입니다.'));
+                    return done(null, false);
                 }
                 return db.User.validPassword(password, user.password, done, user);
             });

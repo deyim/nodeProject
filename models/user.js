@@ -4,24 +4,24 @@ var bcrypt = require('bcrypt');
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
     username: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true
     },
     email: {
-      type: DataTypes.STRING(40),
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true
     },
     password: {
-      type: DataTypes.STRING(150),
+      type: DataTypes.STRING,
       allowNull: false,
     },
     nickname: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    phone: DataTypes.STRING(15),
+    phone: DataTypes.STRING,
     loginDate: DataTypes.DATE,
     loginCnt: {
       type: DataTypes.INTEGER,
@@ -35,22 +35,27 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: true
     },
-    photoPath: DataTypes.STRING(150),
-    providerChk: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
-    masterChk: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
+    photoPath: DataTypes.STRING, 
+    userStatus:{
+      type: DataTypes.STRING,
+      defaultValue: 'U'
+      //user:U / provider:P / master:M
+    }
   }, {
+    hooks: {
+      afterValidate: (user)=>{
+        console.log('validation');
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(user.password, salt);
+        user.password = hash;
+      }
+    },
     paranoid: true,
   });
 
 
   User.associate = function(models) {
-    User.hasOne(models.Provider);
+    // User.hasOne(models.Provider);
   };
 
   User.validPassword = function(password, passwd, done, user){
@@ -66,22 +71,8 @@ module.exports = (sequelize, DataTypes) => {
     });
   }
 
-  User.ifProvider = (user)=>{
-    if(user.providerChk){
-      return true
-    }
-    else{
-      return false;
-    }
-  }
-
-  User.ifMaster = (user)=>{
-    if(user.masterChk){
-      return true
-    }
-    else{
-      return false;
-    }
+  User.checkStatus = (user)=>{
+    return user.status;
   }
 
   return User;

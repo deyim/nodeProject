@@ -12,6 +12,7 @@ db
 
 app.use(function(req, res, next) {
     res.locals.user = req.user; // This is the important line
+    res.locals.message = req.session.message || {};
     next();
 });
 app.use(vhost('master.sosohang.com',master));

@@ -40,6 +40,8 @@ module.exports = (sequelize, DataTypes) => {
     storeLogoPath: {
       type: DataTypes.STRING(100),
     },
+    //store representative image
+    //multer -> images store
     approvalChk: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
