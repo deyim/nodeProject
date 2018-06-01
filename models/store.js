@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
     },
     introduction: {
-      type: DataTypes.STRING(50)
+      type: DataTypes.STRING(100)
     },
     memberCnt: {
       type: DataTypes.INTEGER,
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(20),
     },
     rateType: {
-      type: DataTypes.STRING(20)
+      type: DataTypes.STRING(2)
     },
     monthFee: {
       type: DataTypes.INTEGER,
@@ -40,8 +40,9 @@ module.exports = (sequelize, DataTypes) => {
     storeLogoPath: {
       type: DataTypes.STRING(100),
     },
-    //store representative image
-    //multer -> images store
+    storeImgPath:{
+      type: DataTypes.STRING(100)
+    },
     approvalChk: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
@@ -50,9 +51,10 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: true,
   });
   Store.associate = function(models) {
-    Store.hasOne(models.Categoryfill, {as: Category});
-    Store.hasOne(models.Market);
-    Store.hasMany(models.Board);
+    Store.hasOne(models.Categoryfill, {as: 'category'});
+    Store.hasOne(models.Market, {as: 'market'});
+    Store.hasMany(models.Board, {as: 'board'});
+    Store.belongsTo(models.Provider, {as: 'provider'});
   };
   return Store;
 };

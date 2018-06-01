@@ -6,7 +6,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn(
       'Providers',
-      'UserId',
+      'userId',
       {
         type: Sequelize.INTEGER,
         references: {
@@ -16,13 +16,32 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       }
-    )
+    ).then(()=>{
+      queryInterface.addColumn(
+        'Masters',
+        'userId',
+        {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Users', // name of Target model
+            key: 'id', // key in Target model that we're referencing
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        }
+      )
+    })
   },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.removeColumn(
       'Providers',
-      'UserId'
-    )
+      'userId'
+    ).then(()=>{
+      queryInterface.removeColumn(
+        'Masters',
+        'userId'
+      )
+    })
   }
 };

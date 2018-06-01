@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(20),
       allowNull:false
     }
-  }, {});
+  },{});
   Tag.associate = function(models) {
     // associations can be defined here
   };

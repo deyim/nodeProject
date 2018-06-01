@@ -6,9 +6,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     introduction: DataTypes.STRING(50)
-  }, {});
+  }, {
+    paranoid: true
+  });
   Market.associate = function(models) {
-    Market.belongsTo(models.Store);
+    Market.belongsTo(models.Store, {as: 'store'});
+    Market.belongsTo(models.Provider, {as: 'provider'});
   };
   return Market;
 };

@@ -2,52 +2,52 @@
 module.exports = (sequelize, DataTypes) => {
   var Provider = sequelize.define('Provider', {
     companyName: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING,
       unique: true
     },
     companyNumber:{
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING,
       unique: true
     },
     companyType: {
-      type: DataTypes.STRING(3),
+      type: DataTypes.STRING,
       allowNull: false
     },
     CEO: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING,
       allowNull: false
     },
-    corporateNumber: DataTypes.STRING(50),
-    businessType: DataTypes.STRING(50),
-    businessCategory: DataTypes.STRING(50),
-    commuNumber: DataTypes.STRING(50),
+    corporateNumber: DataTypes.STRING,
+    businessType: DataTypes.STRING,
+    businessCategory: DataTypes.STRING,
+    commuNumber: DataTypes.STRING,
     CEONumber: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING,
       allowNull: false
     },
-    faxNumber: DataTypes.STRING(20),
+    faxNumber: DataTypes.STRING,
     staffName: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING,
       allowNull: false
     },
     staffNumber: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING,
       allowNull: false
     },
     accountNumber: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING,
       allowNull: false
     },
     accountName: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING,
       allowNull: false
     },
     accountBank: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING,
       allowNull: false
     },
     rateType: {
-      type: DataTypes.STRING(1)
+      type: DataTypes.STRING
     },
     monthFee: {
       type: DataTypes.INTEGER,
@@ -61,7 +61,9 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: true,
   });
   Provider.associate = function(models) {
-      Provider.belongsTo(models.User);
+      Provider.belongsTo(models.User, {as: 'user'});
+      Provider.hasMany(models.Store, {as: 'store'});
+      Provider.hasMany(models.Board, {as: 'board'});
   };
   return Provider;
 };

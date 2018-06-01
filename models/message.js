@@ -5,9 +5,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     }
-  }, {});
+  }, {
+    paranoid: true
+  });
   Message.associate = function(models) {
-    // associations can be defined here
+    Message.hasOne(Sentmessage, {as: 'sentMessage', foreignKey: 'messageId'});
   };
   return Message;
 };

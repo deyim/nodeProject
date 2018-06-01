@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   var Categoryfill = sequelize.define('Categoryfill', {
     hotel: {
@@ -41,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: true,
   });
   Categoryfill.associate = function(models) {
-   Categoryfill.belongsTo(models.Store);
+   Categoryfill.belongsTo(models.Store, {as: 'store'});
   };
   return Categoryfill;
 };

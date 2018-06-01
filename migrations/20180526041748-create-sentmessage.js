@@ -1,19 +1,21 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Markets', {
+    return queryInterface.createTable('Sentmessages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      title: {
-        type: Sequelize.STRING(20),
-        allowNull: false
+      receiverDel: {
+        type: Sequelize.BOOLEAN
       },
-      introduction: {
-        type: Sequelize.STRING(50)
+      senderDel: {
+        type: Sequelize.BOOLEAN
+      },
+      ifRead: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -22,10 +24,13 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      deletedAt: {
+        type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Markets');
+    return queryInterface.dropTable('Sentmessages');
   }
 };

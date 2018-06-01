@@ -9,12 +9,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         unique: true,
         allowNull: false
       },
       authority: {
-        type: Sequelize.STRING(1),
+        type: Sequelize.STRING,
         defaultValue: 'A'
       },
       createdAt: {
@@ -23,6 +23,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt:{
         type: Sequelize.DATE
       }
     });

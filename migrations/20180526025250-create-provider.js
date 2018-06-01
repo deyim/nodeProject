@@ -9,62 +9,62 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       companyName: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         unique: true
       },
       companyNumber: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING,
         allowNull: false
       },
       companyType: {
-        type: Sequelize.STRING(3),
+        type: Sequelize.STRING,
         allowNull: false
       },
       CEO: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         allowNull: false
       },
       corporateNumber: {
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING
       },
       businessType: {
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING
       },
       businessCategory: {
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING
       },
       commuNumber: {
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING
       },
       CEONumber: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING,
         allowNull: false
       },
       faxNumber: {
-        type: Sequelize.STRING(20)
+        type: Sequelize.STRING
       },
       staffName: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         allowNull: false
       },
       staffNumber: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING,
         allowNull: false
       },
       accountNumber: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         allowNull: false
       },
       accountName: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING,
         allowNull: false
       },
       accountBank: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING,
         allowNull: false
       },
       rateType: {
-        type: Sequelize.STRING(1),
+        type: Sequelize.STRING,
       },
       monthFee: {
         type: Sequelize.INTEGER,
@@ -80,6 +80,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt:{
         type: Sequelize.DATE
       }
     });

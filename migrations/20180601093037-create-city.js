@@ -17,7 +17,17 @@ module.exports = {
       },
       updatedAt: {
         type: Sequelize.DATE
+      },
+      nationId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Nations', // name of Target model
+          key: 'id', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       }
+
     });
   },
   down: (queryInterface, Sequelize) => {

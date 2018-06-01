@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   City.associate = function(models) {
-    // associations can be defined here
+    City.belongsTo(models.Nation, {as: 'nation'});
   };
   return City;
 };

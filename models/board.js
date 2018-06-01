@@ -5,12 +5,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(20),
       allowNull: false
     },
-    introduction: DataTypes.STRING(50)
+    introduction: DataTypes.STRING(100)
   }, {
     paranoid: true,    
   });
   Board.associate = function(models) {
-     Board.belongsTo(models.Store);
+     Board.belongsTo(models.Store, {as: 'store'});
+     Board.belongsTo(models.Provider, {as: 'provider'});
+    //  Board.hasMany(models.Post, {as: 'post'});
   };
   return Board;
 };

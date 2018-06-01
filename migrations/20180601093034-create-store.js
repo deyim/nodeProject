@@ -18,7 +18,7 @@ module.exports = {
         unique: true
       },
       introduction: {
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING(100)
       },
       memberCnt: {
         type: Sequelize.INTEGER,
@@ -34,7 +34,7 @@ module.exports = {
         type: Sequelize.STRING(20)
       },
       rateType: {
-        type: Sequelize.STRING(20)
+        type: Sequelize.STRING(2)
       },
       monthFee: {
         type: Sequelize.INTEGER
@@ -43,6 +43,9 @@ module.exports = {
         type: Sequelize.FLOAT
       },
       storeLogoPath: {
+        type: Sequelize.STRING(100)
+      },
+      storeImgPath:{
         type: Sequelize.STRING(100)
       },
       approvalChk: {
@@ -55,6 +58,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt: {
         type: Sequelize.DATE
       }
     });
