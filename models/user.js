@@ -72,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   User.checkStatus = (user)=>{
-    return user.status;
+    return user.userStatus;
   }
 
   return User;

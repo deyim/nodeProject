@@ -21,21 +21,27 @@ module.exports = (passport) => {
             return next(err); // will generate a 500 error
           }
           if (!user) {
-            console.log('\n\nno user!!!');
             req.flash( "error" , "잘못된 아이디 혹은 비밀번호입니다.");
             req.session.message = req.flash();   
             return res.redirect('/auth/login');
           }
           else{
-            req.login(user, function(err){
-              if(err){
-                return next(err);
-              }
-              if(res.locals.message){
-                delete res.locals.message;
-              }    
-              return res.redirect('/');        
-            });
+            //통계 1늘리기
+            user.update({
+              loginDate: new Date(),
+              loginCnt: user.loginCnt+1
+            })
+            .then(()=>{
+              req.login(user, function(err){
+                if(err){
+                  return next(err);
+                }
+                if(res.locals.message){
+                  delete res.locals.message;
+                }    
+                return res.redirect('/');        
+              });
+            });            
           }
         })(req, res, next);
       });

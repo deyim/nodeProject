@@ -36,9 +36,12 @@ app.all('/login-failure', function( req, res ) {
 });
 
 app.get('/', (req,res)=>{
-    console.log('\n\n\n',res.locals.sessionFlash);
-    res.render('index', {layout: false, });
-    // res.render('index', {layout: false, error:req.session.error});
+    var errorMsg = null;
+    if(res.locals.message.error!=undefined){
+      errorMsg = res.locals.message.error[0];
+    }
+    req.session.message = [];
+    res.render('index', {layout: false, message: errorMsg});
 });
 app.get('/main', (req,res)=>{
     res.render('dashboard');
