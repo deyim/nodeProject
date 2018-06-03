@@ -6,6 +6,7 @@ const Op = db.Sequelize.Op
 // const queryString = require('query-string');
 
 module.exports = {
+    //middleware, find a user by id
     findUser: (req,res,next)=>{
         db.User.findById(req.params.user_id)
         .then(user=>{
@@ -77,26 +78,37 @@ module.exports = {
                 req.flash('error', '없는 스토어회원입니다.');
                 res.redirect('/members/providers');
             }
-            user = provider.getUser();
-            // stores = provider.getStores();
-
-            //maybe we need to promise 'em
             req.provider = provider;
-            req.user = user;
-            req.stores = stores;
+            provider.getUser(user=>{
+                req.user = user;
+            })
+            db.Store.findAll({
+                include: [
+                    {
+                        model: db.Provider, 
+                        as: 'provider', 
+                        foreignKey: 'providerId',
+                        where: {
+                            id: provider.id
+                        }
+                    }
+                ]
+            })
+            .then(stores=>{
+                req.stores = stores;
+                next();
+            });          
             
-            next();
         })
-        //스토어 자체도 받아와야되나??;; 
     },
 
     //providers - index
     providersIndex: (req,res)=>{
-        // console.log('\n\n\n\n*******\n\n',req.query);
+
         if(Object.keys(req.query).length === 0){
-            db.User.findAll()
-            .then(users=>{
-                res.render('1_members/providers_index', {users});
+            db.Provider.findAll()
+            .then(providers=>{
+                res.render('1_members/providers_index', {providers});
             });   
         }      
         else{
@@ -144,8 +156,10 @@ module.exports = {
     providersShow: (req,res)=>{
         res.render('1_members/providers_show', 
             {
-                provider:req.provider, user: req.user, 
-                stores: req.stores, today:Date.now()
+                provider:req.provider, 
+                user: req.user, 
+                stores: req.stores, 
+                today:Date.now()
             }
         );
         //고치는거는 스토어회원 정보만 고치는거로 하자. 

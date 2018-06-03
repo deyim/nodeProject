@@ -15,10 +15,9 @@
 
 {{#each providers}}
     {{this.email}}
-    <a href="users/{{this.id}}">{{this.nickname}}</a>
+     <a href="members/providers/{{this.id}}">{{this.companyName}}</a><br>
     {{this.companyName}}
-    {{!-- {{this.storeCnt}} --}}
+    {{this.storeCnt}}
     {{this.createdAt}}
-    
     <br>
 {{/each}}

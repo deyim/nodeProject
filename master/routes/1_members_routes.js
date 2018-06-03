@@ -5,10 +5,9 @@ module.exports = ()=>{
 
     //users - index
     route.get('/users', controller.usersIndex);
-    //users - show
-    route.get('/users/:user_id', controller.findUser, controller.usersShow);    
-    //users - update
-    route.post('/users/:user_id', controller.findUser, controller.usersUpdate);
+    //users - show, update
+    route.get('/users/:user_id', controller.findUser, controller.usersShow)
+        .post('/users/:user_id', controller.findUser, controller.usersUpdate);   
     //users - delete
     route.get('/users/:user_id/delete', controller.findUser, controller.usersDelete);
     //users - send messages
@@ -17,9 +16,8 @@ module.exports = ()=>{
     //providers - index
     route.get('/providers', controller.providersIndex);
     //providers - show
-    route.get('/providers/:provider_id',  controller.findProvider, controller.providersShow);
-    //providers - update
-    route.post('/providers/:provider_id/', controller.findProvider, controller.providersUpdate);
+    route.get('/providers/:provider_id',  controller.findProvider, controller.providersShow)
+        .post('/providers/:provider_id', controller.findProvider, controller.providersUpdate);
     //providers - delete
     route.get('/providers/:provider_id/delete', controller.findProvider, controller.providersDelete);
     // //providers - send messages
@@ -27,9 +25,8 @@ module.exports = ()=>{
     //stores - index
     route.get('/stores', controller.storesIndex);
     //stores - show
-    route.get('/stores/:id', controller.findStore, controller.storesShow);
-    //stores - update
-    route.post('/stores/:id/', controller.findStore, controller.storesUpdate);
+    route.get('/stores/:id', controller.findStore, controller.storesShow)
+    .post('/stores/:id/', controller.findStore, controller.storesUpdate);
     //stores - delete
     route.get('/stores/:id/delete', controller.findStore, controller.storesDelete);
     

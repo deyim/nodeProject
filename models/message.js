@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: true
   });
   Message.associate = function(models) {
-    Message.hasOne(Sentmessage, {as: 'sentMessage', foreignKey: 'messageId'});
+    Message.hasOne(models.Sentmessage, {as: 'sentMessage', foreignKey: 'messageId'});
   };
   return Message;
 };
