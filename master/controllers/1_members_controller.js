@@ -182,17 +182,6 @@ module.exports = {
 
 
     findStore: (req,res,next)=>{ 
-        // db.Provider.findOne({
-        //     include: [
-        //         {
-        //             model: db.Store,
-        //             as: 'store',
-        //             where: {
-                        
-        //             }
-        //         }
-        //     ]
-        // })       
         db.Store.findById(req.params.store_id)
         .then(store=>{
             if(!store){
