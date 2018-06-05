@@ -7,8 +7,6 @@ module.exports = ()=>{
     route.get('/stores', controller.storesIndex);
     //stores - show
     route.get('/stores/:id', controller.findStore, controller.storesShow);
-    //stores - update
-    route.post('/stores/:id/', controller.findStore, controller.storesUpdate);
     //stores - delete
     route.get('/stores/:id/delete', controller.findStore, controller.storesDelete);
     

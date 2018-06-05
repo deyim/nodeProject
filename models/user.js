@@ -59,6 +59,11 @@ module.exports = (sequelize, DataTypes) => {
     // User.hasOne(models.Master, {as: 'master'});
     User.hasMany(models.Sentmessage, {as: 'sendings', foreignKey: 'senderId'});
     User.hasMany(models.Sentmessage, {as: 'receivings', foreignKey: 'receiverId'});
+    User.belongsToMany(models.Store, {
+      through: 'StoreUsers',
+      as: 'stores',
+      foreignKey: 'userId'
+    });
   };
 
   User.validPassword = function(password, passwd, done, user){

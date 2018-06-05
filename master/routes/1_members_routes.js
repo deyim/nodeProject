@@ -25,8 +25,8 @@ module.exports = ()=>{
     //stores - index
     route.get('/stores', controller.storesIndex);
     //stores - show
-    route.get('/stores/:id', controller.findStore, controller.storesShow)
-    .post('/stores/:id/', controller.findStore, controller.storesUpdate);
+    route.get('/stores/:store_id', controller.findStore, controller.storesShow)
+        .post('/stores/:store_id/', controller.findStore, controller.storesUpdate);
     //stores - delete
     route.get('/stores/:id/delete', controller.findStore, controller.storesDelete);
     

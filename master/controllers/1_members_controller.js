@@ -104,7 +104,7 @@ module.exports = {
 
     //providers - index
     providersIndex: (req,res)=>{
-
+       
         if(Object.keys(req.query).length === 0){
             db.Provider.findAll()
             .then(providers=>{
@@ -113,6 +113,7 @@ module.exports = {
         }      
         else{
             let q = req.query;
+            console.log('\n\n***',q);
             // 아이디, 닉네임, 메일, SMS는 User에 => & provider인애?
             //OR 개설승인일 사업자명, 회원유형 => provider 
             db.Provider.findAll({
@@ -136,10 +137,10 @@ module.exports = {
                             {
                                 [Op.or]:
                                 [
-                                    {model: User, where:{username: q.username}},
-                                    {model: User, where:{nickname: q.nickname}},
-                                    {model: User, where:{recSMS: q.recSMS}},
-                                    {model: User, where:{recEmail: q.recEmail}},
+                                    {model: db.User, where:{username: q.username}},
+                                    {model: db.User, where:{nickname: q.nickname}},
+                                    {model: db.User, where:{recSMS: q.recSMS}},
+                                    {model: db.User, where:{recEmail: q.recEmail}},
                                 ]
                             }
                         ]
@@ -180,7 +181,18 @@ module.exports = {
     //providers - send messages
 
 
-    findStore: (req,res,next)=>{
+    findStore: (req,res,next)=>{ 
+        // db.Provider.findOne({
+        //     include: [
+        //         {
+        //             model: db.Store,
+        //             as: 'store',
+        //             where: {
+                        
+        //             }
+        //         }
+        //     ]
+        // })       
         db.Store.findById(req.params.store_id)
         .then(store=>{
             if(!store){
@@ -188,36 +200,61 @@ module.exports = {
                 res.redirect('/members/stores');
             }
             req.store = store;
-            next();
+            db.Provider.findById(store.provider_id)
+            .then(provider=>{
+                req.provider = provider;
+            })
+            db.User.findAll({
+                include: [{
+                  model: db.Store,
+                  as: 'stores',
+                  required: true,
+                  through: {attributes:[]}
+                }]
+            }).then(users=>{
+                req.users = users;
+                next();
+            })
+            // next();
         })
         //회원 정보도 다 가져와야돼??
         
     },
     //stores - index
     storesIndex: (req,res)=>{
+        
         if(Object.keys(req.query).length === 0){
-            db.User.findAll()
-            .then(users=>{
-                res.render('1_members/users_index', {users});
+            db.Store.findAll()
+            .then(stores=>{
+                res.render('1_members/stores_index', {stores});
             });   
         }      
         else{
             let q = req.query;
             db.Store.findAll({
-                where:{
-                    [Op.or]:
-                    [
-                        {createdAt: {
-                                [Op.gte]: q.startdate ? q.startdate : null,
-                                [Op.lte]: q.enddate ? q.enddate : null,
-                            }
-                        },
-                        { username: q.username },
-                        { nickname: q.nickname },
-                        { recEmail: q.recEmail },
-                        { recSMS: q.recSMS }
-                    ]                    
-                }
+                // [Op.or]:[{
+                    where:{
+                        [Op.or]:
+                        [
+                            {createdAt: {
+                                    [Op.gte]: q.startdate ? q.startdate : null,
+                                    [Op.lte]: q.enddate ? q.enddate : null,
+                                }
+                            },
+                            { url: q.url }
+                        ]                    
+                    },
+                    // include: [//provider 의 id, 사업자명, 회원유형
+                    //     {
+                    //         [Op.or]:
+                    //         [
+                    //             // {model: Provider, where:{username: q.username}},
+                    //             {model: db.Provider, where:{companyName: q.companyName}},
+                    //             {model: db.Provider, where:{companyType: q.companyType}},
+                    //         ]
+                    //     }
+                    // ]
+                // }]
             })
             .then(stores=>{
                 res.render('1_members/stores_index', {stores});
@@ -226,7 +263,7 @@ module.exports = {
     },
     //stores - show
     storesShow: (req,res)=>{
-        res.render('1_members/stores_show');
+        res.render('1_members/stores_show',{store:req.store, provider:req.provider, users:req.users});
     },
     //stores - update
     storesUpdate: (req,res)=>{

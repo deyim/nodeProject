@@ -53,8 +53,14 @@ module.exports = (sequelize, DataTypes) => {
   Store.associate = function(models) {
     Store.hasOne(models.Categoryfill, {as: 'category'});
     Store.hasOne(models.Market, {as: 'market'});
-    Store.hasMany(models.Board, {as: 'board'});
+    Store.hasMany(models.Board, {as: 'boards'});
     Store.belongsTo(models.Provider, {as: 'provider', foreignKey: 'providerId'});
+    Store.hasOne(models.Approval, {as: 'approval', foreignKey: 'approvalId'});
+    Store.belongsToMany(models.User, {
+      through: 'StoreUsers',
+      as: 'users',
+      foreignKey: 'storeId'
+    });
   };
   return Store;
 };
