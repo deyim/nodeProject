@@ -41,6 +41,15 @@ module.exports = ()=>{
     route.post('/comments/:id/', controller.findComment, controller.commentsUpdate);
     //comments - delete
     route.get('/comments/:id/delete', controller.findComment, controller.commentsDelete);
+
+    //comments - index
+    route.get('/notices', controller.noticesIndex);
+    //comments - show
+    route.get('/notices/:id', controller.findNotice, controller.noticesShow);
+    //comments - update
+    route.post('/notices/:id/', controller.findNotice, controller.noticesUpdate);
+    //comments - delete
+    route.get('/notices/:id/delete', controller.findNotice, controller.noticesDelete);
     
 
     return route;

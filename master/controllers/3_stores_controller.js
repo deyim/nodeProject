@@ -106,6 +106,31 @@ module.exports = {
     //stores - delete
     commentsDelete: (req,res)=>{
         
-    }
+    },
     
+    findNotice: (req,res,next)=>{
+        db.Comment.findById(req.params.comment_id)
+        .then(message=>{
+            if(!message){
+                req.flash('error', '없는 유저입니다.');
+                res.redirect('/members/comments');
+            }
+            req.comment = comment;
+            next();
+        });
+    },
+    noticesIndex: (req,res)=>{
+
+    },
+
+    noticesShow: (req,res)=>{
+
+    },
+    noticesUpdate: (req,res)=>{
+        
+    },
+    //stores - delete
+    noticesDelete: (req,res)=>{
+        
+    }
 }

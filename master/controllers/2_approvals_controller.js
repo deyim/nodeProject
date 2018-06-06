@@ -22,7 +22,7 @@ module.exports = {
             .then(store=>{
                 if(!store){
                     req.flash('error', '없는 스토어입니다.');
-                    res.redirect('/members/stores');
+                    res.redirect('/approvals/stores');
                 }
                 req.store = store;
                 next();
@@ -38,7 +38,7 @@ module.exports = {
                 }                
             })
             .then(stores=>{
-                res.render('1_members/stores_index', {stores});
+                res.render('2_approvals/stores_index', {stores});
             });   
         }      
         else{
@@ -76,13 +76,13 @@ module.exports = {
                 // }]
             })
             .then(stores=>{
-                res.render('1_members/stores_index', {stores});
+                res.render('2_approvals/stores_index', {stores});
             })
         }
     },
 
     storesShow: (req,res)=>{
-        res.render('1_members/stores_show',{store:req.store, approval:req.approval});
+        res.render('2_approvals/stores_show',{store:req.store, approval:req.approval});
     },
 
     //select -> approvalChk to true, approvalDate change(additional column)

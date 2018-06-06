@@ -6,15 +6,15 @@ module.exports = ()=>{
     route.get('/banners', controller.bannersIndex);
     route.get('/banners/adstory/add', controller.adstoryAdd)
         .post('/banners/adstory/add', controller.adstoryCreate);
-    route.get('/banners/adstory/:adstory_iddelete/', controller.adstoryDelete);
+    route.get('/banners/adstory/:adstory_id/delete/', controller.adstoryDelete);
 
     route.get('/banners/adstore/add', controller.adstoreAdd)
         .post('/banners/adstore/add', controller.adstoreCreate);
-    route.get('/banners/adstore/:adstore_iddelete/', controller.adstoreDelete);
+    route.get('/banners/adstore/:adstore_id/delete/', controller.adstoreDelete);
 
     route.get('/banners/adnewstore/add', controller.adnewstoreAdd)
         .post('/banners/adnewstore/add', controller.adnewstoreCreate);
-    route.get('/banners/adnewstore/:adnewstore_iddelete/', controller.adnewstoreDelete);
+    route.get('/banners/adnewstore/:adnewstore_id/delete/', controller.adnewstoreDelete);
 
     route.get('/banners/adaffiliation/add', controller.adaffiliationAdd)
         .post('/banners/adaffiliation/add', controller.adaffiliationCreate);

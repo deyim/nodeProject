@@ -5,7 +5,28 @@ const Op = db.Sequelize.Op
 module.exports = {
 
     bannersIndex: (req,res)=>{
+        db.AdStory.findAll()
+        .then(adstories=>{
+            req.adstories = adstories;
+        });
 
+        db.AdStore.findAll()
+        .then(adstores=>{
+            req.adstores = adstores;
+        });
+
+        db.AdNewstore.findAll()
+        .then(adnewstores=>{
+            req.adnewstores = adnewstores;
+        });
+
+        db.AdAffiliation.findAll()
+        .then(adaffiliations=>{
+            req.adaffiliations = adaffiliations;
+        });
+
+        res.render("");
+        
     },
 
     adstoryAdd: (req, res)=>{
