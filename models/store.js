@@ -54,6 +54,7 @@ module.exports = (sequelize, DataTypes) => {
     Store.hasOne(models.Categoryfill, {as: 'category'});
     Store.hasOne(models.Market, {as: 'market'});
     Store.hasMany(models.Board, {as: 'boards'});
+    Store.hasMany(models.Product, {as: 'products'});
     Store.belongsTo(models.Provider, {as: 'provider', foreignKey: 'providerId'});
     Store.hasOne(models.Approval, {as: 'approval', foreignKey: 'approvalId'});
     Store.belongsToMany(models.User, {
@@ -61,6 +62,8 @@ module.exports = (sequelize, DataTypes) => {
       as: 'users',
       foreignKey: 'storeId'
     });
+    //nation, city
+    
   };
   return Store;
 };

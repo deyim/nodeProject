@@ -15,44 +15,107 @@ module.exports = {
         });
     },
     productsIndex: (req,res)=>{
-
+        if(Object.keys(req.query).length === 0){
+            db.Product.findAll()
+            .then(products=>{
+                res.render('1_members/products_index', {products});
+            });   
+        }      
+        else{
+            let q = req.query;
+            db.Product.findAll({
+                where:{
+                    [Op.or]:
+                    [
+                        {createdAt: {
+                                [Op.gte]: q.startdate ? q.startdate : null,
+                                [Op.lte]: q.enddate ? q.enddate : null,
+                            }
+                        },
+                        { onSaleChk: q.onSaleChk },
+                        { onDisplayChk: q.onDisplayChk },
+                    ]   
+                    //상품코드, category (association included)                
+                }
+            })
+            .then(products=>{
+                res.render('3_stores/products_index', {products});
+            })
+        }
     },
 
     productsShow: (req,res)=>{
-
+        res.render('3_stores/products_show', {product:req.product, today:Date.now()});
     },
     productsUpdate: (req,res)=>{
-        
+        req.product.update(req.product)
+        .then(()=>{
+            req.session.alert = '수정되었습니다.'
+            res.redirect(`/stores/products/${req.product.id}`);
+        });
     },
     //stores - delete
     productsDelete: (req,res)=>{
-        
+        req.product.destroy();
+        res.redirect('/stores/products');
     },
 
     findPost: (req,res,next)=>{
         db.Post.findById(req.params.post_id)
         .then(post=>{
             if(!post){
-                req.flash('error', '없는 유저입니다.');
-                res.redirect('/members/posts');
+                req.flash('error', '없는 포스트입니다.');
+                res.redirect('/stores/posts');
             }
             req.post = post;
             next();
         });
     },
-    postsIndex: (req,res)=>{
 
+    postsIndex: (req,res)=>{
+        if(Object.keys(req.query).length === 0){
+            db.Post.findAll()
+            .then(posts=>{
+                res.render('1_members/posts_index', {posts});
+            });   
+        }      
+        else{
+            let q = req.query;
+            db.Post.findAll({
+                where:{
+                    [Op.or]:
+                    [
+                        {createdAt: {
+                                [Op.gte]: q.startdate ? q.startdate : null,
+                                [Op.lte]: q.enddate ? q.enddate : null,
+                            }
+                        },
+                        { title: q.title },
+                        { content: q.content },
+                    ]   
+                    //스토어url, 제목,내용 (association included)                
+                }
+            })
+            .then(posts=>{
+                res.render('3_stores/posts_index', {posts});
+            })
+        }
     },
 
     postsShow: (req,res)=>{
-
+        res.render('3_stores/posts_show', {post:req.post, today:Date.now()});
     },
     postsUpdate: (req,res)=>{
-        
+        req.post.update(req.post)
+        .then(()=>{
+            req.session.alert = '수정되었습니다.'
+            res.redirect(`/stores/posts/${req.post.id}`);
+        });
     },
     //stores - delete
     postsDelete: (req,res)=>{
-        
+        req.post.destroy();
+        res.redirect('/stores/posts');
     },
 
     findMessage: (req,res,next)=>{

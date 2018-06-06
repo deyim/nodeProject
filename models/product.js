@@ -22,9 +22,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     imagePath: DataTypes.STRING,
     policy: DataTypes.TEXT
-  }, {});
+  }, 
+  {
+    paranoid: true,
+  });
   Product.associate = function(models) {
     // associations can be defined here
+    Product.belongsTo(db.Provider, {as: 'provider'});
+    Product.belongsTo(db.Store, {as: 'store'});
+    Product.belongsTo(db.Category, {as: 'category'});
+    Product.belongsTo(db.Productcode, {as:'productcode'});
+    //city, nation, tag
+    
   };
   return Product;
 };
