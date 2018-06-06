@@ -64,6 +64,7 @@ module.exports = (sequelize, DataTypes) => {
       as: 'stores',
       foreignKey: 'userId'
     });
+    User.hasMany(models.Post, {as: 'posts', foreignKey: 'authorId'});
   };
 
   User.validPassword = function(password, passwd, done, user){

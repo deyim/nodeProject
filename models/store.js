@@ -62,6 +62,7 @@ module.exports = (sequelize, DataTypes) => {
       as: 'users',
       foreignKey: 'storeId'
     });
+    Store.hasMany(models.Post, {as: 'posts'});
     //nation, city
     
   };
