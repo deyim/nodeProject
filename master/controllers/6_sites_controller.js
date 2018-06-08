@@ -76,8 +76,12 @@ module.exports = {
     adaffiliationDelete: (req, res)=>{
 
     },
-    
+      
     findNotice: (req,res,next)=>{
+
+    },
+
+    noticesIndex: (req,res)=>{
 
     },
 
@@ -101,6 +105,9 @@ module.exports = {
 
     },
 
+    faqsIndex: (req,res)=>{
+
+    },
 
     findFaq: (req,res,next)=>{
 

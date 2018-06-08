@@ -8,7 +8,7 @@ module.exports = {
       {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users', // name of Target model
+          model: 'Providers', // name of Target model
           key: 'id', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
@@ -60,15 +60,15 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn('Proudcts','providerId')
+    return queryInterface.removeColumn('Products','providerId')
     .then(()=>{
-      queryInterface.removeColumn('Proudcts','storeId');
+      queryInterface.removeColumn('Products','storeId');
     })
     .then(()=>{
-      queryInterface.removeColumn('Proudcts','categoryId');
+      queryInterface.removeColumn('Products','categoryId');
     })
     .then(()=>{
-      queryInterface.removeColumn('Proudcts','productcodeId');
+      queryInterface.removeColumn('Products','productcodeId');
     })
   }
 };

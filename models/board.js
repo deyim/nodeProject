@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   Board.associate = function(models) {
      Board.belongsTo(models.Store, {as: 'store'});
      Board.belongsTo(models.Provider, {as: 'provider'});
-     Board.hasMany(models.Post, {as: 'posts'});
+     Board.hasMany(models.Post, {as: 'posts', foreignKey: 'boardId'});
   };
   return Board;
 };

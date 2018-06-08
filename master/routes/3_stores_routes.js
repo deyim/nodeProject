@@ -6,9 +6,8 @@ module.exports = ()=>{
     //products - index
     route.get('/products', controller.productsIndex);
     //products - show
-    route.get('/products/:id', controller.findProduct, controller.productsShow);
-    //products - update
-    route.post('/products/:id/', controller.findProduct, controller.productsUpdate);
+    route.get('/products/:product_id', controller.findProduct, controller.productsShow)
+        .post('/products/:product_id/', controller.findProduct, controller.productsUpdate);
     //products - delete
     route.get('/products/:id/delete', controller.findProduct, controller.productsDelete);
 
@@ -16,40 +15,37 @@ module.exports = ()=>{
     //posts - index
     route.get('/posts', controller.postsIndex);
     //posts - show
-    route.get('/posts/:id', controller.findPost, controller.postsShow);
-    //posts - update
-    route.post('/posts/:id/', controller.findPost, controller.postsUpdate);
+    route.get('/posts/:post_id', controller.findPost, controller.postsShow)
+        .post('/posts/:post_id/', controller.findPost, controller.postsUpdate);
     //posts - delete
-    route.get('/posts/:id/delete', controller.findPost, controller.postsDelete);
+    route.get('/posts/:post_id/delete', controller.findPost, controller.postsDelete);
 
 
      //messages - index
      route.get('/messages', controller.messagesIndex);
      //messages - show
-     route.get('/messages/:id', controller.findMessage, controller.messagesShow);
-     //messages - update
-     route.post('/messages/:id/', controller.findMessage, controller.messagesUpdate);
+     route.get('/messages/:message_id', controller.findMessage, controller.messagesShow);
      //messages - delete
-     route.get('/messages/:id/delete', controller.findMessage, controller.messagesDelete);
+     route.get('/messages/:messagae_id/delete', controller.findMessage, controller.messagesDelete);
 
 
     //comments - index
     route.get('/comments', controller.commentsIndex);
     //comments - show
-    route.get('/comments/:id', controller.findComment, controller.commentsShow);
+    route.get('/comments/:comment_id', controller.findComment, controller.commentsShow);
     //comments - update
-    route.post('/comments/:id/', controller.findComment, controller.commentsUpdate);
+    route.post('/comments/:comment_id/', controller.findComment, controller.commentsUpdate);
     //comments - delete
-    route.get('/comments/:id/delete', controller.findComment, controller.commentsDelete);
+    route.get('/comments/:comment_id/delete', controller.findComment, controller.commentsDelete);
 
     //comments - index
     route.get('/notices', controller.noticesIndex);
     //comments - show
-    route.get('/notices/:id', controller.findNotice, controller.noticesShow);
+    route.get('/notices/:notice_id', controller.findNotice, controller.noticesShow);
     //comments - update
-    route.post('/notices/:id/', controller.findNotice, controller.noticesUpdate);
+    route.post('/notices/:notice_id', controller.findNotice, controller.noticesUpdate);
     //comments - delete
-    route.get('/notices/:id/delete', controller.findNotice, controller.noticesDelete);
+    route.get('/notices/:notice_id/delete', controller.findNotice, controller.noticesDelete);
     
 
     return route;

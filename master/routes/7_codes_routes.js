@@ -3,7 +3,7 @@ module.exports = ()=>{
     const route = express.Router();
     const controller = require('../controllers/7_codes_controller');
 
-    route.get('/products',controller.productcodesIndex);
+    route.get('/products', controller.productcodesIndex);
     route.get('/products/add', controller.productcodesAdd);
     route.get('/products/generate', controller.productcodesGenerate);
     

@@ -24,15 +24,15 @@ module.exports = ()=>{
     route.get('/notices', controller.noticesIndex);
     route.get('/notices/add', controller.noticeAdd)
         .post('/notices/add', controller.noticeCreate);
-    route.get('/notices/:notice_id', controoller.findNotice, controller.noticeShow)
-        .post('/notices/:notice_id', controoller.findNotice, controller.noticeUpdate);
+    route.get('/notices/:notice_id', controller.findNotice, controller.noticeShow)
+        .post('/notices/:notice_id', controller.findNotice, controller.noticeUpdate);
     route.get('notices/:notice_id/delete', controller.findNotice, controller.noticeDelete);
 
     route.get('/faqs', controller.faqsIndex);
-    route.get('/faqs/add', controller.faqeAdd)
+    route.get('/faqs/add', controller.faqAdd)
         .post('/faqs/add', controller.faqCreate);
-    route.get('/faqs/:notice_id', controoller.findFaq, controller.faqShow)
-        .post('/faqs/:notice_id', controoller.findFaq, controller.faqUpdate);
+    route.get('/faqs/:notice_id', controller.findFaq, controller.faqShow)
+        .post('/faqs/:notice_id', controller.findFaq, controller.faqUpdate);
     route.get('/faqs/:notice_id/delete', controller.findFaq, controller.faqDelete);
 
     
@@ -41,7 +41,7 @@ module.exports = ()=>{
     route.get('/masters', controller.mastersIndex);
     //masters - show
     route.get('/masters/:master_id', controller.findMaster, controller.mastersShow)
-        post('/masters/:master_id', controller.findMaster, controller.mastersUpdate);
+        .post('/masters/:master_id', controller.findMaster, controller.mastersUpdate);
     //masters - delete
     route.get('/masters/:master_id/delete', controller.findMaster, controller.mastersDelete);
  

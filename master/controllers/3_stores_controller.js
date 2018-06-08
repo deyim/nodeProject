@@ -14,11 +14,12 @@ module.exports = {
             next();
         });
     },
+
     productsIndex: (req,res)=>{
         if(Object.keys(req.query).length === 0){
             db.Product.findAll()
             .then(products=>{
-                res.render('1_members/products_index', {products});
+                res.render('3_stores/products_index', {products});
             });   
         }      
         else{
@@ -76,7 +77,7 @@ module.exports = {
         if(Object.keys(req.query).length === 0){
             db.Post.findAll()
             .then(posts=>{
-                res.render('1_members/posts_index', {posts});
+                res.render('3_stores/posts_index', {posts});
             });   
         }      
         else{
@@ -122,26 +123,57 @@ module.exports = {
         db.Message.findById(req.params.message_id)
         .then(message=>{
             if(!message){
-                req.flash('error', '없는 유저입니다.');
+                req.flash('error', '없는 메시지입니다.');
                 res.redirect('/members/messages');
             }
             req.message = message;
+            //req.senders, req.receivers
             next();
         });
     },
-    messagesIndex: (req,res)=>{
 
+    messagesIndex: (req,res)=>{
+        if(Object.keys(req.query).length === 0){
+            db.Message.findAll()
+            .then(messages=>{
+                res.render('3_stores/messages_index', {messages});
+            });   
+        }      
+        else{
+            let q = req.query;
+            db.Message.findAll({
+                where:{
+                    [Op.or]:
+                    [
+                        {createdAt: {
+                                [Op.gte]: q.startdate ? q.startdate : null,
+                                [Op.lte]: q.enddate ? q.enddate : null,
+                            }
+                        }
+                    ]   
+                    //sentmessage의 아이디, 닉네임 / 스토어주소, 사업자명               
+                }
+            })
+            .then(posts=>{
+                res.render('3_stores/messages_index', {messages});
+            })
+        }
     },
 
     messagesShow: (req,res)=>{
+        //content
+        res.render('3_stores/messages_show', {
+            message: req.message,
+            sender: req.sender,
+            receivers: req.receivers
+        })
+        //receivers
 
-    },
-    messagesUpdate: (req,res)=>{
-        
     },
     //stores - delete
     messagesDelete: (req,res)=>{
-        
+        req.message.destroy();
+        res.redirect('/stores/messages');
     },
 
 
@@ -172,28 +204,66 @@ module.exports = {
     },
     
     findNotice: (req,res,next)=>{
-        db.Comment.findById(req.params.comment_id)
-        .then(message=>{
-            if(!message){
-                req.flash('error', '없는 유저입니다.');
-                res.redirect('/members/comments');
+        db.Post.findById(req.params.notice_id)
+        .then(notice=>{
+            if(!notice){
+                req.flash('error', '없는 공지입니다.');
+                res.redirect('/stores/notices');
             }
-            req.comment = comment;
+            req.notice = notice;
             next();
         });
     },
-    noticesIndex: (req,res)=>{
 
+    noticesIndex: (req,res)=>{
+       if(Object.keys(req.query).length === 0){
+            db.Post.findAll({
+                where: {
+                    noticeChk: true
+                }
+            })
+            .then(notices=>{
+                console.log(notices);
+                res.render('3_stores/notices_index', {notices});
+            });   
+        }      
+        else{
+            let q = req.query;
+            db.Post.findAll({
+                where:{
+                    [Op.or]:
+                    [
+                        {createdAt: {
+                                [Op.gte]: q.startdate ? q.startdate : null,
+                                [Op.lte]: q.enddate ? q.enddate : null,
+                            }
+                        },
+                        { username: q.username },
+                        { nickname: q.nickname },
+                        { url: q.url },
+                        { companyName: q.companyName }
+                    ]                    
+                }
+            })
+            .then(notices=>{
+                res.render('3_stores/notices_index', {notices});
+            })
+        }
     },
 
     noticesShow: (req,res)=>{
-
+        res.render('3_stores/notices_show',{notice:req.notice});
     },
     noticesUpdate: (req,res)=>{
-        
+        req.post.update(req.body)
+        .then((()=>{
+            req.session.alert = '수정되었습니다.'
+            res.redirect(`/stores/notices/${req.notice.id}`);
+        }));
     },
     //stores - delete
     noticesDelete: (req,res)=>{
-        
+        req.notice.destroy();
+        res.redirect('/stores/notices');
     }
 }

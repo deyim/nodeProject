@@ -1,0 +1,16 @@
+<h1>Prodcts Index</h1>
+
+<form method="get">
+    상품등록시작일: <input type="date" name="startdate"><br>
+    상품등록끝일: <input type="date" name="enddate"><br>
+    상품명: <input type="text" name="title" ><br>
+    상품코드: <input type="text" name="productcode" ><br>
+    판매상태: <input type="text" name="onSaleChk" ><br>
+    전시상태: <input type="text" name="onDisplayChk" ><br>
+    카테고리: <input type="text" name="category" ><br>
+    <input type="submit" value="제출"><br>
+</form>
+
+{{#each products}}
+    <a href="/stores/products/{{this.id}}">{{this.title}}</a><br>
+{{/each}}

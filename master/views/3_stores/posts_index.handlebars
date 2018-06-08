@@ -1,0 +1,14 @@
+<h1>Posts Index</h1>
+
+<form method="get">
+    개설승인일시작: <input type="date" name="startdate"><br>
+    개설승인일끝: <input type="date" name="enddate"><br>
+    구분-제목: <input type="text" name="title" ><br>
+    구분-내용: <input type="text" name="content" ><br>
+    스토어주소: <input type="text" name="url" ><br>
+    <input type="submit" value="제출"><br>
+</form>
+
+{{#each posts}}
+    <a href="/stores/posts/{{this.id}}">{{this.title}}</a><br>
+{{/each}}
