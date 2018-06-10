@@ -7,6 +7,10 @@ const perPage = 4;
 // const queryString = require('query-string');
 
 module.exports = {
+    /***********************
+          members/users
+    ***********************/
+
     //users - send messages
     checkToArray: (req,res,next)=>{
         req.checked = req.body.checked;
@@ -29,6 +33,7 @@ module.exports = {
             next();
         })
     },
+
     //users - index
     usersIndex: (req,res)=>{
         let q = req.query;
@@ -69,7 +74,8 @@ module.exports = {
             })
         }
            
-    },        
+    },     
+
     //users - show
     usersShow: (req,res)=>{     
         res.render('1_members/users_show', {user:req.user, today:Date.now()});
@@ -82,14 +88,20 @@ module.exports = {
             res.redirect(`/members/users/${req.user.id}`);
         }));
     },
+
     //users - delete
     usersDelete: (req,res)=>{
         req.user.destroy();
         res.redirect('/members/users');
     },
     
-    //공통인데 어떻게 구현할지 생각해보자. 
+    /**************************
+          members/providers
+    ***************************/
 
+    //req.provider
+    //req.user: user account of provider
+    //req.stores: stores belonging to provider
     findProvider: (req,res,next)=>{
         db.Provider.findById(req.params.provider_id)
         .then(provider=>{
@@ -97,10 +109,17 @@ module.exports = {
                 req.flash('error', '없는 스토어회원입니다.');
                 res.redirect('/members/providers');
             }
+            
+            //provider
             req.provider = provider;
-            provider.getUser(user=>{
-                req.user = user;
-            })
+
+            //user
+            console.log('\n\n\n***');
+            provider.getUser()
+            .then(user=>{req.user = user;});
+            
+
+            //stores
             db.Store.findAll({
                 include: [
                     {
@@ -123,52 +142,57 @@ module.exports = {
 
     //providers - index
     providersIndex: (req,res)=>{
-       
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page;  
         if(Object.keys(req.query).length === 0){
-            db.Provider.findAll()
+            db.Provider.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1)
+            })
             .then(providers=>{
-                res.render('1_members/providers_index', {providers});
+                objectData = {providers:providers.rows, providersCount:providers.count}
+                res.render('1_members/providers_index', objectData);
             });   
         }      
         else{
-            let q = req.query;
-            console.log('\n\n***',q);
-            // 아이디, 닉네임, 메일, SMS는 User에 => & provider인애?
-            //OR 개설승인일 사업자명, 회원유형 => provider 
-            db.Provider.findAll({
-                [Op.or]:[
-                    {
-                        where:{
-                            [Op.or]:
-                            [
-                                {createdAt: {
-                                        [Op.gte]: q.startdate ? q.startdate : null,
-                                        [Op.lte]: q.enddate ? q.enddate : null,
-                                    }
-                                },
-                                {companyName: q.companyName},
-                                {companyType: q.companyType},
-                            ]                
+            console.log(q);
+            db.Provider.findAndCountAll({
+                where:{
+                    [Op.and]:
+                    [
+                        {createdAt: {
+                            [Op.and]:[
+                                {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                            ]
                         }
-                    },
+                        },
+                        {companyName:  { [Op.like]: `%${q.companyName}%` }},
+                        {companyType:  { [Op.like]: `%${q.companyType}%` }},
+                    ]                
+                },
+                include:[
                     {
-                        include:[
-                            {
-                                [Op.or]:
-                                [
-                                    {model: db.User, where:{username: q.username}},
-                                    {model: db.User, where:{nickname: q.nickname}},
-                                    {model: db.User, where:{recSMS: q.recSMS}},
-                                    {model: db.User, where:{recEmail: q.recEmail}},
-                                ]
-                            }
-                        ]
+                        model: db.User,
+                        as: 'user',
+                        where:{
+                            [Op.and]:
+                            [
+                                {username: { [Op.like]: `%${q.username}%` }},
+                                {nickname: { [Op.like]: `%${q.nickname}%` }},
+                                {recSMS: q.recSMS ? q.recSMS : false},
+                                {recEmail: q.recEmail ? q.recEmail : false},
+                            ]
+                        }                                
                     }
                 ]
             })
             .then(providers=>{
-                res.render('1_members/providers_index', {providers});
-            })
+                console.log(providers.rows);
+                objectData = {providers:providers.rows, providersCount:providers.count}
+                res.render('1_members/providers_index', objectData);
+            });   
         }
       
     },
@@ -179,7 +203,6 @@ module.exports = {
                 provider:req.provider, 
                 user: req.user, 
                 stores: req.stores, 
-                today:Date.now()
             }
         );
         //고치는거는 스토어회원 정보만 고치는거로 하자. 
@@ -198,6 +221,11 @@ module.exports = {
         res.redirect('/members/providers');
     },
     //providers - send messages
+
+
+    /**************************
+          members/stores
+    ***************************/
 
 
     findStore: (req,res,next)=>{ 

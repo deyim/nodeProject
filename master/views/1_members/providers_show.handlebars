@@ -1,6 +1,15 @@
 <h1>PROVIDERS_SHOW</h1>
-{{provider.companyName}}<br>
-{{user.username}}<br>
+
+{{!-- <form method="post">
+    <input type="text" name="username" value="{{user.username}}">
+    <input type="text" name="nickname" value="{{user.nickname}}">
+    <input type="text" name="phone" value="{{user.phone}}">
+    <input type="submit" value="제출">
+    <a href="{{user.id}}/delete">탈퇴</a>
+</form> --}}
+
+provider: {{provider.companyName}}<br>
+user: {{user.username}}<br>
 
 {{#each stores}}
     {{this.name}}

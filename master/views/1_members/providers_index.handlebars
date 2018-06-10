@@ -5,20 +5,41 @@
     끝날짜: <input type="date" name="enddate"><br>
     아이디: <input type="text" name="username" ><br>
     닉네임: <input type="text" name="nickname" ><br>
-    사업자명: <input type="text" name="nickname" ><br>
-    회원유형: <input type="text" name="nickname" ><br>
-    이메일수신: <input type="checkbox" name="recEmail" ><br>
-    SMS수신: <input type="checkbox" name="recSMS" ><br>
+    사업자명: <input type="text" name="companyName" ><br>
+    회원유형: <input type="text" name="companyType" ><br>
+    이메일수신: <input type="checkbox" name="recEmail" checked><br>
+    SMS수신: <input type="checkbox" name="recSMS" checked><br>
     <input type="submit" value="제출"><br>
 </form>
 
 
+회원수: {{usersCount}}
+<form method="POST" name="usersIndex"> 
+    <input type="submit" onclick="chooseAll()" value="전체회원 쪽지발송">
+    <input type="submit" value="선택회원 쪽지발송"><br>
 
-{{#each providers}}
-    {{this.email}}
-     <a href="members/providers/{{this.id}}">{{this.companyName}}</a><br>
-    {{this.companyName}}
-    {{this.storeCnt}}
-    {{this.createdAt}}
-    <br>
-{{/each}}
+    {{#each providers}}
+        <input type="checkbox" name="checked" value={{this.id}} >
+        {{this.email}}
+        <a href="providers/{{this.id}}">{{this.companyName}}</a><br>
+        {{this.companyName}}
+        {{this.storeCnt}}
+        {{this.createdAt}}
+        <br>
+    {{/each}}
+</form>
+
+{{!-- pagination 쿼리 append형식으로 다시하기 --}}
+<a href="?page=1">1</a>
+<a href="?page=2">2</a>
+<a href="?page=3">3</a>
+<a href="?page=4">4</a>
+<a href="?page=4">5</a>
+
+<script>
+    function check_all() {
+        for(i=0; i < usersIndex.userCheck.length; i++) {
+            usersIndex.userCheck[i].checked = true;
+        }
+    }
+</script>
