@@ -3,9 +3,20 @@
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
+const perPage = 4;
 // const queryString = require('query-string');
 
 module.exports = {
+    //users - send messages
+    checkToArray: (req,res,next)=>{
+        req.checked = req.body.checked;
+        next();
+    },
+
+    sendMessages: (req,res)=>{
+        res.send('/members/users');
+    },
+
     //middleware, find a user by id
     findUser: (req,res,next)=>{
         db.User.findById(req.params.user_id)
@@ -20,46 +31,54 @@ module.exports = {
     },
     //users - index
     usersIndex: (req,res)=>{
-        // console.log('\n\n\n\n*******\n\n',req.query);
-        if(Object.keys(req.query).length === 0){
-            db.User.findAll()
-            .then(users=>{
-                res.render('1_members/users_index', {users});
-            });   
-        }      
-        else{
-            let q = req.query;
-            db.User.findAll({
-                where:{
-                    [Op.or]:
-                    [
-                        {createdAt: {
-                                [Op.gte]: q.startdate ? q.startdate : null,
-                                [Op.lte]: q.enddate ? q.enddate : null,
-                            }
-                        },
-                        { username: q.username },
-                        { nickname: q.nickname },
-                        { recEmail: q.recEmail },
-                        { recSMS: q.recSMS }
-                    ]                    
-                }
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page;        
+        if(Object.keys(q).length === 0){
+            db.User.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1)
             })
             .then(users=>{
-                res.render('1_members/users_index', {users});
+                res.render('1_members/users_index', {users:users.rows, usersCount:users.count});
+            });   
+        }      
+        else{          
+            db.User.findAndCountAll({
+                where:{
+                    [Op.and]:
+                    [
+                        {createdAt: {
+                                [Op.and]:[
+                                    {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                    {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                ]
+                            }
+                        },
+                        {username: { [Op.like]: `%${q.username}%` }},
+                        {nickname: { [Op.like]: `%${q.nickname}%` }},
+                        { recEmail: q.recEmail ? q.recEmail : false},
+                        { recSMS: q.recSMS ? q.recSMS : false}
+                    ]                    
+                },
+                limit: perPage,
+                offset: perPage*(page-1)
+            })
+            .then(users=>{
+               res.render('1_members/users_index', {users:users.rows, usersCount:users.count});
             })
         }
            
-    },    
+    },        
     //users - show
     usersShow: (req,res)=>{     
         res.render('1_members/users_show', {user:req.user, today:Date.now()});
     },   
+
     //users - update
     usersUpdate: (req,res)=>{
         req.user.update(req.body)
         .then((()=>{
-            req.session.alert = '수정되었습니다.'
             res.redirect(`/members/users/${req.user.id}`);
         }));
     },
@@ -68,7 +87,7 @@ module.exports = {
         req.user.destroy();
         res.redirect('/members/users');
     },
-    //users - send messages
+    
     //공통인데 어떻게 구현할지 생각해보자. 
 
     findProvider: (req,res,next)=>{

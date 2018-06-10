@@ -2,20 +2,41 @@
 
 <form method="get">
     시작날짜: <input type="date" name="startdate"><br>
-    끝날짜: <input type="date" name="enddate"><br>
+    끝날짜: <input type="date" name="enddate" value={{today}}><br>
     아이디: <input type="text" name="username" ><br>
     닉네임: <input type="text" name="nickname" ><br>
-    이메일수신: <input type="checkbox" name="recEmail" ><br>
-    SMS수신: <input type="checkbox" name="recSMS" ><br>
+    이메일수신: <input type="checkbox" name="recEmail" checked><br>
+    SMS수신: <input type="checkbox" name="recSMS" checked><br>
     <input type="submit" value="제출"><br>
 </form>
 
+회원수: {{usersCount}}
+<form method="POST" name="usersIndex"> 
+    <input type="submit" onclick="chooseAll()" value="전체회원 쪽지발송">
+    <input type="submit" value="선택회원 쪽지발송"><br>
 
-{{#each users}}
-    {{this.id}}
-    <a href="users/{{this.id}}">{{this.nickname}}</a>
-    {{this.createdAt}}
-    {{this.loginDate}}
-    {{this.loginCnt}}
-    <br>
-{{/each}}
+    {{#each users}}    
+        <input type="checkbox" name="checked" value={{this.id}} >
+        <a href="users/{{this.id}}">{{this.nickname}}</a>
+        {{this.createdAt}}
+        {{this.loginDate}}
+        {{this.loginCnt}}
+        <br>
+    {{/each}}
+</form>
+
+{{!-- pagination 쿼리 append형식으로 다시하기 --}}
+<a href="?page=1">1</a>
+<a href="?page=2">2</a>
+<a href="?page=3">3</a>
+<a href="?page=4">4</a>
+<a href="?page=4">5</a>
+
+
+<script>
+    function check_all() {
+        for(i=0; i < usersIndex.userCheck.length; i++) {
+            usersIndex.userCheck[i].checked = true;
+        }
+    }
+</script>
