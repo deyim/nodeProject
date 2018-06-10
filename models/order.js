@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     childCount: DataTypes.INTEGER
   }, {});
   Order.associate = function(models) {
-    Order.hasOne(models.OrderStatus, {as: 'order'});
+    Order.hasOne(models.OrderStatus, {as: 'orderStatus', foreignKey: 'orderId'});
   };
   return Order;
 };

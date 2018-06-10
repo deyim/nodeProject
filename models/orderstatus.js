@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     cancelChk: DataTypes.BOOLEAN
   }, {});
   OrderStatus.associate = function(models) {
-    OrderStatus.belongsTo(models.Order, {as: 'orderStatus'});
+    OrderStatus.belongsTo(models.Order, {as: 'order', foreignKey: 'orderId'});
   };
   return OrderStatus;
 };
