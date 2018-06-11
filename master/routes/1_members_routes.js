@@ -4,10 +4,10 @@ module.exports = ()=>{
     const controller = require('../controllers/1_members_controller');
     const msgLibrary = require('../../lib/message_functions');
     // route.get('/sendMessages', controller.sendMessages);
-
+    route.post('/sendMessages', controller.sendMessage);
     //users - index
     route.get('/users', controller.usersIndex)
-        .post('/users', controller.checkToArray, controller.sendMessages);
+        .post('/users', controller.writeMessages);
     //users - show, update
     route.get('/users/:user_id', controller.findUser, controller.usersShow)
         .post('/users/:user_id', controller.findUser, controller.usersUpdate);   

@@ -7,18 +7,35 @@ const perPage = 4;
 // const queryString = require('query-string');
 
 module.exports = {
+    sendMessage: (req,res)=>{
+        receivers = req.body.receivers.split(',');
+        db.Message.create({
+            content: req.body.content
+        })
+        .then(message=>{
+            for(var i = 0 ; i < receivers.length ; i++){
+                console.log('\n\n**',receivers[i] *= 1);
+                db.Sentmessage.create({
+                    senderId: req.user.id,
+                    receiverId: receivers[i],
+                    messageId: message.id
+                })
+                .then((sentmessage)=>{
+                    console.log(sentmessage);
+                });
+            }
+            res.redirect('/members/users');
+        });
+        
+    },
+
     /***********************
           members/users
     ***********************/
 
-    //users - send messages
-    checkToArray: (req,res,next)=>{
-        req.checked = req.body.checked;
-        next();
-    },
-
-    sendMessages: (req,res)=>{
-        res.send('/members/users');
+    writeMessages: (req,res)=>{
+        console.log(req.body.checked);
+        res.render('1_members/send_messages', {receivers: req.body.checked});
     },
 
     //middleware, find a user by id

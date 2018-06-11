@@ -31,7 +31,7 @@ module.exports = {
     }).then(()=>{
       queryInterface.addColumn(
         'Sentmessages',
-        'messaageId',
+        'messageId',
         {
           type: Sequelize.INTEGER,
           references: {

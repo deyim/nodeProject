@@ -25,37 +25,6 @@ app.get('/', (req,res)=>{
     res.render('index/home');
 })
 
-app.get('/dbcreate', (req,res,next)=>{
-    console.log('\n\n','dbcreate');
-    provider = db.Provider.create({
-        companyName: 'admin2store',
-        companyNumber: '42132',
-        companyType: 'A',
-        CEO: 'agsdf',
-        CEONumber: 'aas',
-        staffName: 'aas',
-        staffNumber: 'aas',
-        accountNumber: 'aas',
-        accountName: 'aas',
-        accountBank: 'aas',
-        rateType: 'a',
-    })
-    .then(provider=>{
-        console.log('222222');
-        req.provider = provider;
-        next();
-    })
-}, (req,res)=>{
-    console.log('3333333');
-    db.User.findById(8)
-    .then(user=>{
-        user.update({providerChk:true});
-        req.provider.setUser(user);
-        res.redirect('/');
-    })
-    
-});
-
 app.get('/failure', (req,res)=>{
     res.send("Login failed");
 })
