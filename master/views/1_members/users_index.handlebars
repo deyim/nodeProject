@@ -34,9 +34,10 @@
 
 
 <script>
-    function check_all() {
-        for(i=0; i < usersIndex.userCheck.length; i++) {
-            usersIndex.userCheck[i].checked = true;
+    function chooseAll() {
+        checkboxes = document.getElementsByName('checked');
+        for(i=0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = true;
         }
     }
 </script>

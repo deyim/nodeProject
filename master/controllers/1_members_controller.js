@@ -47,7 +47,22 @@ module.exports = {
                 res.redirect('/members/users');
             }
             req.user = user;
-            next();
+
+            user.getStores()
+            .then(stores=>{req.stores = stores});
+
+            user.getPosts()
+            .then(posts=>{req.posts = posts.length || 0;});
+            
+            user.getSendings()
+            .then(sendings=>{req.sendings = sendings.length || 0;});
+
+            user.getReceivings()
+            .then(receivings=>{req.receivings = receivings.length || 0;
+                next();
+            });
+
+           
         })
     },
 
@@ -87,6 +102,7 @@ module.exports = {
                 offset: perPage*(page-1)
             })
             .then(users=>{
+                
                res.render('1_members/users_index', {users:users.rows, usersCount:users.count});
             })
         }
@@ -94,8 +110,9 @@ module.exports = {
     },     
 
     //users - show
-    usersShow: (req,res)=>{     
-        res.render('1_members/users_show', {user:req.user, today:Date.now()});
+    usersShow: (req,res)=>{  
+        dataobj = {user:req.user, posts:req.posts, sendings:req.sendings, receivings:req.receivings, stores:req.stores, storesCnt:req.stores.length};
+        res.render('1_members/users_show', dataobj);
     },   
 
     //users - update
