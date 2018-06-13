@@ -34,7 +34,6 @@ module.exports = {
     },
 
     writeMessages: (req,res)=>{
-        console.log(req.body.checked);
         res.render('1_members/send_messages', {receivers: req.body.checked});
     },
 
@@ -180,6 +179,8 @@ module.exports = {
         else{
             console.log(q);
             db.Provider.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
                 where:{
                     [Op.and]:
                     [
@@ -273,55 +274,82 @@ module.exports = {
                 req.users = users;
                 next();
             })
-            // next();
         })
         //회원 정보도 다 가져와야돼??
         
     },
     //stores - index
     storesIndex: (req,res)=>{
-        
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page; 
         if(Object.keys(req.query).length === 0){
-            db.Store.findAll()
+            db.Store.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1)
+            })
             .then(stores=>{
-                res.render('1_members/stores_index', {stores});
+                objData = {stores:stores.rows, storesCnt:stores.count}
+                res.render('1_members/stores_index', objData);
             });   
         }      
         else{
             let q = req.query;
-            db.Store.findAll({
-                // [Op.or]:[{
-                    where:{
-                        [Op.or]:
-                        [
-                            {createdAt: {
-                                    [Op.gte]: q.startdate ? q.startdate : null,
-                                    [Op.lte]: q.enddate ? q.enddate : null,
+            db.Store.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where:{
+                    [Op.and]:
+                    [
+                        {createdAt: {
+                                [Op.and]:[
+                                    {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                    {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                ]
+                            }
+                        },
+                        {url:  { [Op.like]: `%${q.url}%` }},
+                    ]                    
+                },
+                include: [//provider 의 id, 사업자명, 회원유형
+                    {
+                        model: db.Provider,
+                        as: 'provider',
+                        where: {
+                            [Op.and]:
+                            [
+                                {companyName:{ [Op.like]: `%${q.companyName}%`}},
+                                {companyType:{ [Op.like]: `%${q.companyType}%`}},
+                            
+                            ]
+                        },
+                        include: [
+                            {
+                                model: db.User,
+                                as: 'user',
+                                where: {
+                                    [Op.and]:
+                                    [
+                                        {username:{ [Op.like]: `%${q.username}%`}},
+                                    ]
                                 }
-                            },
-                            { url: q.url }
-                        ]                    
-                    },
-                    // include: [//provider 의 id, 사업자명, 회원유형
-                    //     {
-                    //         [Op.or]:
-                    //         [
-                    //             // {model: Provider, where:{username: q.username}},
-                    //             {model: db.Provider, where:{companyName: q.companyName}},
-                    //             {model: db.Provider, where:{companyType: q.companyType}},
-                    //         ]
-                    //     }
-                    // ]
-                // }]
+                            }
+                        ]
+                        
+                    }
+                ]
             })
             .then(stores=>{
-                res.render('1_members/stores_index', {stores});
+                console.log('\n\n\n***',stores.rows);
+                objData = {stores:stores.rows, storesCnt:stores.count}
+                res.render('1_members/stores_index', objData);
             })
         }
     },
     //stores - show
     storesShow: (req,res)=>{
-        res.render('1_members/stores_show',{store:req.store, provider:req.provider, users:req.users});
+        objData = {store:req.store, provider:req.provider, users:req.users};
+        res.render('1_members/stores_show',objData);
     },
     //stores - update
     storesUpdate: (req,res)=>{
@@ -333,7 +361,19 @@ module.exports = {
     },
     //stores - delete
     storesDelete: (req,res)=>{
-        req.user.destroy();
+        req.store.destroy();
         res.redirect('/members/users');
+    },
+
+    multipleStoresDelete: (req,res)=>{
+        console.log('\n\n\n*****',req.body.checked);
+        stores = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < stores.length; i++){
+            db.Store.findById(stores[i])
+            .then(store=>{
+                store.destroy();
+            });
+        };
+        res.redirect('/members/stores');
     }
 }

@@ -10,9 +10,23 @@
     <input type="submit" value="제출"><br>
 </form>
 
+스토어수: {{storesCnt}}
+<form method="POST" name="storesIndex"> 
+    <input type="submit" value="선택삭제"><br>
 
+    {{#each stores}}    
+        <input type="checkbox" name="checked" value={{this.id}} >
+        <a href="stores/{{this.id}}">{{this.name}}</a>
+        {{this.url}}
+        {{this.memberCnt}}
+        {{this.approvalDate}}
+        <br>
+    {{/each}}
+</form>
 
-{{#each stores}}
-    <a href="stores/{{this.id}}">{{this.url}}</a><br>
-    {{this.name}}<br>
-{{/each}}
+<a href="?page=1">1</a>
+<a href="?page=2">2</a>
+<a href="?page=3">3</a>
+<a href="?page=4">4</a>
+<a href="?page=4">5</a>
+

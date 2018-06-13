@@ -2,7 +2,7 @@ module.exports = ()=>{
     const express = require('express');
     const route = express.Router();
     const controller = require('../controllers/1_members_controller');
-    const msgLibrary = require('../../lib/message_functions');
+   
     // route.get('/sendMessages', controller.sendMessages);
     route.post('/sendMessages', controller.sendMessage);
     //users - index
@@ -28,7 +28,8 @@ module.exports = ()=>{
     // //providers - send messages
 
     //stores - index
-    route.get('/stores', controller.storesIndex);
+    route.get('/stores', controller.storesIndex)
+        .post('/stores', controller.multipleStoresDelete);
     //stores - show
     route.get('/stores/:store_id', controller.findStore, controller.storesShow)
         .post('/stores/:store_id/', controller.findStore, controller.storesUpdate);
