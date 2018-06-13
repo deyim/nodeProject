@@ -8,9 +8,46 @@
     <a href="{{user.id}}/delete">탈퇴</a>
 </form> --}}
 
-provider: {{provider.companyName}}<br>
-user: {{user.username}}<br>
+provider:
+<br>{{provider.companyName}}
+<br>{{provider.companyName}}
+<br>{{provider.companyNumber}}
+<br>{{provider.companyType}}
+<br>{{provider.CEO}}
+<br>{{provider.corporateNumber}}
+<br>{{provider.busniessType}}
+<br>{{provider.businessCategory}}
+<br>{{provider.commuNumber}}
+<br>{{provider.CEONumber}}
+<br>{{provider.faxNumber}}
+<br>{{provider.staffName}}
+<br>{{provider.staffNumber}}
+<br>{{provider.accountNumber}}
+<br>{{provider.accountName}}
+<br>{{provider.accountBank}}
+<br>{{provider.rateType}}
+<br>{{provider.monthFee}}
+<br>{{provider.commission}}
+<br>{{provider.createdAt}}
+<br>{{provider.storeCnt}}
+<br><br>user: 
+<br>{{user.username}}
+<br>{{user.email}}
+<br>{{user.nickname}}
+<br>{{user.phone}}
+<br>{{user.createdAt}}
+<br>{{user.updatedAt}}
+<br>{{user.loginDate}}
+<br>{{user.loginCnt}}
+<br>{{user.recEmail}}
+<br>{{user.recSMS}}
 
+<br><br>stores:
 {{#each stores}}
-    {{this.name}}
+    <br>{{this.url}}
+    <br>{{this.membersCnt}}
+    <br>{{this.introduction}}
+    <br>{{this.storeLogoPath}}
+    <br>{{this.storeImgPath}}
+
 {{/each}}

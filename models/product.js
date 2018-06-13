@@ -34,6 +34,21 @@ module.exports = (sequelize, DataTypes) => {
     Product.belongsTo(models.Productcode, {as:'productcode', foreignKey: 'productcodeId'});
     Product.hasMany(models.Commentb, {as: 'comments'});
     //city, nation, tag
+    Product.belongsToMany(models.Nation, {
+      through: 'ProductNations',
+      as: 'nations',
+      foreignKey: 'productId'
+    });
+    Product.belongsToMany(models.City, {
+      through: 'ProductCities',
+      as: 'cities',
+      foreignKey: 'productId'
+    });
+    Product.belongsToMany(models.Tag, {
+      through: 'ProductTags',
+      as: 'tags',
+      foreignKey: 'productId'
+    });
     
   };
   return Product;

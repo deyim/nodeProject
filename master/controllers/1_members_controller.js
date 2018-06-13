@@ -7,6 +7,10 @@ const perPage = 4;
 // const queryString = require('query-string');
 
 module.exports = {
+     /***********************
+          members/common
+    ***********************/
+
     sendMessage: (req,res)=>{
         receivers = req.body.receivers.split(',');
         db.Message.create({
@@ -29,14 +33,14 @@ module.exports = {
         
     },
 
-    /***********************
-          members/users
-    ***********************/
-
     writeMessages: (req,res)=>{
         console.log(req.body.checked);
         res.render('1_members/send_messages', {receivers: req.body.checked});
     },
+
+    /***********************
+          members/users
+    ***********************/
 
     //middleware, find a user by id
     findUser: (req,res,next)=>{
@@ -148,29 +152,13 @@ module.exports = {
             req.provider = provider;
 
             //user
-            console.log('\n\n\n***');
             provider.getUser()
             .then(user=>{req.user = user;});
-            
 
             //stores
-            db.Store.findAll({
-                include: [
-                    {
-                        model: db.Provider, 
-                        as: 'provider', 
-                        foreignKey: 'providerId',
-                        where: {
-                            id: provider.id
-                        }
-                    }
-                ]
-            })
-            .then(stores=>{
-                req.stores = stores;
-                next();
-            });          
-            
+            provider.getStores()
+            .then(stores=>{req.stores = stores; next();});
+    
         })
     },
 
@@ -223,7 +211,6 @@ module.exports = {
                 ]
             })
             .then(providers=>{
-                console.log(providers.rows);
                 objectData = {providers:providers.rows, providersCount:providers.count}
                 res.render('1_members/providers_index', objectData);
             });   
@@ -237,6 +224,7 @@ module.exports = {
                 provider:req.provider, 
                 user: req.user, 
                 stores: req.stores, 
+                storesCnt: req.stores.length
             }
         );
         //고치는거는 스토어회원 정보만 고치는거로 하자. 

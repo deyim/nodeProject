@@ -62,10 +62,10 @@ module.exports = (sequelize, DataTypes) => {
   });
   Provider.associate = function(models) {
       Provider.belongsTo(models.User, {as: 'user'});
-      Provider.hasMany(models.Store, {as: 'store', foreignKey: 'providerId'});
-      Provider.hasMany(models.Board, {as: 'board'});
-      Provider.hasMany(models.Approval, {as: 'approval', foreignKey: 'approvalId'});
-      Provider.hasMany(models.Product, {as: 'product', foreignKey: 'providerId'});
+      Provider.hasMany(models.Store, {as: 'stores', foreignKey: 'providerId'});
+      Provider.hasMany(models.Board, {as: 'boards'});
+      Provider.hasMany(models.Approval, {as: 'approvals', foreignKey: 'approvalId'});
+      Provider.hasMany(models.Product, {as: 'products', foreignKey: 'providerId'});
   };
   return Provider;
 };

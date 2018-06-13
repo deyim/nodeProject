@@ -18,8 +18,9 @@ module.exports = ()=>{
     //공통인데 어떻게 구현할지 생각해보자. 
 
     //providers - index
-    route.get('/providers', controller.providersIndex);
-    //providers - show
+    route.get('/providers', controller.providersIndex)
+        .post('/providers', controller.writeMessages);
+    //providers - show, update
     route.get('/providers/:provider_id',  controller.findProvider, controller.providersShow)
         .post('/providers/:provider_id', controller.findProvider, controller.providersUpdate);
     //providers - delete

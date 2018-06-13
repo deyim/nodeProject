@@ -13,8 +13,8 @@
 </form>
 
 
-회원수: {{usersCount}}
-<form method="POST" name="usersIndex"> 
+회원수: {{providersCount}}
+<form method="POST" name="providersIndex"> 
     <input type="submit" onclick="chooseAll()" value="전체회원 쪽지발송">
     <input type="submit" value="선택회원 쪽지발송"><br>
 
@@ -37,9 +37,10 @@
 <a href="?page=4">5</a>
 
 <script>
-    function check_all() {
-        for(i=0; i < usersIndex.userCheck.length; i++) {
-            usersIndex.userCheck[i].checked = true;
+    function chooseAll() {
+        checkboxes = document.getElementsByName('checked');
+        for(i=0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = true;
         }
     }
 </script>

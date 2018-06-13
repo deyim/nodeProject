@@ -64,6 +64,16 @@ module.exports = (sequelize, DataTypes) => {
     });
     Store.hasMany(models.Post, {as: 'posts', foreignKey: 'storeId'});
     //nation, city
+    Store.belongsToMany(models.Nation, {
+      through: 'StoreNations',
+      as: 'nations',
+      foreignKey: 'storeId'
+    });
+    Store.belongsToMany(models.City, {
+      through: 'StoreCities',
+      as: 'cities',
+      foreignKey: 'storeId'
+    });
     
   };
   return Store;
