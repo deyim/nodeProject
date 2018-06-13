@@ -7,7 +7,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   },{});
   Tag.associate = function(models) {
-    // associations can be defined here
+    Tag.belongsToMany(models.Product, {
+      through: 'ProductTags',
+      as: 'products',
+      foreignKey: 'tagId'
+    });
   };
   return Tag;
 };

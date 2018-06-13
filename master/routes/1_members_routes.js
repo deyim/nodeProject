@@ -3,7 +3,6 @@ module.exports = ()=>{
     const route = express.Router();
     const controller = require('../controllers/1_members_controller');
    
-    // route.get('/sendMessages', controller.sendMessages);
     route.post('/sendMessages', controller.sendMessage);
     //users - index
     route.get('/users', controller.usersIndex)

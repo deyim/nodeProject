@@ -1,6 +1,7 @@
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
-const Op = db.Sequelize.Op
+const Op = db.Sequelize.Op;
+const perPage = 5;
 
 module.exports = {
     findProduct: (req,res,next)=>{
@@ -11,42 +12,106 @@ module.exports = {
                 res.redirect('/stores/products');
             }
             req.product = product;
-            next();
+
+            product.getProductcode()
+            .then(productcode=>{
+                req.productcode = productcode;
+            });
+
+            product.getCategory()
+            .then(category=>{
+                req.category = category;
+            });
+            
+            product.getTags()
+            .then(tags=>{
+                req.tags = tags;
+            });
+
+            product.getNations()
+            .then(nations=>{                
+                req.nations = nations;
+            });
+
+            product.getCities()
+            .then(cities=>{
+                req.cities = cities;
+                next();
+            });
         });
     },
 
     productsIndex: (req,res)=>{
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page;    
+        console.log('\n\n****',q.productcode); 
         if(Object.keys(req.query).length === 0){
-            db.Product.findAll()
+            db.Product.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1)
+            })
             .then(products=>{
-                res.render('3_stores/products_index', {products});
+                objData = {products:products.rows, productsCount:products.count}
+                res.render('3_stores/products_index', objData);
             });   
         }      
         else{
             let q = req.query;
-            db.Product.findAll({
+            db.Product.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
                 where:{
-                    [Op.or]:
+                    [Op.and]:
                     [
-                        {createdAt: {
-                                [Op.gte]: q.startdate ? q.startdate : null,
-                                [Op.lte]: q.enddate ? q.enddate : null,
+                        {createdAt: 
+                            {
+                            [Op.and]:[
+                                {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                ]
                             }
                         },
-                        { onSaleChk: q.onSaleChk },
-                        { onDisplayChk: q.onDisplayChk },
-                    ]   
-                    //상품코드, category (association included)                
-                }
+                        { title: { [Op.like]: `%${q.title}%` }},
+                        { onSaleChk: q.onSaleChk ? q.onSaleChk : false},
+                        { onDisplayChk: q.onDisplayChk ? q.onDisplayChk : false}
+                    ],                                  
+                },
+                include:[
+                    {
+                        model: db.Productcode,
+                        as: 'productcode',
+                        where:{
+                                code: { [Op.like]: `%${q.productcode}%` }
+                        }                                
+                    },
+                    {
+                        model: db.Category,
+                        as: 'category',
+                        where:{
+                            name: { [Op.like]: `%${q.category}%` }
+                        }                                
+                    },
+                ]
             })
             .then(products=>{
-                res.render('3_stores/products_index', {products});
+                console.log(products);
+                objData = {products:products.rows, productsCount:products.count}
+                res.render('3_stores/products_index', objData);
             })
         }
     },
 
     productsShow: (req,res)=>{
-        res.render('3_stores/products_show', {product:req.product, today:Date.now()});
+        objData = {
+            product:req.product, 
+            productcode:req.productcode, 
+            nations:req.nations, 
+            cities:req.cities, 
+            tags:req.tags,
+            category:req.category
+        };
+        res.render('3_stores/products_show', objData);
     },
     productsUpdate: (req,res)=>{
         req.product.update(req.product)

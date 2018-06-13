@@ -5,9 +5,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(20),
       allowNull: false
     }
-  }, {});
+  }, {
+    timestamps: false
+  });
   Nation.associate = function(models) {
-    Nation.hasMany(models.City, {as: 'city'});
+    Nation.hasMany(models.City, {as: 'cities', foreignKey: 'nationId'});
     Nation.belongsToMany(models.Store, {
       through: 'StoreNations',
       as: 'stores',
