@@ -4,7 +4,8 @@ module.exports = ()=>{
     const controller = require('../controllers/3_stores_controller');
 
     //products - index
-    route.get('/products', controller.productsIndex);
+    route.get('/products', controller.productsIndex)
+        .post('/products', controller.productsStatusChange);
     //products - show
     route.get('/products/:product_id', controller.findProduct, controller.productsShow)
         .post('/products/:product_id/', controller.findProduct, controller.productsUpdate);

@@ -95,11 +95,43 @@ module.exports = {
                 ]
             })
             .then(products=>{
-                console.log(products);
                 objData = {products:products.rows, productsCount:products.count}
                 res.render('3_stores/products_index', objData);
             })
         }
+    },
+
+    productsStatusChange: (req,res)=>{
+        products = req.body.checked.toString().split(',');
+        if(req.body.delete){
+            for(var i = 0 ; i < products.length; i++){
+                db.Product.findById(products[i])
+                .then(product=>{
+                    product.destroy();
+                });
+            };
+        }
+        else if(req.body.offSale){
+            for(var i = 0 ; i < products.length; i++){
+                db.Product.findById(products[i])
+                .then(product=>{
+                    product.update({
+                        onSaleChk: false
+                    }).then(()=>{});
+                });
+            };
+        }
+        else{
+            for(var i = 0 ; i < products.length; i++){
+                db.Product.findById(products[i])
+                .then(product=>{
+                    product.update({
+                        onSaleChk: true
+                    }).then(()=>{});
+                });
+            };
+        }
+        res.redirect('/stores/products');
     },
 
     productsShow: (req,res)=>{
