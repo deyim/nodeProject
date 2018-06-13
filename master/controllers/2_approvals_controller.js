@@ -1,88 +1,97 @@
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
+const perPage = 5;
 
 module.exports = {
     findStore: (req,res,next)=>{
-        db.Approval.findOne({
-            include: [
-                {
-                    model: db.Store,
-                    as: 'store',
-                    foreignKey: 'storeId',
-                    where: {
-                        id: req.params.store_id
-                    }
-                }
-            ]
-        })
-        .then(approaval=> {
-            req.approval = approval;
-            db.Store.findById(req.params.store_id)
-            .then(store=>{
-                if(!store){
-                    req.flash('error', '없는 스토어입니다.');
-                    res.redirect('/approvals/stores');
-                }
-                req.store = store;
+        db.Store.findById(req.params.store_id)
+        .then(store=>{
+            if(!store){
+                req.flash('error', '없는 스토어입니다.');
+                res.redirect('/approvals/stores');
+            }
+            req.store = store;
+            store.getApproval()
+            .then(approval=>{
+                req.approval = approval;
                 next();
-            })
-        })        
+            });
+        });       
     },
     storesIndex: (req,res)=>{
-        
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page;     
         if(Object.keys(req.query).length === 0){
-            db.Store.findAll({
+            db.Store.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
                 where:{
                     approvalChk: false
                 }                
             })
             .then(stores=>{
-                res.render('2_approvals/stores_index', {stores});
+                objData = {stores:stores.rows, storesCnt:stores.count};
+                res.render('2_approvals/stores_index', objData);
             });   
         }      
         else{
             let q = req.query;
-            db.Store.findAll({
-                // [Op.or]:[{
-                    where:{
-                        [Op.and]:[
+            db.Store.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where:{
+                    [Op.and]:
+                    [
+                        {createdAt: {
+                                [Op.and]:[
+                                    {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                    {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                ]
+                            }
+                        },
+                        {url:  { [Op.like]: `%${q.url}%` }},
+                    ]                    
+                },
+                include: [//provider 의 id, 사업자명, 회원유형
+                    {
+                        model: db.Provider,
+                        as: 'provider',
+                        where: {
+                            [Op.and]:
+                            [
+                                {companyName:{ [Op.like]: `%${q.companyName}%`}},
+                                {companyType:{ [Op.like]: `%${q.companyType}%`}},
+                            
+                            ]
+                        },
+                        include: [
                             {
-                                approvalChk: false
-                            },
-                            {
-                                [Op.or]:
+                                model: db.User,
+                                as: 'user',
+                                where: {
+                                    [Op.and]:
                                     [
-                                        {createdAt: {
-                                                [Op.gte]: q.startdate ? q.startdate : null,
-                                                [Op.lte]: q.enddate ? q.enddate : null,
-                                            }
-                                        },
-                                        { url: q.url }
+                                        {username:{ [Op.like]: `%${q.username}%`}},
                                     ]
-                            }  
-                        ]             
-                    },
-                    // include: [//provider 의 id, 사업자명, 회원유형
-                    //     {
-                    //         [Op.or]:
-                    //         [
-                    //             // {model: Provider, where:{username: q.username}},
-                    //             {model: db.Provider, where:{companyName: q.companyName}},
-                    //             {model: db.Provider, where:{companyType: q.companyType}},
-                    //         ]
-                    //     }
-                    // ]
-                // }]
+                                }
+                            }
+                        ]
+                        
+                    }
+                ]
             })
-            .then(stores=>{
-                res.render('2_approvals/stores_index', {stores});
+            .then(stores=>{ 
+                objData = {stores:stores.rows, storesCnt:stores.count};
+                res.render('2_approvals/stores_index', objData);
             })
         }
     },
 
     storesShow: (req,res)=>{
-        res.render('2_approvals/stores_show',{store:req.store, approval:req.approval});
+        objData = {store:req.store, approval:req.approval}
+        res.render('2_approvals/stores_show', objData);
     },
 
     //select -> approvalChk to true, approvalDate change(additional column)
@@ -94,7 +103,47 @@ module.exports = {
         approval.update({
             deniedChk: true,
         })
-        res.redirect('/members/users');
+        res.redirect('/approvals/stores');
+    },
+
+    storesApproveOrDelete: (req,res)=>{
+        stores = req.body.checked.toString().split(',');
+        if(req.body.approve){
+            for(var i = 0 ; i < stores.length; i++){
+                db.Store.findById(stores[i])
+                .then(store=>{
+                    store.update({
+                        approvalChk: true,
+                        approvalDate: Date.now()
+                    });
+    
+                    store.getApproval()
+                    .then(approval=>{
+                        approval.update({
+                            deniedChk: false
+                        })
+                    });
+                });
+            };
+        }
+        else{
+            for(var i = 0 ; i < stores.length; i++){
+                db.Store.findById(stores[i])
+                .then(store=>{
+                    store.update({
+                        approvalChk: false,
+                    });
+    
+                    store.getApproval()
+                    .then(approval=>{
+                        approval.update({
+                            deniedChk: true
+                        })
+                    });
+                });
+            };
+        }
+        res.redirect('/approvals/stores');
     }
     
 }

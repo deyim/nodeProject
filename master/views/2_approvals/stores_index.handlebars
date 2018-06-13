@@ -1,0 +1,33 @@
+<h1>APPROVAL STORES_INDEX</h1>
+
+<form method="get">
+    개설승인일시작: <input type="date" name="startdate"><br>
+    개설승인일끝: <input type="date" name="enddate"><br>
+    아이디: <input type="text" name="username" ><br>
+    스토어주소: <input type="text" name="url" ><br>
+    사업자명: <input type="text" name="companyName" ><br>
+    회원유형: <input type="text" name="companyType" ><br>
+    <input type="submit" value="제출"><br>
+</form>
+
+스토어수: {{storesCnt}}
+<form method="POST" name="storesIndex"> 
+    <input type="submit" name="approve" value="승인"><br>
+    <input type="submit" name="deny" value="반려"><br>
+
+    {{#each stores}}    
+        <input type="checkbox" name="checked" value={{this.id}} >
+        <a href="stores/{{this.id}}">{{this.name}}</a>
+        {{this.url}}
+        {{this.memberCnt}}
+        {{this.approvalDate}}
+        <br>
+    {{/each}}
+</form>
+
+<a href="?page=1">1</a>
+<a href="?page=2">2</a>
+<a href="?page=3">3</a>
+<a href="?page=4">4</a>
+<a href="?page=4">5</a>
+

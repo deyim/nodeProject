@@ -3,7 +3,7 @@
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
-const perPage = 4;
+const perPage = 5;
 // const queryString = require('query-string');
 
 module.exports = {
@@ -340,7 +340,6 @@ module.exports = {
                 ]
             })
             .then(stores=>{
-                console.log('\n\n\n***',stores.rows);
                 objData = {stores:stores.rows, storesCnt:stores.count}
                 res.render('1_members/stores_index', objData);
             })
@@ -366,7 +365,7 @@ module.exports = {
     },
 
     multipleStoresDelete: (req,res)=>{
-        console.log('\n\n\n*****',req.body.checked);
+       
         stores = req.body.checked.toString().split(',');
         for(var i = 0 ; i < stores.length; i++){
             db.Store.findById(stores[i])

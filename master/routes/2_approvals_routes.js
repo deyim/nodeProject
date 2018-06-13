@@ -4,11 +4,12 @@ module.exports = ()=>{
     const controller = require('../controllers/2_approvals_controller');
 
     //stores - index
-    route.get('/stores', controller.storesIndex);
+    route.get('/stores', controller.storesIndex)
+        .post('/stores', controller.storesApproveOrDelete);
     //stores - show
-    route.get('/stores/:id', controller.findStore, controller.storesShow);
+    route.get('/stores/:store_id', controller.findStore, controller.storesShow);
     //stores - delete
-    route.get('/stores/:id/delete', controller.findStore, controller.storesDelete);
+    route.get('/stores/:store_id/delete', controller.findStore, controller.storesDelete);
     
 
     return route;

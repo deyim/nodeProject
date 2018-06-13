@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Approval.associate = function(models) {
     // associations can be defined here
+    Approval.belongsTo(models.Provider, {as: 'provider'});
+    Approval.belongsTo(models.Store, {as: 'store'});
   };
   return Approval;
 };

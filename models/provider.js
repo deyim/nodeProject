@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
       Provider.belongsTo(models.User, {as: 'user'});
       Provider.hasMany(models.Store, {as: 'stores', foreignKey: 'providerId'});
       Provider.hasMany(models.Board, {as: 'boards'});
-      Provider.hasMany(models.Approval, {as: 'approvals', foreignKey: 'approvalId'});
+      Provider.hasMany(models.Approval, {as: 'approvals', foreignKey: 'providerId'});
       Provider.hasMany(models.Product, {as: 'products', foreignKey: 'providerId'});
   };
   return Provider;
