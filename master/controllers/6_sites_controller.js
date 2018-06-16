@@ -25,16 +25,16 @@ module.exports = {
             req.adaffiliations = adaffiliations;
         });
 
-        res.render("");
+
+        res.render("6_sites/banners_index");
         
     },
 
     adstoryAdd: (req, res)=>{
-
     },
 
     adstoryCreate: (req, res)=>{
-
+        
     },
 
     adstoryDelete: (req, res)=>{
