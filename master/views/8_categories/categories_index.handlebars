@@ -1,0 +1,13 @@
+{{!-- <form action="categoryAction"></form> --}}
+<h1>Category Index</h1>
+<form action="/categories/add" method="post">
+        <input type="text" name="name">
+        <input type="submit" value="추가">
+</form>
+{{#each categories}}
+    <form action="edit/{{this.id}}">
+        <input type="text" value={{this.name}}>
+        <input type="submit" value="수정">
+    </form>
+    <a href="delete/{{this.id}}">삭제</a>
+{{/each}}
