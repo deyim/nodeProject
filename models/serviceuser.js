@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   ServiceUser.associate = function(models) {
     // associations can be defined here
+    ServiceUser.belongsTo(models.Order, {as:'order', foreignKey: 'orderId'});
   };
   return ServiceUser;
 };

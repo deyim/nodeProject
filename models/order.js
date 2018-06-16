@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Order.associate = function(models) {
     Order.hasOne(models.OrderStatus, {as: 'orderStatus', foreignKey: 'orderId'});
+    Order.belongsTo(models.Product, {as: 'product'});
+    Order.belongsTo(models.User, {as: 'buyer'});
+    Order.belongsTo(models.Provider, {as: 'provider'});
+    Order.belongsTo(models.Store, {as: 'store'});
+    Order.belongsTo(models.Ordercode, {as: 'ordercode'});
+    Order.hasMany(models.ServiceUser, {as: 'serviceUsers', foreignKey: 'orderId'});
+    Order.hasOne(models.Payinfo, {as: 'payinfo'});
+    Order.hasOne(models.CancelRequest, {as: 'cancelRequest'});
   };
   return Order;
 };

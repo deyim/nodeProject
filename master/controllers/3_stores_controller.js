@@ -145,6 +145,7 @@ module.exports = {
         };
         res.render('3_stores/products_show', objData);
     },
+    
     productsUpdate: (req,res)=>{
         req.product.update(req.product)
         .then(()=>{
@@ -166,43 +167,88 @@ module.exports = {
                 res.redirect('/stores/posts');
             }
             req.post = post;
-            next();
+
+            post.getStore()
+            .then(store=>{
+                req.store = store;
+                next();
+            })
         });
     },
 
     postsIndex: (req,res)=>{
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page;
         if(Object.keys(req.query).length === 0){
-            db.Post.findAll()
-            .then(posts=>{
-                res.render('3_stores/posts_index', {posts});
-            });   
-        }      
-        else{
-            let q = req.query;
-            db.Post.findAll({
-                where:{
-                    [Op.or]:
-                    [
-                        {createdAt: {
-                                [Op.gte]: q.startdate ? q.startdate : null,
-                                [Op.lte]: q.enddate ? q.enddate : null,
-                            }
-                        },
-                        { title: q.title },
-                        { content: q.content },
-                    ]   
-                    //스토어url, 제목,내용 (association included)                
+            db.Post.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where: {
+                    noticeChk: false
                 }
             })
             .then(posts=>{
-                res.render('3_stores/posts_index', {posts});
+                objData = {posts:posts.rows, postsCount:posts.count}
+                res.render('3_stores/posts_index', objData);
+            });   
+        }      
+        else{
+            db.Post.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where:{
+                    [Op.and]:
+                    [
+                        {createdAt: {
+                            [Op.and]:[
+                                {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                            ]
+                            }
+                        },
+                        { title: { [Op.like]: `%${q.title}%` }}, 
+                        { content: { [Op.like]: `%${q.content}%` }},
+                        { noticeChk: false}
+                    ]   
+                    //스토어url, 제목,내용 (association included)                
+                },
+                include:[
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        foreignKey: 'storeId',
+                        where:{
+                            [Op.and]:
+                            [
+                                {url: { [Op.like]: `%${q.url}%` }},
+                            ]
+                        }                                
+                    }
+                ]
+            })
+            .then(posts=>{
+                objData = {posts:posts.rows, postsCount:posts.count}
+                res.render('3_stores/posts_index', objData);
             })
         }
     },
 
-    postsShow: (req,res)=>{
-        res.render('3_stores/posts_show', {post:req.post, today:Date.now()});
+    postsMultipleDelete: (req,res)=>{       
+        posts = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < posts.length; i++){
+            db.Post.findById(posts[i])
+            .then(post=>{
+                post.destroy();
+            });
+        };
+        res.redirect('/stores/posts');
     },
+
+    postsShow: (req,res)=>{
+        res.render('3_stores/posts_show', {post:req.post,store:req.store});
+    },
+    
     postsUpdate: (req,res)=>{
         req.post.update(req.post)
         .then(()=>{
@@ -210,6 +256,7 @@ module.exports = {
             res.redirect(`/stores/posts/${req.post.id}`);
         });
     },
+    
     //stores - delete
     postsDelete: (req,res)=>{
         req.post.destroy();
@@ -224,37 +271,130 @@ module.exports = {
                 res.redirect('/members/messages');
             }
             req.message = message;
-            //req.senders, req.receivers
-            next();
+
+            message.getSentMessages()
+            .then(sentMessages =>{
+                receivers = [];
+                console.log('\n\n\n***',sentMessages.length);
+                db.User.findById(sentMessages[0].senderId)
+                .then(sender=>{
+                    // console.log('first sync');
+                    req.sender = sender;
+                });
+                
+               
+                for(var i = 0 ; i < sentMessages.length ; i++){
+                // console.log('in loop',i);
+                    db.User.findById(sentMessages[i].receiverId)
+                    .then(receiver =>{
+                        receivers.push(receiver);
+                    // console.log('loop sync',i);//어차피 다 돌고 난 이후니깐 계속 i 는 length와 동일
+                    });
+                }
+                
+            })
+            .then(()=>{
+                setTimeout(function() {
+                    req.receivers = receivers;
+                    console.log(req.receivers, req.sender);
+                    next();
+                  }, 300);
+                
+            });           
         });
     },
 
     messagesIndex: (req,res)=>{
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page; 
         if(Object.keys(req.query).length === 0){
-            db.Message.findAll()
+            db.Message.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+            })
             .then(messages=>{
-                res.render('3_stores/messages_index', {messages});
+                objData = {messages:messages.rows, messagesCount:messages.count}
+                res.render('3_stores/messages_index', objData);
             });   
         }      
         else{
-            let q = req.query;
-            db.Message.findAll({
+            db.Message.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
                 where:{
-                    [Op.or]:
+                    [Op.and]:
                     [
                         {createdAt: {
-                                [Op.gte]: q.startdate ? q.startdate : null,
-                                [Op.lte]: q.enddate ? q.enddate : null,
+                            [Op.and]:[
+                                {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                {deletedAt: null}
+                            ]
                             }
                         }
                     ]   
                     //sentmessage의 아이디, 닉네임 / 스토어주소, 사업자명               
-                }
+                },
+                //user(sender), provider()
+                include: [
+                    {
+                        model: db.Sentmessage,
+                        as: 'sentMessages',
+                        include: [
+                            {
+                                model: db.User,
+                                as: 'sender',
+                                where: {
+                                    [Op.and]:
+                                    [
+                                        {username:{ [Op.like]: `%${q.username}%`}},
+                                        {nickname:{ [Op.like]: `%${q.nickname}%`}},
+                                        {deletedAt: null}
+                                    ]
+                                },
+                                // include: [
+                                //     {
+                                //         model: db.Provider,
+                                //         as: 'user',
+                                //         where: {
+                                //             companyName:{ [Op.like]: `%${q.companyName}%`},
+                                //         },
+                                //         include: [
+                                //             {
+                                //                 model: db.Store,
+                                //                 as: 'stores',
+                                //                 where: {
+                                //                     url:{ [Op.like]: `%${q.url}%`},
+                                //                 }
+                                //             }
+                                //         ]
+                                //     },
+                                    
+                                // ]
+                            }
+                        ]
+
+                    }
+                ]
             })
-            .then(posts=>{
-                res.render('3_stores/messages_index', {messages});
+            .then(messages=>{
+                console.log(messages);
+                objData = {messages:messages.rows, messagesCount:messages.count}
+                res.render('3_stores/messages_index', objData);
             })
         }
+    },
+
+    messagesMultipleDelete: (req,res)=>{       
+        messages = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < messages.length; i++){
+            db.Message.findById(messages[i])
+            .then(message=>{
+                message.destroy();
+            });
+        };
+        res.redirect('/stores/messages');
     },
 
     messagesShow: (req,res)=>{
@@ -273,31 +413,117 @@ module.exports = {
         res.redirect('/stores/messages');
     },
 
-
     findComment: (req,res,next)=>{
         db.Comment.findById(req.params.comment_id)
-        .then(message=>{
-            if(!message){
-                req.flash('error', '없는 유저입니다.');
+        .then(comment=>{
+            if(!comment){
+                req.flash('error', '없는 댓글입니다.');
                 res.redirect('/members/comments');
             }
             req.comment = comment;
-            next();
+            
+            comment.getPost()
+            .then(post=>{
+                req.post = post;
+            });
+
+            comment.getAuthor()
+            .then(author=>{
+                req.author = author;
+                next();
+            });
         });
     },
+    
     commentsIndex: (req,res)=>{
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page; 
+        if(Object.keys(req.query).length === 0){
+            db.Commenta.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1)
+            })
+            .then(comments=>{
+                objData = {comments:comments.rows, commentsCount:comments.count};
+                res.render('3_stores/commentas_index', objData);
+            });   
+        }      
+        else{
+            db.Commenta.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where:{
+                    [Op.and]:
+                    [
+                        {createdAt: {
+                                [Op.and]:[
+                                    {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                    {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                ]
+                            }
+                        },
+                        {content: { [Op.like]: `%${q.content}%`}}
+                    ]                    
+                },
+                include: [//provider 의 id, 사업자명, 회원유형
+                    {
+                        model: db.User,
+                        as: 'author',
+                        where: {
+                            [Op.and]:
+                            [
+                                {username:{ [Op.like]: `%${q.username}%`}},
+                                {nickname:{ [Op.like]: `%${q.nickname}%`}},
+                            
+                            ]
+                        },
+                        include: [
+                            {
+                                model: db.User,
+                                as: 'user',
+                                where: {
+                                    [Op.and]:
+                                    [
+                                        {username:{ [Op.like]: `%${q.username}%`}},
+                                    ]
+                                }
+                            }
+                        ]
+                        
+                    }
+                ]
+            })
+            .then(comments=>{
+                objData = {comments:comments.rows, comments:comments.count}
+                res.render('3_stores/commentas_index', objData);
+            })
+        }
+    },
 
+    commentsMultipleDelete: (req,res)=>{       
+        comments = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < comments.length; i++){
+            db.Commentas.findById(comments[i])
+            .then(comments=>{
+                comments.destroy();
+            });
+        };
+        res.redirect('/stores/comments');
     },
 
     commentsShow: (req,res)=>{
-
-    },
-    commentsUpdate: (req,res)=>{
-        
+        objData = {
+            comment: req.comment,
+            post: req.post,
+            author: req.author
+        }
+        res.render('3_stores/commentas_show.handlebars',objData);
     },
     //stores - delete
     commentsDelete: (req,res)=>{
-        
+        req.comment.destroy();
+        res.redirect('/stores/messages');
     },
     
     findNotice: (req,res,next)=>{
@@ -308,48 +534,89 @@ module.exports = {
                 res.redirect('/stores/notices');
             }
             req.notice = notice;
-            next();
+
+            notice.getAuthor()
+            .then(author=>{
+                req.author =author;
+            });
+
+            notice.getStore()
+            .then(store=>{
+                req.store = store;
+                next();
+            })
+            
+
         });
     },
 
     noticesIndex: (req,res)=>{
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page; 
        if(Object.keys(req.query).length === 0){
-            db.Post.findAll({
+            db.Post.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
                 where: {
                     noticeChk: true
                 }
             })
             .then(notices=>{
-                console.log(notices);
-                res.render('3_stores/notices_index', {notices});
+                objData = {notices:notices.rows, noticesCount:notices.count};
+                res.render('3_stores/notices_index', objData);
             });   
         }      
         else{
-            let q = req.query;
-            db.Post.findAll({
+            db.Post.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
                 where:{
-                    [Op.or]:
+                    [Op.and]:
                     [
                         {createdAt: {
-                                [Op.gte]: q.startdate ? q.startdate : null,
-                                [Op.lte]: q.enddate ? q.enddate : null,
-                            }
+                            [Op.and]:[
+                                {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                            ]
+                        }
                         },
-                        { username: q.username },
-                        { nickname: q.nickname },
-                        { url: q.url },
-                        { companyName: q.companyName }
+                        {title: { [Op.like]: `%${q.title}%`}},
+                        {content: { [Op.like]: `%${q.content}%`}},
+                        {noticeChk: true}
                     ]                    
-                }
+                },
+                include: [
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            url: { [Op.like]: `%${q.url}%`}
+                        }
+                    }
+                ]
             })
             .then(notices=>{
-                res.render('3_stores/notices_index', {notices});
+                objData = {notices:notices.rows, noticesCount:notices.count};
+                res.render('3_stores/notices_index', objData);
             })
         }
     },
 
+    noticesMultipleDelete: (req,res)=>{       
+        notices = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < notices.length; i++){
+            db.Commentas.findById(notices[i])
+            .then(notices=>{
+                notices.destroy();
+            });
+        };
+        res.redirect('/stores/notices');
+    },
+
     noticesShow: (req,res)=>{
-        res.render('3_stores/notices_show',{notice:req.notice});
+        objData = {notice: req.notice, author:req.author, store:req.store}
+        res.render('3_stores/notices_show',objData);
     },
     noticesUpdate: (req,res)=>{
         req.post.update(req.body)

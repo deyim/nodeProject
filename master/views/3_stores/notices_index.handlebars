@@ -1,6 +1,27 @@
-<h1>notices index</h1>
+<h1>Notices Index</h1>
 
-{{#each notices }}
-    <a href="/stores/notices/{{this.id}}">{{this.title}}</a>
-{{/each}}
+<form method="get">
+    등록일시작: <input type="date" name="startdate"><br>
+    등록일끝: <input type="date" name="enddate"><br>
+    제목: <input type="text" name="title" ><br>
+    내용: <input type="text" name="content" ><br>
+    스토어주소: <input type="text" name="url" ><br>
+    <input type="submit" value="제출"><br>
+</form>
 
+전체공지 수: {{noticesCount}}
+<form method="POST" name="noticesIndex"> 
+    <input type="submit" value="삭제"><br>
+    {{#each notices}}    
+        <input type="checkbox" name="checked" value={{this.id}} >
+        <a href="/stores/notices/{{this.id}}">{{this.content}}</a>
+        {{this.createdAt}}
+        <br>
+    {{/each}}
+</form>
+
+<a href="?page=1">1</a>
+<a href="?page=2">2</a>
+<a href="?page=3">3</a>
+<a href="?page=4">4</a>
+<a href="?page=4">5</a>

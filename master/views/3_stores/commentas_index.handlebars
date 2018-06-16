@@ -1,0 +1,27 @@
+<h1>Posts Comments Index</h1>
+
+<form method="get">
+    댓글작성일시작: <input type="date" name="startdate"><br>
+    댓글작성일끝: <input type="date" name="enddate"><br>
+    아이디: <input type="text" name="username" ><br>
+    닉네임: <input type="text" name="nickname" ><br>
+    검색어: <input type="text" name="content" ><br>
+    <input type="submit" value="제출"><br>
+</form>
+
+댓글 수: {{commentsCount}}
+<form method="POST" name="commentsIndex"> 
+    <input type="submit" value="삭제"><br>
+    {{#each comments}}    
+        <input type="checkbox" name="checked" value={{this.id}} >
+        <a href="/stores/comments/{{this.id}}">{{this.content}}</a>
+        {{this.createdAt}}
+        <br>
+    {{/each}}
+</form>
+
+<a href="?page=1">1</a>
+<a href="?page=2">2</a>
+<a href="?page=3">3</a>
+<a href="?page=4">4</a>
+<a href="?page=4">5</a>

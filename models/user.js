@@ -55,8 +55,8 @@ module.exports = (sequelize, DataTypes) => {
 
 
   User.associate = function(models) {
-    // User.hasOne(models.Provider, {as: 'provider'});
-    // User.hasOne(models.Master, {as: 'master'});
+    User.hasOne(models.Provider, {as: 'user'});
+    // User.hasOne(models.Master, {as: 'user'});
     User.hasMany(models.Sentmessage, {as: 'sendings', foreignKey: 'senderId'});
     User.hasMany(models.Sentmessage, {as: 'receivings', foreignKey: 'receiverId'});
     User.belongsToMany(models.Store, {

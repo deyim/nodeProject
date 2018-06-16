@@ -177,7 +177,6 @@ module.exports = {
             });   
         }      
         else{
-            console.log(q);
             db.Provider.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
@@ -294,7 +293,6 @@ module.exports = {
             });   
         }      
         else{
-            let q = req.query;
             db.Store.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),

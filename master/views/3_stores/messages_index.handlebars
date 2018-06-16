@@ -10,6 +10,21 @@
     <input type="submit" value="제출"><br>
 </form>
 
-{{#each messages}}
-    <a href="/stores/messages/{{this.id}}">{{this.content}}</a><br>
-{{/each}}
+쪽지 수: {{messagesCount}}
+<form method="POST" name="messagesIndex"> 
+    <input type="submit" value="삭제"><br>
+    <input type="submit" onclick="chooseAll()" value="전체삭제"><br>
+
+    {{#each messages}}    
+        <input type="checkbox" name="checked" value={{this.id}} >
+        <a href="/stores/messages/{{this.id}}">{{this.content}}</a>
+        {{this.createdAt}}
+        <br>
+    {{/each}}
+</form>
+
+<a href="?page=1">1</a>
+<a href="?page=2">2</a>
+<a href="?page=3">3</a>
+<a href="?page=4">4</a>
+<a href="?page=4">5</a>

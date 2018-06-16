@@ -9,6 +9,31 @@
     <input type="submit" value="제출"><br>
 </form>
 
-{{#each posts}}
-    <a href="/stores/posts/{{this.id}}">{{this.title}}</a><br>
-{{/each}}
+게시글 수: {{postsCount}}
+<form method="POST" name="postsIndex"> 
+    <input type="submit" value="삭제"><br>
+    <input type="submit" onclick="chooseAll()" value="전체삭제"><br>
+
+    {{#each posts}}    
+        <input type="checkbox" name="checked" value={{this.id}} >
+        <a href="/stores/posts/{{this.id}}">{{this.title}}</a>
+        {{this.createdAt}}
+        <br>
+    {{/each}}
+</form>
+
+<a href="?page=1">1</a>
+<a href="?page=2">2</a>
+<a href="?page=3">3</a>
+<a href="?page=4">4</a>
+<a href="?page=4">5</a>
+
+
+<script>
+    function chooseAll() {
+        checkboxes = document.getElementsByName('checked');
+        for(i=0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = true;
+        }
+    }
+</script>

@@ -1,2 +1,6 @@
 <h1>Message show</h1>
-{{message.content}}
+<br>{{message.content}}
+<br>{{sender.username}}
+<br>{{#each receivers}}
+<br>    {{this.username}}
+{{/each}}

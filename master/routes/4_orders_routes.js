@@ -7,33 +7,33 @@ module.exports = ()=>{
 
     //ordered - index
     route.get('/ordered', controller.orderedIndex);
-    //ordered - show
-    route.get('/ordered/:id', controller.orderedShow);
+    // //ordered - show
+    // route.get('/ordered/:id', controller.orderedShow);
 
     //paid - index
     route.get('/paid', controller.paidIndex);
     //paid - show
-    route.get('/paid/:id', controller.paidShow);
+    // route.get('/paid/:id', controller.paidShow);
 
     //placed - index
     route.get('/placed', controller.placedIndex);
     //placed - show
-    route.get('/placed/:id', controller.placedShow);
+    // route.get('/placed/:id', controller.placedShow);
     
     //used - index
     route.get('/used', controller.usedIndex);
     //used - show
-    route.get('/used/:id', controller.usedShow);
+    // route.get('/used/:id', controller.usedShow);
 
     //final - index
     route.get('/final', controller.finalIndex);
     //final - show
-    route.get('/final/:id', controller.finalShow);
+    // route.get('/final/:id', controller.finalShow);
 
     //cancel - index
     route.get('/cancel', controller.cancelIndex);
     //cancel - show
-    route.get('/cancel/:id', controller.cancelShow);
+    // route.get('/cancel/:id', controller.cancelShow);
    
 //complicated..
 

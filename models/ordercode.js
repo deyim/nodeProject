@@ -6,9 +6,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     }
-  }, {});
+  }, {
+    timestamps:false
+  });
   Ordercode.associate = function(models) {
     // associations can be defined here
+    Ordercode.hasOne(models.Order, {as:'ordercode'});
   };
   return Ordercode;
 };

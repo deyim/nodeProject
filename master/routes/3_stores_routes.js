@@ -14,7 +14,8 @@ module.exports = ()=>{
 
 
     //posts - index
-    route.get('/posts', controller.postsIndex);
+    route.get('/posts', controller.postsIndex)
+        .post('/posts', controller.postsMultipleDelete)
     //posts - show
     route.get('/posts/:post_id', controller.findPost, controller.postsShow)
         .post('/posts/:post_id/', controller.findPost, controller.postsUpdate);
@@ -23,7 +24,8 @@ module.exports = ()=>{
 
 
      //messages - index
-     route.get('/messages', controller.messagesIndex);
+     route.get('/messages', controller.messagesIndex)
+        .post('/messages', controller.messagesMultipleDelete);
      //messages - show
      route.get('/messages/:message_id', controller.findMessage, controller.messagesShow);
      //messages - delete
@@ -31,16 +33,18 @@ module.exports = ()=>{
 
 
     //comments - index
-    route.get('/comments', controller.commentsIndex);
+    route.get('/comments', controller.commentsIndex)
+        .post('/comments', controller.commentsMultipleDelete);
     //comments - show
     route.get('/comments/:comment_id', controller.findComment, controller.commentsShow);
     //comments - update
-    route.post('/comments/:comment_id/', controller.findComment, controller.commentsUpdate);
+    
     //comments - delete
     route.get('/comments/:comment_id/delete', controller.findComment, controller.commentsDelete);
 
     //comments - index
-    route.get('/notices', controller.noticesIndex);
+    route.get('/notices', controller.noticesIndex)
+        .post('/notices', controller.noticesMultipleDelete);
     //comments - show
     route.get('/notices/:notice_id', controller.findNotice, controller.noticesShow);
     //comments - update
