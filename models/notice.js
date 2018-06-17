@@ -4,10 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING(30),
     },
-    content: DataTypes.TEXT
+    content: DataTypes.TEXT,
+    type: DataTypes.STRING(1)
   }, {});
   Notice.associate = function(models) {
-    // associations can be defined here
+    Notice.belongsTo(models.Noticecode, {as:'noticecode', foreignKey: 'noticecodeId'});
   };
   return Notice;
 };

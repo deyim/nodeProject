@@ -38,6 +38,15 @@ module.exports = {
         }
       )
     })
+    .then(()=>{
+      queryInterface.addColumn(
+        'Notices',
+        'type',
+        {
+          type: Sequelize.STRING(1),          
+        }
+      )
+    })
   },
 
   down: (queryInterface, Sequelize) => {
@@ -53,6 +62,12 @@ module.exports = {
     .then(()=>{
       queryInterface.removeColumn(
         'Faqs',
+        'type'
+      )
+    })
+    .then(()=>{
+      queryInterface.removeColumn(
+        'Notices',
         'type'
       )
     })

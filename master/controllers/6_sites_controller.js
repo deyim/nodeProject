@@ -83,7 +83,59 @@ module.exports = {
     },
 
     noticesIndex: (req,res)=>{
-
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page;  
+        if(Object.keys(req.query).length === 0){
+            db.Notice.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1)
+            })
+            .then(notices=>{
+                // console.log('\n\n\n****',notices);
+                db.Noticecode.findAll()
+                .then(codes=>{                    
+                    objData = {notices:notices.rows, noticesCount: notices.count, noticecodes:codes};
+                    res.render('6_sites/notices_index', objData);
+                });                
+            });
+        }
+        else{
+            let type;            
+            if(q.type === "사용자"){
+                console.log('\n\n\**',q.type);
+                type = "A"
+            }else{
+                type = "B"
+            }
+            db.Notice.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Noticecode,
+                        as: 'noticecode',
+                        foreignKey: 'noticecodeId',
+                        where: {
+                            code: { [Op.like]: `%${q.code}%` }
+                        }
+                    }
+                ],
+                where: {
+                    type: type
+                }
+            })
+            .then(notices=>{
+                
+                db.Noticecode.findAll({
+                })
+                .then(codes=>{
+                    objData = {notices:notices.rows, noticesCount: notices.count, noticecodes:codes};
+                    res.render('6_sites/notices_index', objData);
+                });   
+            });
+        }
+        
     },
 
     noticeAdd: (req,res)=>{
