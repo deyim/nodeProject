@@ -9,6 +9,14 @@ module.exports = (sequelize, DataTypes) => {
     authority: {
       type: DataTypes.STRING,
       defaultValue: 'A'
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     paranoid:true

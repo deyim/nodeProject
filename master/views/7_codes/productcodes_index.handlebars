@@ -4,12 +4,10 @@
     상품코드: <input type="text" name="productcode"><br>    
     <input type="submit" value="제출"><br>
 </form>
-
+<a href="products/add">추가하기</a><br>
 상품코드: {{codesCount}}
 {{#each codes}}  
-    <br>{{this.code}}
-    <br>{{this.categoryId}}
-    <br>{{this.usedChk}}
+    <br>{{this.code}} {{this.categoryId}} {{this.usedChk}}
     <br>{{#each this.serviceUsers}} {{this.korName}}{{/each}}
 {{/each}}
 

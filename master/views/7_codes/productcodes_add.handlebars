@@ -1,0 +1,11 @@
+<form action="/codes/products/generate" method="post">
+    <input type="text" name="faqcode" list="faqcodes">
+    <datalist id="faqcodes">
+    {{#each categories}}
+        <option value={{this.code}}> 
+    {{/each}}
+    </datalist>
+    
+    <input type="submit" value="제출">
+</form>
+

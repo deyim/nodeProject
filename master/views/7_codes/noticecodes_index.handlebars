@@ -2,5 +2,11 @@
 
 
 {{#each codes}}  
-    <br>{{this.code}}
+    <br>{{this.code}} <a href="/codes/notices/delete/{{this.id}}">삭제</a>
 {{/each}}
+
+<form action="/codes/notices/generate" method="post">
+    <label>코드값</label>
+    <input type="text" name="code">
+    <input type="submit" value="등록">
+</form>

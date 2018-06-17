@@ -1,0 +1,9 @@
+<h1>Master index</h1>
+<a href="/sites/masters/add">추가</a>
+{{!-- <form action="/sites/masters/masterMultiple"> --}}
+    {{#each masters}}  
+        {{!-- <br><input type="checkbox" name="checked" value={{this.id}}> --}}
+        <br><a href="/sites/masters/{{this.id}}">{{this.name}}</a>
+    {{/each}}
+{{!-- </form> --}}
+

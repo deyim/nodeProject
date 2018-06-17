@@ -26,19 +26,21 @@ module.exports = ()=>{
         .post('/notices/add', controller.noticeCreate);
     route.get('/notices/:notice_id', controller.findNotice, controller.noticeShow)
         .post('/notices/:notice_id', controller.findNotice, controller.noticeUpdate);
-    route.get('notices/:notice_id/delete', controller.findNotice, controller.noticeDelete);
+    route.get('/notices/:notice_id/delete', controller.findNotice, controller.noticeDelete);
 
     route.get('/faqs', controller.faqsIndex);
     route.get('/faqs/add', controller.faqAdd)
         .post('/faqs/add', controller.faqCreate);
-    route.get('/faqs/:notice_id', controller.findFaq, controller.faqShow)
-        .post('/faqs/:notice_id', controller.findFaq, controller.faqUpdate);
-    route.get('/faqs/:notice_id/delete', controller.findFaq, controller.faqDelete);
+    route.get('/faqs/:faq_id', controller.findFaq, controller.faqShow)
+        .post('/faqs/:faq_id', controller.findFaq, controller.faqUpdate);
+    route.get('/faqs/:faq_id/delete', controller.findFaq, controller.faqDelete);
 
     
 
     //masters - index
     route.get('/masters', controller.mastersIndex);
+    route.get('/masters/add', controller.mastersAdd)
+        .post('/masters/add', controller.mastersCreate);
     //masters - show
     route.get('/masters/:master_id', controller.findMaster, controller.mastersShow)
         .post('/masters/:master_id', controller.findMaster, controller.mastersUpdate);

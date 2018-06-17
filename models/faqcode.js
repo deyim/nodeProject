@@ -1,12 +1,16 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var FAQcode = sequelize.define('FAQcode', {
-    code: DataTypes.STRING
+    code: DataTypes.STRING,
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW 
+    }
   }, {
     timestamps: false
   });
   FAQcode.associate = function(models) {
-    // associations can be defined here
+    FAQcode.hasMany(models.Faq, {as: 'faqs', foreignKey: 'faqcodeId'});
   };
   return FAQcode;
 };

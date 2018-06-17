@@ -1,7 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Noticecode = sequelize.define('Noticecode', {
-    code: DataTypes.STRING
+    code: DataTypes.STRING,
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW 
+    }
   }, {
     timestamps: false
   });

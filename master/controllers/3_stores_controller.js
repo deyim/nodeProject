@@ -45,7 +45,6 @@ module.exports = {
         let q = req.query;
         let page = q.page||1;
         delete q.page;    
-        console.log('\n\n****',q.productcode); 
         if(Object.keys(req.query).length === 0){
             db.Product.findAndCountAll({
                 limit: perPage,

@@ -1,1 +1,26 @@
 <h1>faqs_index</h1>
+<form action="">
+    <input type="text" name="code" list="codes">
+    <datalist id="codes">
+        {{#each faqcodes}}
+            <option value={{this.code}}> 
+        {{/each}}
+    </datalist>
+    <input type="text" name="type" list="types">
+    <datalist id="types">
+        <option value="사용자">
+        <option value="스토어">
+    </datalist>
+    <input type="submit", value="제출">
+</form>
+
+{{#each faqs}}
+    <a href="/sites/faqs/{{this.id}}">{{this.title}}</a>
+    {{!-- {{#if {{this.type}}=='A'}}
+        일반FAQ
+    {{else}}
+        회사FAQ
+    {{/if}} --}}
+    {{!-- {{this.content}} --}}
+    {{this.createdAt}}<br>
+{{/each}}
