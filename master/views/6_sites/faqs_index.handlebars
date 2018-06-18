@@ -1,18 +1,19 @@
 <h1>faqs_index</h1>
 <form action="">
-    <input type="text" name="code" list="codes">
-    <datalist id="codes">
+    <select name="code">
         {{#each faqcodes}}
-            <option value={{this.code}}> 
+            <option value={{this.code}}>{{this.code}}</option> 
         {{/each}}
-    </datalist>
-    <input type="text" name="type" list="types">
-    <datalist id="types">
-        <option value="사용자">
-        <option value="스토어">
-    </datalist>
+    </select>
+    <select name="type">
+        <option value="">선택안함</option>
+        <option value="A">사용자</option>
+        <option value="B">스토어</option>
+    </select>
     <input type="submit", value="제출">
 </form>
+
+<a href="/sites/faqs/add">FAQ 추가하기</a><br>
 
 {{#each faqs}}
     <a href="/sites/faqs/{{this.id}}">{{this.title}}</a>

@@ -79,10 +79,19 @@ module.exports = {
     },
       
     findNotice: (req,res,next)=>{
-
+        db.Notice.findById(req.params.notice_id)
+        .then(notice=>{
+            req.notice = notice;
+            db.Noticecode.findAll()
+            .then(codes=>{                
+                req.noticecodes = codes;
+                next();
+            });
+        })
     },
 
     noticesIndex: (req,res)=>{
+        console.log(req.query);
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
@@ -101,13 +110,14 @@ module.exports = {
             });
         }
         else{
-            let type;            
-            if(q.type === "사용자"){
-                console.log('\n\n\**',q.type);
-                type = "A"
-            }else{
-                type = "B"
-            }
+            // let type;            
+            // if(q.type === "사용자"){
+            //     type = "A";
+            // }else if(q.type === "스토어"){
+            //     type = "B";
+            // }else{
+            //     type = "";
+            // }
             db.Notice.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
@@ -122,11 +132,11 @@ module.exports = {
                     }
                 ],
                 where: {
-                    type: type
+                    type: { [Op.like]: `%${q.type}%` }
                 }
             })
             .then(notices=>{
-                
+                console.log(notices);
                 db.Noticecode.findAll({
                 })
                 .then(codes=>{
@@ -139,23 +149,42 @@ module.exports = {
     },
 
     noticeAdd: (req,res)=>{
-
+        db.Noticecode.findAll()
+        .then(codes=>{                    
+            objData = {codes:codes};
+            res.render('6_sites/notices_add', objData);
+        });    
     },
 
     noticeCreate: (req,res)=>{
+        let notice = req.body;
+        notice.createdAt = Date.now();
+        notice.updatedAt = Date.now();
 
+        db.Notice.create(notice)
+        .then((anotice)=>{
+            res.redirect("/sites/notices");
+        })
     },
 
     noticeShow: (req,res)=>{
-
+        notice = req.notice;
+        codes = req.noticecodes;
+        res.render("6_sites/notices_show", {notice:notice,codes:codes});
     },
 
     noticeUpdate: (req,res)=>{
-
+        req.notice.update(req.body)
+        .then(()=>{
+            res.redirect("/sites/notices");
+            })
+        // })
+        
     },
 
     noticeDelete: (req,res)=>{
-
+        req.notice.destroy();
+        res.redirect("/sites/notices");
     },
 
     /***********************
@@ -185,8 +214,10 @@ module.exports = {
             let type;
             if(q.type === "사용자"){
                 type = "A"
+            }else if(q.type === "스토어"){
+                type = "B";
             }else{
-                type = "B"
+                type = "";
             }
             db.Faq.findAndCountAll({
                 limit: perPage,
@@ -202,7 +233,7 @@ module.exports = {
                     }
                 ],
                 where: {
-                    type: type
+                    type: { [Op.like]: `%${q.type}%` }
                 }
             })
             .then(faqs=>{
@@ -231,11 +262,22 @@ module.exports = {
     },
 
     faqAdd: (req,res)=>{
-
+        db.FAQcode.findAll()
+        .then(codes=>{                    
+            objData = {codes:codes};
+            res.render('6_sites/faqs_add', objData);
+        });  
     },
 
     faqCreate: (req,res)=>{
+        let faq = req.body;
+        faq.createdAt = Date.now();
+        faq.updatedAt = Date.now();
 
+        db.Faq.create(faq)
+        .then((afaq)=>{
+            res.redirect("/sites/faqs");
+        })
     },
 
     faqShow: (req,res)=>{
@@ -244,11 +286,15 @@ module.exports = {
     },
 
     faqUpdate: (req,res)=>{
-
+        req.faq.update(req.body)
+        .then(()=>{
+            res.redirect("/sites/faqs");
+            })
     },
 
     faqDelete: (req,res)=>{
-
+        req.faq.destroy();
+        res.redirect("/sites/faqs");
     },
     
     /***********************

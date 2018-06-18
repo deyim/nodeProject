@@ -1,4 +1,20 @@
 <h1>notices_show</h1>
 
-<br>{{notice.title}}
-<br>{{notice.content}}
+<form action="" method="POST">
+    {{!-- <select id="codes" name="noticecodeId">
+        {{#each codes}}
+            <option value={{this.code}}>{{this.code}}</option>
+        {{/each}}
+    </select><br> --}}
+    **사용자, 스토어 체크할 것
+    <select id="types" name="type">
+        {{!-- javascript로 default value 표시해야 --}}
+        <option value="A">사용자</option>
+        <option value="B">스토어</option>
+    </select><br>
+    제목:<input type="text" name="title" value={{notice.title}}>
+    내용:<input type="text" name="content" value={{notice.content}}>
+    <input type="submit" value="제출">
+</form>
+
+<a href="/sites/notices/{{notice.id}}/delete">삭제</a>

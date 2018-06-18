@@ -1,0 +1,13 @@
+<h1>send messages</h1>
+보내는 이: {{user.nickname}}<br>
+받는이 id: {{receivers}} 
+{{!-- 받는 이: {{#each receivers}} {{this.id}}  {{/each}} --}}
+
+<form action="/members/sendMessages" method="POST">
+    <input type="hidden" name="receivers" value={{receivers}}>
+    <div>
+        <label>쪽지내용</label>
+        <input type="text" name="content">
+    </div>
+    <input type="submit" value="제출">
+</form>

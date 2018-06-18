@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
   Noticecode.associate = function(models) {
-    Noticecode.hasMany(models.Notice, {as: 'notices', foreignKey: 'noticecodeId'});
+    Noticecode.hasMany(models.Notice, {as: 'notices', foreignKey: 'noticecodeId', onDelete:'cascade'});
   };
   return Noticecode;
 };

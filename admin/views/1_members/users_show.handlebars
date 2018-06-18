@@ -1,0 +1,29 @@
+<h1>USERS_SHOW</h1>
+{{!-- {{#if req.session.alert}}
+    <script>alert('수정되었습니다.');</script>
+{{/if}} --}}
+
+<form method="post">
+    <input type="text" name="username" value="{{user.username}}">
+    <input type="text" name="nickname" value="{{user.nickname}}">
+    <input type="text" name="phone" value="{{user.phone}}">
+    <input type="submit" value="제출">
+    <a href="{{user.id}}/delete">탈퇴</a>
+</form>
+{{user.username}}
+<br>{{user.email}}
+<br>{{user.nickname}}
+<br>{{user.phone}}
+<br>{{user.createdAt}}
+<br>{{user.updatedAt}}
+<br>{{user.loginDate}}
+<br>{{user.loginCnt}}
+<br>{{user.recEmail}}
+<br>{{user.recSMS}}
+<br>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+<br>{{storesCnt}}개
+{{#each stores}} {{this.name}} {{/each}}
+<br>{{posts}}개
+<br>{{sendings}}개
+<br>{{receivings}}개
+

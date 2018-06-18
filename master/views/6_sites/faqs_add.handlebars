@@ -1,8 +1,16 @@
 <h1>faqs_add</h1>
 
-<form action="" method="post">
-    <br><input type="text" name="title">
-    <br><input type="text" name="code">
-    <br><input type="text" name="content">
-    <br><input type="submit" value="제출">
+<form action="" method="POST">
+    <select name="faqcodeId">
+        {{#each codes}}
+            <option value={{this.id}}>{{this.code}}</option> 
+        {{/each}}
+    </select>
+    <select name="type">
+        <option value="A">사용자</option>
+        <option value="B">스토어</option>
+    </select><br>
+    제목:<input type="text" name="title">
+    내용:<input type="text" name="content">
+    <input type="submit" value="제출">
 </form>
