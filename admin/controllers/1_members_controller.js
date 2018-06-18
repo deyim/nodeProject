@@ -1,7 +1,39 @@
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
-const perPage = 5;
+const perPage = 10;
+
+var makeObj = (user)=>{
+    return new Promise (resolve=>{
+        db.Order.findAndCountAll({
+            include: [
+                {
+                   model: db.User,
+                   as: 'buyer',
+                   where: {
+                       id: user.id
+                   }
+                }
+            ]
+        })
+        .then(orders=>{
+            console.log('\n\n\n\n****', user);
+            user.ordersCnt = orders.count;
+        });
+    });    
+}
+
+async function usersToArray(users){
+    var usersArray =[];
+    for( var i = 0 ; i < users.count ; i++){
+        var user = users.rows[i].dataValues;
+        await makeObj(user);
+        usersArray.push(user);
+        console.log('\n\n\n\n******',user);
+    }
+    var myObj = {users:usersArray, userCount:users.count};
+    return myObj;
+}
 
 module.exports = {
      /***********************
@@ -66,7 +98,16 @@ module.exports = {
             .then(orders=>{
                 req.orders = orders.length || 0;                
             });
-            
+
+            db.StoreUsers.find({
+                where: {
+                    userId: user.id,
+                    storeId: res.locals.store.id
+                }
+            }).then((asso)=>{
+                req.createdAt = asso.createdAt
+            })
+
             user.getCommentas({
                 include: [
                     {
@@ -100,7 +141,7 @@ module.exports = {
     usersIndex: (req,res)=>{
         let q = req.query;
         let page = q.page||1;
-        delete q.page;        
+        delete q.page;    
         if(Object.keys(q).length === 0){
             db.User.findAndCountAll({
                 limit: perPage,
@@ -117,7 +158,11 @@ module.exports = {
                 },
             })
             .then(users=>{
-                res.render('1_members/users_index', {users:users.rows, usersCount:users.count});
+                res.render('1_members/users_index', {users:users.rows, usersCount: users.count});                
+                // var myObj = usersToArray(users);
+                // setTimeout(()=>{
+                //     res.render('1_members/users_index', myObj);
+                // },1000);                
             });   
         }      
         else{          
@@ -158,7 +203,7 @@ module.exports = {
     //users - show
     usersShow: (req,res)=>{  
         console.log('\n\n***', req.posts);
-        dataobj = {user:req.user, posts:req.posts, orders:req.orders, comments:req.comments};
+        dataobj = {user:req.user, posts:req.posts, orders:req.orders, comments:req.comments, createdAt:req.createdAt};
         res.render('1_members/users_show', dataobj);
     },   
 

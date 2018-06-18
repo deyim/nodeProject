@@ -8,15 +8,15 @@ module.exports = {
         db.Product.find({
             where: {
                 id: req.params.product_id,
-                include: [
-                    {
-                        model: db.Store,
-                        as: 'store',
-                        where: {
-                            id: res.locals.store.id
-                        }
-                    }
-                ]
+                // include: [
+                //     {
+                //         model: db.Store,
+                //         as: 'store',
+                //         where: {
+                //             id: res.locals.store.id
+                //         }
+                //     }
+                // ]
             }
         })
         .then(product=>{
@@ -74,12 +74,14 @@ module.exports = {
 
             })
             .then(products=>{
-                objData = {products:products.rows, productsCount:products.count}
-                res.render('2_stores/products_index', objData);
+                db.Category.findAll()
+                .then(categories=>{
+                    objData = {products:products.rows, productsCount:products.count, categories:categories}
+                    res.render('2_stores/products_index', objData);
+                })               
             });   
         }      
         else{
-            let q = req.query;
             db.Product.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
@@ -124,8 +126,11 @@ module.exports = {
                 ]
             })
             .then(products=>{
-                objData = {products:products.rows, productsCount:products.count}
-                res.render('2_stores/products_index', objData);
+                db.Category.findAll()
+                .then(categories=>{
+                    objData = {products:products.rows, productsCount:products.count, categories:categories}
+                    res.render('2_stores/products_index', objData);
+                })
             })
         }
     },
@@ -172,7 +177,7 @@ module.exports = {
             tags:req.tags,
             category:req.category
         };
-        res.render('3_stores/products_show', objData);
+        res.render('2_stores/products_show', objData);
     },
     
     productsUpdate: (req,res)=>{
@@ -182,6 +187,16 @@ module.exports = {
             res.redirect(`/stores/products/${req.product.id}`);
         });
     },
+
+    //products - add
+    productsAdd: (req,res)=>{
+        res.render("2_stores/products_add");
+    },
+
+    productsCreate: (req,res)=>{
+        res.render("2_stores/products_add_completed");
+    },
+
     //stores - delete
     productsDelete: (req,res)=>{
         req.product.destroy();
@@ -354,7 +369,7 @@ module.exports = {
             })
             .then(messages=>{
                 objData = {messages:messages.rows, messagesCount:messages.count}
-                res.render('3_stores/messages_index', objData);
+                res.render('2_stores/messages_index', objData);
             });   
         }      
         else{
@@ -485,7 +500,7 @@ module.exports = {
             })
             .then(comments=>{
                 objData = {comments:comments.rows, commentsCount:comments.count};
-                res.render('3_stores/commentas_index', objData);
+                res.render('2_stores/commentas_index', objData);
             });   
         }      
         else{
@@ -535,7 +550,7 @@ module.exports = {
             })
             .then(comments=>{
                 objData = {comments:comments.rows, comments:comments.count}
-                res.render('3_stores/commentas_index', objData);
+                res.render('2_stores/commentas_index', objData);
             })
         }
     },
@@ -557,7 +572,7 @@ module.exports = {
             post: req.post,
             author: req.author
         }
-        res.render('3_stores/commentas_show.handlebars',objData);
+        res.render('2_stores/commentas_show.handlebars',objData);
     },
     //stores - delete
     commentsDelete: (req,res)=>{
@@ -603,7 +618,7 @@ module.exports = {
             })
             .then(notices=>{
                 objData = {notices:notices.rows, noticesCount:notices.count};
-                res.render('3_stores/notices_index', objData);
+                res.render('2_stores/notices_index', objData);
             });   
         }      
         else{
@@ -637,7 +652,7 @@ module.exports = {
             })
             .then(notices=>{
                 objData = {notices:notices.rows, noticesCount:notices.count};
-                res.render('3_stores/notices_index', objData);
+                res.render('2_stores/notices_index', objData);
             })
         }
     },
@@ -655,7 +670,7 @@ module.exports = {
 
     noticesShow: (req,res)=>{
         objData = {notice: req.notice, author:req.author, store:req.store}
-        res.render('3_stores/notices_show',objData);
+        res.render('2_stores/notices_show',objData);
     },
     noticesUpdate: (req,res)=>{
         req.post.update(req.body)

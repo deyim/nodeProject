@@ -11,9 +11,9 @@
                             <tr>
                                 <th>회원가입일</th>
                                 <td colspan="3">
-                                    <div class="calendar_box"><input type="date" name="startdate"><span><img src="../images/sub/calendar.jpg"></span></div>
+                                    <div class="calendar_box"><input type="date" name="startdate"><span><img src="/images/sub/calendar.jpg"></span></div>
                                     <div>-</div>
-                                    <div class="calendar_box"><input type="date" name="enddate"><span><img src="../images/sub/calendar.jpg"></span></div>
+                                    <div class="calendar_box"><input type="date" name="enddate"><span><img src="/images/sub/calendar.jpg"></span></div>
                                     <div class="priod_box">
                                         <select class="inputstyle">
                                             <option>전체기간</option>
@@ -50,6 +50,7 @@
 			
 			
 			<div class="list_all">
+                <form method="POST">
 				<div class="list_info">
 					<div class="count">전체회원수 : {{usersCount}}명</div>
 					<ul class="message_button">
@@ -58,30 +59,30 @@
 					</ul>
 				</div>
 				
-                <form method="POST">
+                
                     <table cellpadding="0" cellspacing="0" class="list_table">
                         <thead>
                             <tr>
                                 <th><input type="checkbox"></input></th>
-                                <th>번호</th>
+                                {{!-- <th>번호</th> --}}
                                 <th>아이디</th>
                                 <th>닉네임</th>
-                                <th>주문횟수</th>
+                                {{!-- <th>주문횟수</th> --}}
                                 <th>가입일자</th>
                             </tr>
                         </thead>
                         
                         <tbody>
-                            <tr>
-                                {{#each users}}
-                                    <th> <input type="checkbox" name="checked" value={{this.id}} ></th>
-                                    <th>10</th>
-                                    <th>{{this.username}}</th>
-                                   <th> <a href="users/{{this.id}}">{{this.nickname}}</a></th>
-                                    <th>{{this.loginCnt}}</th>
-                                    <th>{{this.createdAt}}</th>
-                                {{/each}}                                
-                            </tr>                                                    
+                             {{#each users}}
+                            <tr>                               
+                                <th> <input type="checkbox" name="checked" value={{this.id}} ></th>
+                                {{!-- <th>10</th> --}}
+                                <th>{{this.username}}</th>
+                                <th> <a href="users/{{this.id}}">{{this.nickname}}</a></th>
+                                {{!-- <th>{{this.ordersCnt}}</th> --}}
+                                <th>{{this.createdAt}}</th>                         
+                            </tr>
+                            {{/each}}                                                    
                         </tbody>
                     </table>
 				</form>
@@ -103,48 +104,6 @@
 			</div>
 			
 		</div>
-
-
-
-
-
-
-
-
-
-
-<h1>USERS_INDEX</h1>
-
-<form method="get">
-    시작날짜: <input type="date" name="startdate"><br>
-    끝날짜: <input type="date" name="enddate" value={{today}}><br>
-    아이디: <input type="text" name="username" ><br>
-    닉네임: <input type="text" name="nickname" ><br>
-    <input type="submit" value="제출"><br>
-</form>
-
-회원수: {{usersCount}}
-<form method="POST" name="usersIndex"> 
-    <input type="submit" onclick="chooseAll()" value="전체회원 쪽지발송">
-    <input type="submit" value="선택회원 쪽지발송"><br>
-
-    {{#each users}}    
-        <input type="checkbox" name="checked" value={{this.id}} >
-        <a href="users/{{this.id}}">{{this.nickname}}</a>
-        {{this.createdAt}}
-        {{this.loginDate}}
-        {{this.loginCnt}}
-        <br>
-    {{/each}}
-</form>
-
-{{!-- pagination 쿼리 append형식으로 다시하기 --}}
-<a href="?page=1">1</a>
-<a href="?page=2">2</a>
-<a href="?page=3">3</a>
-<a href="?page=4">4</a>
-<a href="?page=4">5</a>
-
 
 <script>
     function chooseAll() {

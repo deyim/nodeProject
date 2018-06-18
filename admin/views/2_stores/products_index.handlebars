@@ -1,3 +1,141 @@
+<div class="cont">
+			<div class="titlearea">
+				<div class="title">상품조회</div>
+				<div class="nav">스토어관리 > 상품조회</div>
+			</div>
+			
+			
+			<form method="get">
+                <div class="search_area">
+                    <table class="serach_box" cellpadding='0' cellspacing='0'>
+                        <tbody>
+                            <tr>
+                                <th>상품등록일</th>
+                                <td colspan="3">
+                                    <div class="calendar_box"><input type="date" name="startdate"><span><img src="../images/sub/calendar.jpg"></span></div>
+                                    <div>-</div>
+                                    <div class="calendar_box"><input type="date" name="enddate"><span><img src="../images/sub/calendar.jpg"></span></div>
+                                    {{!-- <div class="priod_box">
+                                        <select class="inputstyle">
+                                            <option>전체기간</option>
+                                            <option>1개월</option>
+                                            <option>2개월</option>
+                                            <option>3개월</option>
+                                            <option>4개월</option>
+                                        </select>
+                                    </div> --}}
+                                </td>
+                            </tr>
+                            
+                            
+                            
+                            <tr>
+                                <th>카테고리</th>
+                                <td colspan="1">
+    {{!-- 								
+                                    <div class="category_box">
+                                        <select class="inputstyle">
+                                            <option>대분류선택</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="category_box">
+                                        <select class="inputstyle">
+                                            <option>중분류선택</option>
+                                        </select>
+                                    </div>
+                                    --}}
+                                    <div class="category_box">
+                                        <select class="inputstyle" name="category">
+                                            <option value="">선택안함</option> 
+                                            {{#each categories}}
+                                                <option value={{this.id}}>{{this.name}}</option> 
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            
+                            <tr>
+                                <th>구분</th>
+                                <td>
+                                    <div class="priod_box">
+                                        <select class="inputstyle">
+                                            <option value="title">상품명</option>
+                                            <option value="productcode">상품코드</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="input_80box">
+                                        <input type="text" class="inputstyle" name=""></input>
+                                    </div>
+                                </td>
+                                
+                                <th>상태</th>
+                                <td>
+                                    {{!-- <div class="mem_inputbox"> --}}
+                                        전시상태: <input type="checkbox" name="onDisplayChk" checked>
+                                        판매상태: <input type="checkbox" name="onSaleChk" checked>
+                                    {{!-- </div> --}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+				
+                    <div class="serach_button"><input type="submit" value="검색하기"></div>
+                </div>
+            </form>
+			
+			
+			<div class="list_all">
+				<div class="list_info">
+					<div class="count">전체상품수 : {{productsCount}}개</div>
+					<ul class="message_button">
+						<li class="lg_button"><input type="submit" name="delete" value="선택 상품 삭제"></li>
+						<li class="wh_button"><input type="submit" name="offSale" value="선택상품 판매중지"></li>
+						<li class="wh_button"><input type="submit" name="onSale" value="선택상품 판매중"></li>
+					</ul>
+				</div>
+				
+				<table cellpadding="0" cellspacing="0" class="list_table">
+					<thead>
+						<tr>
+							<th><input type="checkbox"></input></th>
+							{{!-- <th>번호</th> --}}
+							<th>카테고리</th>
+							<th>판매상태</th>
+							<th>상품코드</th>
+							<th>상품명</th>
+							<th>등록일자</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+                        {{#each products}}
+                        
+						<tr>
+							<th><input type="checkbox" name="checked" value={{this.id}} ></th>
+							{{!-- <th>10</th> --}}
+							<th>{{this.categoryId}}</th>
+							<th>{{this.onSaleChk}}</th>
+							<th>{{this.productcodeId}}<span class="clip_icon"><img src="/images/sub/clip_icon.png"></span></th>
+							<th><a href="/stores/products/{{this.id}}">{{this.title}}</a></th>
+							<th>{{this.createdAat}}</th>
+						</tr>
+                        
+                        {{/each}}
+						
+						
+					</tbody>
+				</table>				
+				{{>pages}}
+			</div>
+			
+			
+			
+		</div>
+
 <h1>Prodcts Index</h1>
 
 <form method="get">
@@ -10,23 +148,3 @@
     카테고리: <input type="text" name="category" ><br>
     <input type="submit" value="제출"><br>
 </form>
-
-상품수: {{productsCount}}
-<form method="POST" name="productsIndex"> 
-    <input type="submit" name="delete" value="삭제"><br>
-    <input type="submit" name="offSale" value="판매중지"><br>
-    <input type="submit" name="onSale" value="판매중"><br>
-
-    {{#each products}}    
-        <input type="checkbox" name="checked" value={{this.id}} >
-        <a href="/stores/products/{{this.id}}">{{this.title}}</a>
-        {{this.createdAt}}
-        <br>
-    {{/each}}
-</form>
-
-<a href="?page=1">1</a>
-<a href="?page=2">2</a>
-<a href="?page=3">3</a>
-<a href="?page=4">4</a>
-<a href="?page=4">5</a>

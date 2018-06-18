@@ -6,9 +6,13 @@ module.exports = ()=>{
     //products - index
     route.get('/products', controller.productsIndex)
         .post('/products', controller.productsStatusChange);
-    //products - show
+     //products - add
+     route.get('/products/add', controller.productsAdd)
+     .post('/products/create', controller.productsCreate);
+        //products - show
     route.get('/products/:product_id', controller.findProduct, controller.productsShow)
         .post('/products/:product_id/', controller.findProduct, controller.productsUpdate);
+   
     //products - delete
     route.get('/products/:id/delete', controller.findProduct, controller.productsDelete);
 

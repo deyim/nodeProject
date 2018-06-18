@@ -1,3 +1,56 @@
+<div class="cont">
+			<div class="titlearea">
+				<div class="title">회원정보</div>
+				<div class="nav">회원관리 > 회원조회 > 회원상세</div>
+			</div>
+			
+			<div class="member_view">
+				<table cellpadding="0" cellspacing="0" class="de_table">
+					<tbody>
+						<tr>
+							<th>가입일자</th>
+							<td>{{createdAt}}</td>
+						</tr>
+						
+						<tr>
+							<th>아이디</th>
+							<td>{{user.username}}</td>
+						</tr>
+						
+						<tr>
+							<th>닉네임</th>
+							<td>
+                                {{user.nickname}}
+							</td>
+						</tr>
+						
+						<tr>
+							<th>주문횟수</th>
+							<td>{{orders}}회</td>
+						</tr>
+						
+						<tr>
+							<th>작성글수</th>
+							<td>{{posts}}회</td>
+						</tr>
+						
+						<tr>
+							<th>댓글수</th>
+							<td>{{comments}}개</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="bot_button">
+				<a href="/members/users"><div class="wt_button">목록</div></a>
+				<div class="dg_button">탈퇴처리</div>
+				
+			</div>
+		</div>
+
+
+
 <h1>USERS_SHOW</h1>
 
 <br>{{user.username}}

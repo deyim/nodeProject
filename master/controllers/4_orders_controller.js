@@ -42,7 +42,6 @@ var makeObj = (order)=>{
     })
     
 }
-
 async function ordersToArray(orders){
     var ordersArray = [];
 
@@ -59,13 +58,11 @@ async function ordersToArray(orders){
 module.exports = {   
     
     orderedIndex: (req,res)=>{
-        // console.log('************\n\n\n\n\n******',req.query);
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
         let objData = {};
-        if(Object.keys(req.query).length === 0){
-            
+        if(Object.keys(req.query).length === 0){            
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
