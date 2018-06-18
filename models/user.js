@@ -59,6 +59,7 @@ module.exports = (sequelize, DataTypes) => {
     // User.hasOne(models.Master, {as: 'user'});
     User.hasMany(models.Sentmessage, {as: 'sendings', foreignKey: 'senderId'});
     User.hasMany(models.Sentmessage, {as: 'receivings', foreignKey: 'receiverId'});
+    User.hasMany(models.Order, {as: 'orders', foreignKey: 'buyerId'});
     User.belongsToMany(models.Store, {
       through: 'StoreUsers',
       as: 'stores',
