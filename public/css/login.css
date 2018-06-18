@@ -1,0 +1,102 @@
+#login{
+	width:460px;
+	margin:80px auto 0;
+}
+
+#login .logo{
+	width:219px;
+	margin:0 auto;
+}
+
+#login .login_nav{
+	font-size:24px;
+	text-align:center;
+}
+
+#login .input_area{
+	width:100%;
+}
+
+#login .input_area .inputbox{
+	width:100%;
+	border:1px solid #e5e5e5;
+	box-sizing:border-box;
+	padding:15px 10px 15px 10px;
+	margin-top:10px;
+}
+
+#login .input_area .button{
+	width:100%;
+	background-color:#4b69ad;
+	box-sizing:border-box;
+	padding:15px 0px 15px 0px;
+	margin-top:30px;
+	color:#fff;
+	text-align:center;
+}
+
+
+#login .loginmenu_area{
+	width:100%;
+	border-bottom:1px solid #e5e5e5;
+	padding-bottom:15px;
+	margin-top:30px;
+	display:inline-block;
+}
+
+#login .loginmenu_area .keep{
+	display:inline-block;
+	float:left;
+	font-size:14px;
+	color:#7f7f7f;
+}
+
+
+#login .loginmenu_area .keep .checkstyle{
+	width:20px;
+	height:20px;
+	vertical-align:middle;
+	margin-right:3px;
+	background-color:red;
+	box-sizing:border-box;
+}
+
+
+#login .loginmenu_area .login_menu{
+	display:inline-block;
+	float:right;
+}
+#login .loginmenu_area .login_menu li{
+	display:inline-block;
+	float:left;
+	font-size:14px;
+	padding:0px 10px 0px 10px;
+	border-right:1px solid #777;
+	color:#4f4f4f;
+}
+
+#login .loginmenu_area .login_menu li:last-child{
+	padding:0px 00px 0px 10px;
+	border-right:0px solid #777;
+}
+
+#login .alert_text{
+	font-size:15px;
+	color:red;
+	text-align:center;
+	margin-top:50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

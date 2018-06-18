@@ -58,13 +58,13 @@ app.get('/main', (req,res)=>{
 
 const authRoutes = require('./routes/auth_routes')(passport);
 const membersRoutes = require('./routes/1_members_routes')();
-// const storesRoutes = require('./routes/3_stores_routes')();
+const storesRoutes = require('./routes/2_stores_routes')();
 // const ordersRoutes = require('./routes/4_orders_routes')();
 // const salesRoutes = require('./routes/5_sales_routes')();
 // const categoriesRoutes = require('./routes/8_categories_routes')();
 app.use('/auth', authRoutes);
 app.use('/members', membersRoutes);
-// app.use('/stores', storesRoutes);
+app.use('/stores', storesRoutes);
 // app.use('/orders', ordersRoutes);
 // app.use('/sales', salesRoutes);
 // app.use('/categories', categoriesRoutes);

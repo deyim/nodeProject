@@ -1,3 +1,118 @@
+<div class="cont">
+			<div class="titlearea">
+				<div class="title">회원조회</div>
+				<div class="nav">회원관리 > 회원조회</div>
+			</div>
+			
+			<div class="search_area">
+                <form method="get">
+                    <table class="serach_box" cellpadding='0' cellspacing='0'>
+                        <tbody>
+                            <tr>
+                                <th>회원가입일</th>
+                                <td colspan="3">
+                                    <div class="calendar_box"><input type="date" name="startdate"><span><img src="../images/sub/calendar.jpg"></span></div>
+                                    <div>-</div>
+                                    <div class="calendar_box"><input type="date" name="enddate"><span><img src="../images/sub/calendar.jpg"></span></div>
+                                    <div class="priod_box">
+                                        <select class="inputstyle">
+                                            <option>전체기간</option>
+                                            <option>1개월</option>
+                                            <option>2개월</option>
+                                            <option>3개월</option>
+                                            <option>4개월</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <th>아이디</th>
+                                <td>
+                                    <div class="mem_inputbox">
+                                        <input type="text" name="username" class="inputstyle"></input>
+                                    </div>
+                                </td>
+                                
+                                <th>닉네임</th>
+                                <td>
+                                    <div class="mem_inputbox">
+                                        <input type="text" name="nickname" class="inputstyle"></input>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+				
+				<div class="serach_button"><input type="submit" value="검색하기"></div>
+                </form>
+			</div>
+			
+			
+			<div class="list_all">
+				<div class="list_info">
+					<div class="count">전체회원수 : {{usersCount}}명</div>
+					<ul class="message_button">
+						<li class="lg_button"><input type="submit" onclick="chooseAll()" value="전체회원 쪽지발송"></li>
+						<li class="wh_button"><input type="submit" value="선택회원 쪽지발송"></li>
+					</ul>
+				</div>
+				
+                <form method="POST">
+                    <table cellpadding="0" cellspacing="0" class="list_table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox"></input></th>
+                                <th>번호</th>
+                                <th>아이디</th>
+                                <th>닉네임</th>
+                                <th>주문횟수</th>
+                                <th>가입일자</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <tr>
+                                {{#each users}}
+                                    <th> <input type="checkbox" name="checked" value={{this.id}} ></th>
+                                    <th>10</th>
+                                    <th>{{this.username}}</th>
+                                   <th> <a href="users/{{this.id}}">{{this.nickname}}</a></th>
+                                    <th>{{this.loginCnt}}</th>
+                                    <th>{{this.createdAt}}</th>
+                                {{/each}}                                
+                            </tr>                                                    
+                        </tbody>
+                    </table>
+				</form>
+				<div class="paging">
+					<ul class="paging_list">
+						<li class="arrow"><img src="../images/sub/arrow_prev.png"></li>
+						<a href="?page=1"><li>1</li></a>
+						<a href="?page=2"><li>2</li></a>
+						<a href="?page=3"><li>3</li></a>
+						<a href="?page=4"><li>4</li></a>
+						<a href="?page=5"><li>5</li></a>
+						<a href="?page=6"><li>6</li></a>
+						<a href="?page=7"><li>7</li></a>
+						<a href="?page=8"><li>8</li></a>
+						<a href="?page=9"><li>9</li></a>
+						<li class="arrow"><img src="../images/sub/arrow_next.png"></li>
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+
+
+
+
+
+
+
+
+
+
 <h1>USERS_INDEX</h1>
 
 <form method="get">

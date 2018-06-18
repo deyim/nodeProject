@@ -1,0 +1,168 @@
+/* CSS reset  */
+/*******************************************************************************************************************************************/
+
+@import url(http://fonts.googleapis.com/css?family=Noto+Sans);
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+
+@charset "utf-8";
+/* 한국어 */
+@font-face {
+	font-family:'Noto_kr';
+	src:url('font/Noto_kr/NotoSansKR-DemiLight-Hestia.eot');	
+	src:local(※),
+		url('font/Noto_kr/NotoSansKR-DemiLight-Hestia.eot?#iefix') format('embedded-opentype'),
+		url('font/Noto_kr/NotoSansKR-DemiLight-Hestia.woff') format('woff'),		
+		url('font/Noto_kr/NotoSansKR-DemiLight-Hestia.otf') format('opentype');
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	font-family:'Noto_kr';
+	src:url('font/Noto_kr/NotoSansKR-Light-Hestia.eot');	
+	src:local(※),
+		url('font/Noto_kr/NotoSansKR-Light-Hestia.eot?#iefix') format('embedded-opentype'),
+		url('font/Noto_kr/NotoSansKR-Light-Hestia.woff') format('woff'),		
+		url('font/Noto_kr/NotoSansKR-Light-Hestia.otf') format('opentype');
+	font-weight: 100;
+	font-style: normal;
+}
+@font-face {
+	font-family:'Noto_kr';
+	src:url('font/Noto_kr/NotoSansKR-Medium-Hestia.eot');	
+	src:local(※),
+		url('font/Noto_kr/NotoSansKR-Medium-Hestia.eot?#iefix') format('embedded-opentype'),
+		url('font/Noto_kr/NotoSansKR-Medium-Hestia.woff') format('woff'),		
+		url('font/Noto_kr/NotoSansKR-Medium-Hestia.otf') format('opentype');
+	font-weight: 700;
+	font-style: normal;
+}
+@font-face {
+	font-family:'SinkinSans';
+	src:url('font/SinkinSans-300Light.eot');	
+	src:local(※),
+		url('font/SinkinSans-300Light.eot?#iefix') format('embedded-opentype'),
+		url('font/SinkinSans-300Light.woff') format('woff'),		
+		url('font/SinkinSans-300Light.otf') format('opentype');
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	font-family:'SinkinSans';
+	src:url('font/SinkinSans-600SemiBold.eot');	
+	src:local(※),
+		url('font/SinkinSans-600SemiBold.eot?#iefix') format('embedded-opentype'),
+		url('font/SinkinSans-600SemiBold.woff') format('woff'),		
+		url('font/SinkinSans-600SemiBold.otf') format('opentype');
+	font-weight: 700;
+	font-style: normal;
+}
+
+
+
+
+
+
+
+/*******************************************************************************************************************************************/
+
+/*******************************************************************************************************************************************/
+
+/* CSS reset */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, input, label {margin:0; padding:0; border:0; font-weight:inherit; font-style:inherit;  vertical-align:baseline; color:#535353;}
+html { overflow-y:scroll; background-color:#fff; }
+body, table, input, select, textarea, button, a, p, div, span {font-family:'Noto_kr', 'sinkinsans';}
+td{font-family: 'Noto_kr', 'sinkinsans';}
+
+.wrap, .intropage_wrap, .page_wrap { width:100%;  background-color:#fff; overflow:hidden; min-width:1180px;}/*  하단좌우스코롤때문에 삭제*/
+
+/* 링크에서 밑줄 없애기 */
+a { text-decoration:none }
+/* 마우스 지나갈 때만 삭제 + 강제로 없애기 */
+a:hover { cursor:pointer; text-decoration:none !important }
+/* ul li type reset */
+ul,ol,li { list-style-type:none;}
+
+
+.mar_l10{margin-left:10px;}
+.mar_l20{margin-left:20px;}
+#mar_l20{margin-left:20px;}
+.mar_l25{margin-left:25px;}
+.mar_l30{margin-left:30px;}
+.mar_l38{margin-left:38px;color:#9c9c9c; line-height:16px;}
+.mar_l40{margin-left:40px;}
+.mar_l50{margin-left:50px;}
+.mar_l60{margin-left:60px;}
+.mar_l90{margin-left:90px;}
+.mar_l115{margin-left:115px;}
+
+.mar_l120{margin-left:120px;}
+
+.mar_t1{margin-top:1px;}
+.mar_t04{margin-top:4px;}
+.mar_t10{margin-top:10px;}
+.mar_t20{margin-top:20px;}
+.mar_t30{margin-top:30px;}
+.mar_t40{margin-top:40px;}
+.mar_t50{margin-top:50px;}
+#mar_t50{margin-top:50px;}
+#mar_t20{margin-top:20px;}
+
+
+.color:{color:#c62127;}
+
+/*
+input::-webkit-input-placeholder{
+	color:#aeaeae;
+	font-size:14px;
+	font-weight:normal;
+}
+
+input::-moz-placeholder{
+	color:#aeaeae;
+	font-size:14px;
+	font-weight:normal;
+}
+input::-ms-input-placeholder {
+	color:#aeaeae;
+	font-size:14px;
+	font-weight:normal;
+}
+
+
+input:-ms-input-placeholder {
+	color:#aeaeae;
+	font-size:14px;
+	font-weight:normal;
+}
+
+
+
+textarea::-webkit-input-placeholder{
+	color:#aeaeae;
+	font-size:14px;
+	font-weight:normal;
+}
+
+textarea::-moz-placeholder{
+	color:#aeaeae;
+	font-size:14px;
+	font-weight:normal;
+}
+textarea::-ms-input-placeholder {
+	color:#aeaeae;
+	font-size:14px;
+	font-weight:normal;
+}
+
+
+textarea:-ms-input-placeholder {
+	color:#aeaeae;
+	font-size:14px;
+	font-weight:normal;
+}
+*/
+
+
+
