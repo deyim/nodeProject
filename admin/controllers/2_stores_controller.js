@@ -96,7 +96,7 @@ module.exports = {
                                 ]
                             }
                         },
-                        { title: { [Op.like]: `%${q.title}%` }},
+                        { title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}},
                         { onSaleChk: q.onSaleChk ? q.onSaleChk : false},
                         { onDisplayChk: q.onDisplayChk ? q.onDisplayChk : false}
                     ],                                  
@@ -113,14 +113,14 @@ module.exports = {
                         model: db.Productcode,
                         as: 'productcode',
                         where:{
-                                code: { [Op.like]: `%${q.productcode}%` }
+                             code: q.productcode? { [Op.like]: `%${q.productcode}%` } : {[Op.regexp]: '^'},
                         }                                
                     },
                     {
                         model: db.Category,
                         as: 'category',
                         where:{
-                            name: { [Op.like]: `%${q.category}%` }
+                            name: q.category? { [Op.like]: `%${q.category}%` } : {[Op.regexp]: '^'}
                         }                                
                     },
                 ]
@@ -212,6 +212,16 @@ module.exports = {
             }
             req.post = post;
 
+            post.getAuthor()
+            .then(author=>{
+                req.author=author;
+            })
+
+            // post.getCategory()
+            // .then(category=>{
+            //     req.category = category;
+            // })
+
             post.getStore()
             .then(store=>{
                 req.store = store;
@@ -224,6 +234,7 @@ module.exports = {
         let q = req.query;
         let page = q.page||1;
         delete q.page;
+        console.log('\n\n\n****', q);
         if(Object.keys(req.query).length === 0){
             db.Post.findAndCountAll({
                 limit: perPage,
@@ -250,7 +261,7 @@ module.exports = {
             db.Post.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                where:{
+                where:{                                
                     [Op.and]:
                     [
                         {createdAt: {
@@ -260,8 +271,8 @@ module.exports = {
                             ]
                             }
                         },
-                        { title: { [Op.like]: `%${q.title}%` }}, 
-                        { content: { [Op.like]: `%${q.content}%` }},
+                        { title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}},
+                        { content: q.content? { [Op.like]: `%${q.content}%` } : {[Op.regexp]: '^'}},
                         { noticeChk: false}
                     ]   
                     //스토어url, 제목,내용 (association included)                
@@ -272,18 +283,15 @@ module.exports = {
                         as: 'store',
                         foreignKey: 'storeId',
                         where:{
-                            [Op.and]:
-                            [
-                                {id: res.locals.store.id},
-                                {url: { [Op.like]: `%${q.url}%` }},
-                            ]
+                            id: res.locals.store.id,
                         }                                
                     }
                 ]
             })
             .then(posts=>{
+                console.log(posts, posts.rows[0]);
                 objData = {posts:posts.rows, postsCount:posts.count}
-                res.render('3_stores/posts_index', objData);
+                res.render('2_stores/posts_index', objData);
             })
         }
     },
@@ -300,13 +308,14 @@ module.exports = {
     },
 
     postsShow: (req,res)=>{
-        res.render('2_stores/posts_show', {post:req.post,store:req.store});
+        let objData = {post:req.post,store:req.store,
+            author:req.author}
+        res.render('2_stores/posts_show', objData);
     },
     
     postsUpdate: (req,res)=>{
-        req.post.update(req.post)
+        req.post.update(req.body)
         .then(()=>{
-            req.session.alert = '수정되었습니다.'
             res.redirect(`/stores/posts/${req.post.id}`);
         });
     },
@@ -329,7 +338,8 @@ module.exports = {
             message.getSentMessages()
             .then(sentMessages =>{
                 receivers = [];
-                console.log('\n\n\n***',sentMessages.length);
+                req.sentMessages=sentMessages;
+                // console.log('\n\n\n***',sentMessages.length);
                 db.User.findById(sentMessages[0].senderId)
                 .then(sender=>{
                     // console.log('first sync');
@@ -358,7 +368,7 @@ module.exports = {
         });
     },
 
-    messagesIndex: (req,res)=>{
+    messagesReceivedIndex: (req,res)=>{
         let q = req.query;
         let page = q.page||1;
         delete q.page; 
@@ -366,10 +376,25 @@ module.exports = {
             db.Message.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Sentmessage,
+                        as: 'sentMessages',
+                        include :[
+                            {
+                                model:db.User,
+                                as: 'receiver',
+                                where: {
+                                    id: res.locals.user.id
+                                }
+                            }
+                        ]                        
+                    }
+                ]
             })
             .then(messages=>{
                 objData = {messages:messages.rows, messagesCount:messages.count}
-                res.render('2_stores/messages_index', objData);
+                res.render('2_stores/messages_received_index', objData);
             });   
         }      
         else{
@@ -435,11 +460,108 @@ module.exports = {
             .then(messages=>{
                 console.log(messages);
                 objData = {messages:messages.rows, messagesCount:messages.count}
-                res.render('3_stores/messages_index', objData);
+                res.render('2_stores/messages_received_index', objData);
             })
         }
     },
 
+    messagesSentIndex: (req,res)=>{
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page; 
+        if(Object.keys(req.query).length === 0){
+            db.Message.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Sentmessage,
+                        as: 'sentMessages',
+                        include :[
+                            {
+                                model:db.User,
+                                as: 'sender',
+                                where: {
+                                    id: res.locals.user.id
+                                }
+                            }
+                        ]                        
+                    }
+                ]
+            })
+            .then(messages=>{
+                objData = {messages:messages.rows, messagesCount:messages.count}
+                res.render('2_stores/messages_sent_index', objData);
+            });   
+        }      
+        else{
+            db.Message.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where:{
+                    [Op.and]:
+                    [
+                        {createdAt: {
+                            [Op.and]:[
+                                {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                {deletedAt: null}
+                            ]
+                            }
+                        }
+                    ]   
+                    //sentmessage의 아이디, 닉네임 / 스토어주소, 사업자명               
+                },
+                //user(sender), provider()
+                include: [
+                    {
+                        model: db.Sentmessage,
+                        as: 'sentMessages',
+                        include: [
+                            {
+                                model: db.User,
+                                as: 'sender',
+                                where: {
+                                    [Op.and]:
+                                    [
+                                        {username:{ [Op.like]: `%${q.username}%`}},
+                                        {nickname:{ [Op.like]: `%${q.nickname}%`}},
+                                        {deletedAt: null}
+                                    ]
+                                },
+                                // include: [
+                                //     {
+                                //         model: db.Provider,
+                                //         as: 'user',
+                                //         where: {
+                                //             companyName:{ [Op.like]: `%${q.companyName}%`},
+                                //         },
+                                //         include: [
+                                //             {
+                                //                 model: db.Store,
+                                //                 as: 'stores',
+                                //                 where: {
+                                //                     url:{ [Op.like]: `%${q.url}%`},
+                                //                 }
+                                //             }
+                                //         ]
+                                //     },
+                                    
+                                // ]
+                            }
+                        ]
+
+                    }
+                ]
+            })
+            .then(messages=>{
+                console.log(messages);
+                objData = {messages:messages.rows, messagesCount:messages.count}
+                res.render('2_stores/messages_sent_index', objData);
+            })
+        }
+    },
+    
     messagesMultipleDelete: (req,res)=>{       
         messages = req.body.checked.toString().split(',');
         for(var i = 0 ; i < messages.length; i++){
@@ -453,7 +575,7 @@ module.exports = {
 
     messagesShow: (req,res)=>{
         //content
-        res.render('3_stores/messages_show', {
+        res.render('2_stores/messages_show', {
             message: req.message,
             sender: req.sender,
             receivers: req.receivers
@@ -461,9 +583,30 @@ module.exports = {
         //receivers
 
     },
+
+    messagesShowReceivers: (req,res)=>{
+        //content
+        res.render('2_stores/messages_receivers_show', {
+            receivers: req.receivers
+        })
+        //receivers
+
+    },
     //stores - delete
     messagesDelete: (req,res)=>{
-        req.message.destroy();
+        // req.message.destroy();
+        if(req.sentMessages.senderId === req.user.id){
+            for(var i = 0 ; i < req.sentMessage.length ; i++){
+                req.sentMessages[i].update({
+                    senderDel: true
+                })
+            }
+        }else{
+            req.sentMessages.update({
+                receiverDel: true
+            })
+        }
+       
         res.redirect('/stores/messages');
     },
 
@@ -614,7 +757,16 @@ module.exports = {
                 offset: perPage*(page-1),
                 where: {
                     noticeChk: true
-                }
+                },
+                include: [
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            id: res.locals.store.id
+                        }
+                    }
+                ]
             })
             .then(notices=>{
                 objData = {notices:notices.rows, noticesCount:notices.count};
@@ -635,8 +787,8 @@ module.exports = {
                             ]
                         }
                         },
-                        {title: { [Op.like]: `%${q.title}%`}},
-                        {content: { [Op.like]: `%${q.content}%`}},
+                        { title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}},
+                        { content: q.content? { [Op.like]: `%${q.content}%` } : {[Op.regexp]: '^'}},
                         {noticeChk: true}
                     ]                    
                 },
@@ -645,7 +797,7 @@ module.exports = {
                         model: db.Store,
                         as: 'store',
                         where: {
-                            url: { [Op.like]: `%${q.url}%`}
+                            id: res.locals.store.id
                         }
                     }
                 ]
@@ -672,8 +824,10 @@ module.exports = {
         objData = {notice: req.notice, author:req.author, store:req.store}
         res.render('2_stores/notices_show',objData);
     },
+
     noticesUpdate: (req,res)=>{
-        req.post.update(req.body)
+        console.log('\n\n\n\n****',req.body);
+        req.notice.update(req.body)
         .then((()=>{
             req.session.alert = '수정되었습니다.'
             res.redirect(`/stores/notices/${req.notice.id}`);

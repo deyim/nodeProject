@@ -1,0 +1,80 @@
+<div class="cont">
+	<div class="titlearea">
+		<div class="title">쪽지관리</div>
+		<div class="nav">스토어관리 > 쪽지관리</div>
+	</div>
+	
+	<div class="search_area">
+		<form method="get">
+			<table class="serach_box" cellpadding='0' cellspacing='0'>
+				<tbody>
+					<tr>
+						<th>쪽지수신일</th>
+						<td colspan="3">
+							{{>period}}
+						</td>
+					</tr>
+					
+					<tr>
+						<th>아이디</th>
+						<td>
+							<div class="mem_inputbox">
+								<input type="text" name="username" class="inputstyle"></input>
+							</div>
+						</td>
+						
+						<th>닉네임</th>
+						<td>
+							<div class="mem_inputbox">
+								<input type="text" name="nickname" class="inputstyle"></input>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		
+			<div class="serach_button"><input type="submit" value="검색하기"</div>
+		</form>
+	</div>
+	
+	
+	<div class="list_all">
+		<form method="POST">
+			<div class="list_info">
+				<div class="count"><span>받은쪽지함({{messagesCount}})</span> ｜ <a href="/stores/messages/sent">보낸쪽지함</a></div>
+				<ul class="message_button">
+					<li class="lg_button"><input type="submit" value="선택 삭제"></li>
+				</ul>
+			</div>
+			
+			<table cellpadding="0" cellspacing="0" class="list_table">
+				<thead>
+					<tr>
+						<th><input type="checkbox"></input></th>
+						<th>번호</th>
+						<th>아이디</th>
+						<th>닉네임</th>
+						<th>쪽지내용</th>
+						<th>수신일자</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					{{#each messages}}
+					<tr>
+						<th> <input type="checkbox" name="checked" value={{this.id}} ></th>
+						<th>10</th>
+						<th>honggildong@naver.com</th>
+						<th>flywork</th>
+						<th class="message_title"><a href="/stores/messages/{{this.id}}">{{this.content}}</a></th>
+						<th>{{this.createdAt}}</th>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</form>
+		
+		{{>pages}}
+	</div>
+	
+</div>

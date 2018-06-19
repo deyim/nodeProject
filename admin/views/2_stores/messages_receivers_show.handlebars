@@ -1,0 +1,38 @@
+<div class="cont">
+	<div class="titlearea">
+		<div class="title">게시글정보</div>
+		<div class="nav">스토어관리 > 쪽지 관리 > 발송대상</div>
+	</div>	
+	
+	<div class="list_all">
+        <div class="product_write">
+            <table cellpadding="0" cellspacing="0" class="list_table">
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>아이디</th>
+                            <th>닉네임</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {{#each receivers}}
+                        <tr>
+                            <th>10</th>
+                            <th>{{this.username}}</th>
+                            <th>{{this.nickname}}</th>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            
+            <div id="mydate"></div>
+        </div>
+    </div>
+
+    <div class="bot_button">
+		<div class="wt_button"><a href="/stores/messages/sent">목록</a></div>
+	</div>
+
+	
+</div>

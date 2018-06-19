@@ -18,9 +18,9 @@
 	<link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="./js/jquery.mCustomScrollbar.concat.min.js"></script>
-	<script type="text/javascript" src="./js/jquery-ui.min.js"></script> 
-	
+	<script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui.min.js"></script> 
+	<script type="text/javascript" src="/js/admin_master.js"></script>
 	
 	<script>
 		(function($){
@@ -28,6 +28,23 @@
 				$(".menuarea").mCustomScrollbar();
 			});
 		})(jQuery);
+
+		$(document).ready(function(){ 
+        $("#mydate").datepicker(); 
+
+		}); 
+
+		(function($){
+			$(window).on("load",function(){
+				$(".menuarea").mCustomScrollbar();
+			});
+		})(jQuery);
+
+		$(function(){
+			$(".calendar_box").click(function(){
+				$("#mydate").show();
+			});
+		});
 	</script>
 </head>
     

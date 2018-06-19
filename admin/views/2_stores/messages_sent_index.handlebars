@@ -1,0 +1,81 @@
+<div class="cont">
+    <div class="titlearea">
+        <div class="title">쪽지관리</div>
+        <div class="nav">스토어관리 > 쪽지관리</div>
+    </div>
+    
+    <div class="search_area">
+        <table class="serach_box" cellpadding='0' cellspacing='0'>
+            <tbody>
+                <tr>
+                    <th>쪽지수신일</th>
+                    <td colspan="3">
+                        {{>period}}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>아이디</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" class="inputstyle"></input>
+                        </div>
+                    </td>
+                    
+                    <th>닉네임</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" class="inputstyle"></input>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="serach_button">검색하기</div>
+    </div>
+    
+    
+    <div class="list_all">
+        <div class="list_info">
+            <div class="count"> <a href="/stores/messages/received">받은쪽지함</a> ｜ <span>보낸쪽지함({{messagesCount}})</span></div>
+            <ul class="message_button">
+                <li class="lg_button">선택내역 삭제</li>
+            </ul>
+        </div>
+        
+        <table cellpadding="0" cellspacing="0" class="list_table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox"></input></th>
+                    <th>번호</th>
+                    <th>쪽지내용</th>
+                    <th>발송대상</th>
+                    <th>수신일자</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {{#each messages}}
+					<tr>
+						<th> <input type="checkbox" name="checked" value={{this.id}} ></th>
+						<th>10</th>
+						<th class="message_title"><a href="/stores/messages/{{this.id}}">{{this.content}}</a></th>
+						<th><a href="/stores/messages/receivers/{{this.id}}">발송대상</a></th>
+                        <th><a href="/stores/messages/{{this.id}}">{{this.createdAt}}</a></th>
+					</tr>
+					{{/each}}
+            </tbody>
+        </table>
+        
+        {{>pages}}
+    </div>
+    
+</div>
+
+
+
+
+
+
+

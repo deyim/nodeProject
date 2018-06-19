@@ -6,13 +6,12 @@ module.exports = ()=>{
     //products - index
     route.get('/products', controller.productsIndex)
         .post('/products', controller.productsStatusChange);
-     //products - add
-     route.get('/products/add', controller.productsAdd)
-     .post('/products/create', controller.productsCreate);
-        //products - show
+    //products - add
+    route.get('/products/add', controller.productsAdd)
+        .post('/products/create', controller.productsCreate);
+    //products - show
     route.get('/products/:product_id', controller.findProduct, controller.productsShow)
         .post('/products/:product_id/', controller.findProduct, controller.productsUpdate);
-   
     //products - delete
     route.get('/products/:id/delete', controller.findProduct, controller.productsDelete);
 
@@ -28,10 +27,13 @@ module.exports = ()=>{
 
 
      //messages - index
-     route.get('/messages', controller.messagesIndex)
-        .post('/messages', controller.messagesMultipleDelete);
+     route.get('/messages/received', controller.messagesReceivedIndex);
+     route.get('/messages/sent', controller.messagesSentIndex);
+     route.post('/messages', controller.messagesMultipleDelete);
      //messages - show
+     
      route.get('/messages/:message_id', controller.findMessage, controller.messagesShow);
+     route.get('/messages/receivers/:message_id/', controller.findMessage, controller.messagesShowReceivers);
      //messages - delete
      route.get('/messages/:messagae_id/delete', controller.findMessage, controller.messagesDelete);
 

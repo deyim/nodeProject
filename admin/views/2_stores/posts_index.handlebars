@@ -1,246 +1,77 @@
 <div class="cont">
-			<div class="titlearea">
-				<div class="title">게시글관리</div>
-				<div class="nav">스토어관리 > 게시글관리</div>
-			</div>
-			
-			
-			
-			<div class="search_area">
-				<table class="serach_box" cellpadding='0' cellspacing='0'>
-					<tbody>
-						<tr>
-							<th>등록일</th>
-							<td>
-								<div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-								<div>-</div>
-								<div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-								<div class="priod_box">
-									<select class="inputstyle">
-										<option>전체기간</option>
-										<option>1개월</option>
-										<option>2개월</option>
-										<option>3개월</option>
-										<option>4개월</option>
-									</select>
-								</div>
-							</td>
-						</tr>
-						
-						<tr>
-							<th>구분</th>
-							<td>
-								<div class="priod_box">
-									<select class="inputstyle">
-										<option>제목</option>
-									</select>
-								</div>
-								
-								<div class="input_80box">
-									<input type="text" class="inputstyle"></input>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+	<div class="titlearea">
+		<div class="title">게시글관리</div>
+		<div class="nav">스토어관리 > 게시글관리</div>
+	</div>
+	
+	
+	<form method="get">
+	<div class="search_area">
+		<table class="serach_box" cellpadding='0' cellspacing='0'>
+			<tbody>
+				<tr>
+					<th>등록일</th>
+					<td>
+						{{>period}}
+					</td>
+				</tr>
 				
-				<div class="serach_button">검색하기</div>
-			</div>
-			
-			
-			
-			
-			
-			
-			<div class="list_all">
-				<div class="list_info">
-					<div class="count">전체게시글수 : 93개</div>
-					<ul class="message_button">
-						<li class="lg_button">전체삭제</li>
-						<li class="wh_button">선택삭제</li>
-						
-					</ul>
-				</div>
-				
-				<table cellpadding="0" cellspacing="0" class="list_table">
-					<thead>
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>번호</th>
-							<th>제목</th>
-							<th>내용</th>
-							<th>작성자아이디</th>
-							<th>등록일자</th>
-						</tr>
-					</thead>
-					
-					<tbody>
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>1</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-						
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>2</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-						
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>3</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-						
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>4</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-						
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>5</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-						
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>6</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-						
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>7</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-						
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>8</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-						
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>9</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-						
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>10</th>
-							<th>제목이 들어가는 곳 입니다</th>
-							<th>내용이 들어가는곳 입니다! 상품명이 들어가는 곳 입니다</th>
-							<th>flyworkds@naver.com</th>
-							<th>2018-09-02</th>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				<div class="paging">
-					<ul class="paging_list">
-						<li class="arrow"><img src="../images/sub/arrow_prev.png"></li>
-						<li>1</li>
-						<li>2</li>
-						<li>3</li>
-						<li>4</li>
-						<li>5</li>
-						<li>6</li>
-						<li>7</li>
-						<li>8</li>
-						<li>9</li>
-						<li class="arrow"><img src="../images/sub/arrow_next.png"></li>
-					</ul>
-				</div>
-			</div>
-			
-			
-			
+				<tr>
+					<th>구분</th>
+					<td>
+						{{>querySelect}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="serach_button"><input type="submit" value="검색하기"></div>
+	</div>
+	</form>
+	
+	
+	
+	
+	
+	
+	<div class="list_all">
+		<div class="list_info">
+			<div class="count">전체게시글수 : {{postsCount}}개</div>
+			<ul class="message_button">
+				<li class="lg_button"><input type="submit" onclick="chooseAll()" value="전체삭제"></li>
+				<li class="wh_button"><input type="submit" value="삭제"></li>	
+			</ul>
 		</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1>Posts Index</h1>
-
-<form method="get">
-    개설승인일시작: <input type="date" name="startdate"><br>
-    개설승인일끝: <input type="date" name="enddate"><br>
-    구분-제목: <input type="text" name="title" ><br>
-    구분-내용: <input type="text" name="content" ><br>
-    <input type="submit" value="제출"><br>
-</form>
-
-게시글 수: {{postsCount}}
-<form method="POST" name="postsIndex"> 
-    <input type="submit" value="삭제"><br>
-    <input type="submit" onclick="chooseAll()" value="전체삭제"><br>
-
-    {{#each posts}}    
-        <input type="checkbox" name="checked" value={{this.id}} >
-        <a href="/stores/posts/{{this.id}}">{{this.title}}</a>
-        {{this.createdAt}}
-        <br>
-    {{/each}}
-</form>
-
-<a href="?page=1">1</a>
-<a href="?page=2">2</a>
-<a href="?page=3">3</a>
-<a href="?page=4">4</a>
-<a href="?page=4">5</a>
-
-
-<script>
-    function chooseAll() {
-        checkboxes = document.getElementsByName('checked');
-        for(i=0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = true;
-        }
-    }
-</script>
+		
+		<table cellpadding="0" cellspacing="0" class="list_table">
+			<thead>
+				<tr>
+					<th><input type="checkbox"></input></th>
+					<th>번호</th>
+					<th>제목</th>
+					<th>내용</th>
+					<th>작성자아이디</th>
+					<th>등록일자</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				{{#each posts}}
+					<tr>
+						<th><input type="checkbox" name="checked" value={{this.id}} ></th>
+						<th>1</th>
+						<th><a href="/stores/posts/{{this.id}}">{{this.title}}</a></th>
+						<th><a href="/stores/posts/{{this.id}}">{{this.content}}</a></th>
+						<th>{{this.user.username}}</th>
+						<th>{{this.createdAt}}</th>
+					</tr>
+				{{/each}}				
+			</tbody>
+		</table>
+		
+		{{>pages}}
+	</div>
+	
+	
+	
+</div>
