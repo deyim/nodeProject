@@ -1,0 +1,116 @@
+<div class="cont">
+    <div class="titlearea">
+        <div class="title">스토어 공지조회</div>
+        <div class="nav">매출/정산관리 > 스토어 공지조회</div>
+    </div>
+    
+    
+    <div class="search_area">
+        <form method="get">
+            <table class="serach_box" cellpadding='0' cellspacing='0'>
+                <tbody>                
+                    <tr>
+                        <th>구분</th>
+                        <td>                            
+                            <div class="priod_box">
+                                <select name="code">
+                                     <option value="">선택안함</option> 
+                                    {{#each noticecodes}}
+                                        <option value={{this.code}}>{{this.code}}</option> 
+                                    {{/each}}
+                                </select>
+                            </div>
+                            
+                            <div class="input_80box">
+                                <input type="text" name="title" class="inputstyle"></input>
+                            </div>
+                        </td>
+                        
+                        
+                    </tr>
+                </tbody>
+            </table>
+         
+        
+            <div class="serach_button"><input type="submit", value="검색하기"></div>
+        </form>
+    </div>
+    
+    
+    
+    <div class="list_all">
+        <div class="list_info">
+            <div class="count">전체게시글 : {{noticesCount}}개</div>
+        </div>
+        
+        <table cellpadding="0" cellspacing="0" class="list_table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox"></input></th>
+                    <th>번호</th>
+                    <th>구분</th>
+                    <th>항목</th>
+                    <th>제목</th>
+                    <th>등록자</th>
+                    <th>생성일자</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {{#each notices}}
+                <tr>
+                    <th><input type="checkbox"></input></th>
+                    <th>10</th>
+                    <th>구분값</th>
+                    <th>스토어공지</th>
+                    <th class="message_title">{{this.title}}</th>
+                    <th>최고관리자</th>
+                    <th>{{this.createdAt}}</th>
+                </tr>
+                 <div class="message_show" style="display:none;">
+                    <div class="layer_back_area"></div>
+                    <div class="layer_area">
+                        <div class="showbox">
+                            <div class="showbox_cetearea">
+                                <div class="title">스토어FAQ</div>
+                                <div class="close"><img src="/images/sub/showbox_close.png"></div>
+                            </div>
+                            
+                            <div class="showbox_contents">
+                                <div class="titlearea">
+                                    <div class="title">{{this.title}}</div>
+                                    <div class="info">{{this.createdAt}}</div>
+                                </div>
+                                
+                                <div class="contents">
+                                    {{this.content}}
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </tbody>
+        </table>
+        
+        {{>pages}}
+    </div>
+    
+    
+    
+    
+</div>
+
+<script>
+    $(function(){
+        $(".message_title").click(function(){
+            $(".message_show").show();
+        });
+    });
+
+    $(function(){
+        $(".close").click(function(){
+            $(".message_show").hide();
+        });
+    });
+</script>

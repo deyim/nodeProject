@@ -31,7 +31,7 @@ module.exports = ()=>{
     // route.get('/final/:id', controller.finalShow);
 
     //cancel - index
-    route.get('/cancel', controller.cancelIndex);
+    route.get('/canceled', controller.cancelIndex);
     //cancel - show
     // route.get('/cancel/:id', controller.cancelShow);
    

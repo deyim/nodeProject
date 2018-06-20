@@ -1,0 +1,22 @@
+<div class="order_info_show" style="display:none;">
+    <div class="layer_back_area"></div>
+    <div class="layer_area">
+        <div class="showbox">
+            <div class="showbox_cetearea">
+                <div class="title">서비스이용자정보</div>
+                <div class="close"><img src="/images/sub/showbox_close.png"></div>
+            </div>
+            
+            <div class="showbox_contents">
+                <div class="grey_contents">
+                    {{#each this.serviceUsers}} 
+                        서비스이용자<br>
+                        카카오아이디 : {{this.kakao}} <br>                     
+                        이름(한글) : {{this.korName}}<br>
+                        이름(영문) : {{this.engName}}<br><br>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

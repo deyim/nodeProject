@@ -1,7 +1,7 @@
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
-const perPage = 5;
+const perPage = 2;
 
 
 var makeObj = (order)=>{
@@ -66,13 +66,22 @@ module.exports = {
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: false 
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: false 
+                        }
                     },
-                }]
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            id: res.locals.store.id
+                        }
+                    },
+                ]
             })
             .then(orders=>{
                 if(orders.count ==0){
@@ -85,7 +94,6 @@ module.exports = {
             })
             .then(()=>{
                 setTimeout(()=>{
-                    console.log("\n\nhihihihihih", objData);
                     res.render('3_orders/ordered_index', objData);
                 },1000);                
             });       
@@ -94,11 +102,6 @@ module.exports = {
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { paidChk: false },
-                }],
                 where:{
                     [Op.and]:
                     [
@@ -114,6 +117,11 @@ module.exports = {
                 },
                 include: [
                     {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { paidChk: false },
+                    },
+                    {
                         model: db.Product,
                         as: 'product',
                         where:{
@@ -124,21 +132,21 @@ module.exports = {
                         model: db.Ordercode,
                         as: 'ordercode',
                         where: {
-                            code: { [Op.like]: `%${q.ordercode}%` }
+                            code: q.ordercode? { [Op.like]: `%${q.ordercode}%` } : {[Op.regexp]: '^'}
                         }
                     },
                     {
                         model: db.Store,
                         as: 'store',
                         where: {
-                            url: { [Op.like]: `%${q.url}%` }
+                            id: res.locals.store.id
                         }
                     },
                     {
                         model: db.User,
                         as: 'buyer',
                         where: {
-                            username: { [Op.like]: `%${q.username}%` }
+                            username: q.ordercode? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}
                         }
                     }
                 ]
@@ -154,7 +162,6 @@ module.exports = {
             })
             .then(()=>{
                 setTimeout(()=>{
-                    console.log("\n\nhihihihihih", objData);
                     res.render('3_orders/ordered_index', objData);
                 },1000);                
             });   
@@ -172,17 +179,25 @@ module.exports = {
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: true,
-                        placeChk: false,
-                     },
-                }]
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: false,
+                        },
+                    },
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            id: res.locals.store.id
+                        }
+                    },
+                ]
             })
             .then(orders=>{
-                console.log(orders);
                 if(orders.count ==0){
                     res.render('3_orders/paid_index',{ordersCount:0});
                 }
@@ -193,23 +208,15 @@ module.exports = {
             })
             .then(()=>{
                 setTimeout(()=>{
-                    console.log("\n\nhihihihihih", objData);
+                    console.log(objData);
                     res.render('3_orders/paid_index', objData);
-                },1000);                
+                },900);                
             });   
         }      
         else{
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: true,
-                        placeChk: false,
-                     },
-                }],
                 where:{
                     [Op.and]:
                     [
@@ -225,6 +232,14 @@ module.exports = {
                 },
                 include: [
                     {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: false,
+                        },
+                    },
+                    {
                         model: db.Product,
                         as: 'product',
                         where:{
@@ -235,21 +250,21 @@ module.exports = {
                         model: db.Ordercode,
                         as: 'ordercode',
                         where: {
-                            code: { [Op.like]: `%${q.ordercode}%` }
+                            code: q.ordercode? { [Op.like]: `%${q.ordercode}%` } : {[Op.regexp]: '^'}
                         }
                     },
                     {
                         model: db.Store,
                         as: 'store',
                         where: {
-                            url: { [Op.like]: `%${q.url}%` }
+                            id: res.locals.store.id
                         }
                     },
                     {
                         model: db.User,
                         as: 'buyer',
                         where: {
-                            username: { [Op.like]: `%${q.username}%` }
+                            username: q.ordercode? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}
                         }
                     }
                 ]
@@ -281,15 +296,24 @@ module.exports = {
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: true,
-                        placeChk: true,
-                        cancelChk: false,
-                     },
-                }]
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: true,
+                            cancelChk: false,
+                        },
+                    },
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            id: res.locals.store.id
+                        }
+                    }
+                ]
             })
             .then(orders=>{
                 if(orders.count ==0){
@@ -310,15 +334,6 @@ module.exports = {
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: true,
-                        placeChk: true,
-                        cancelChk: false
-                     },
-                }],
                 where:{
                     [Op.and]:
                     [
@@ -333,6 +348,15 @@ module.exports = {
                     ///상품명, 주문번호, 주문자아이디, 판매스토어주소
                 },
                 include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: true,
+                            cancelChk: false
+                        },
+                    },
                     {
                         model: db.Product,
                         as: 'product',
@@ -394,15 +418,24 @@ module.exports = {
                 where: {
                     endDate: {[Op.gte]: limit},
                 },
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: true,
-                        placeChk: true,
-                        
-                     },
-                }]
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: true,
+                            
+                        },
+                    },
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            id: res.locals.store.id
+                        }
+                    },
+                ]
             })
             .then(orders=>{
                 if(orders.count ==0){
@@ -426,14 +459,6 @@ module.exports = {
                 where: {
                     endDate: {[Op.lte]: limit},
                 },
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: true,
-                        placeChk: true,
-                     },
-                }],
                 where:{
                     [Op.and]:
                     [
@@ -449,6 +474,14 @@ module.exports = {
                 },
                 include: [
                     {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: true,
+                        },
+                    },
+                    {
                         model: db.Product,
                         as: 'product',
                         where:{
@@ -459,21 +492,21 @@ module.exports = {
                         model: db.Ordercode,
                         as: 'ordercode',
                         where: {
-                            code: { [Op.like]: `%${q.ordercode}%` }
+                            code: q.ordercode? { [Op.like]: `%${q.ordercode}%` } : {[Op.regexp]: '^'}
                         }
                     },
                     {
                         model: db.Store,
                         as: 'store',
                         where: {
-                            url: { [Op.like]: `%${q.url}%` }
+                            id: res.locals.store.id
                         }
                     },
                     {
                         model: db.User,
                         as: 'buyer',
                         where: {
-                            username: { [Op.like]: `%${q.username}%` }
+                            username: q.ordercode? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}
                         }
                     }
                 ]
@@ -511,14 +544,23 @@ module.exports = {
                 where: {
                     endDate: {[Op.lt]: limit},
                 },
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: true,
-                        placeChk: true,
-                     },
-                }]
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: true,
+                        },
+                    },
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            id: res.locals.store.id
+                        }
+                    }
+                ]
             })
             .then(orders=>{
                 if(orders.count ==0){
@@ -542,14 +584,6 @@ module.exports = {
                 where: {
                     endDate: {[Op.lte]: limit},
                 },
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: true,
-                        placeChk: true,
-                     },
-                }],
                 where:{
                     [Op.and]:
                     [
@@ -565,6 +599,14 @@ module.exports = {
                 },
                 include: [
                     {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: true,
+                         },
+                    },
+                    {
                         model: db.Product,
                         as: 'product',
                         where:{
@@ -575,21 +617,21 @@ module.exports = {
                         model: db.Ordercode,
                         as: 'ordercode',
                         where: {
-                            code: { [Op.like]: `%${q.ordercode}%` }
+                            code: q.ordercode? { [Op.like]: `%${q.ordercode}%` } : {[Op.regexp]: '^'}
                         }
                     },
                     {
                         model: db.Store,
                         as: 'store',
                         where: {
-                            url: { [Op.like]: `%${q.url}%` }
+                            id: res.locals.store.id
                         }
                     },
                     {
                         model: db.User,
                         as: 'buyer',
                         where: {
-                            username: { [Op.like]: `%${q.username}%` }
+                            username: q.ordercode? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}
                         }
                     }
                 ]
@@ -620,13 +662,22 @@ module.exports = {
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        cancelChk: true
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            cancelChk: true
+                        },
                     },
-                }]
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            id: res.locals.store.id
+                        }
+                    }
+                ]
             })
             .then(orders=>{
                 if(orders.count ==0){
@@ -661,6 +712,13 @@ module.exports = {
                 },
                 include: [
                     {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            cancelChk: true
+                        },
+                    },
+                    {
                         model: db.Product,
                         as: 'product',
                         where:{
@@ -671,21 +729,21 @@ module.exports = {
                         model: db.Ordercode,
                         as: 'ordercode',
                         where: {
-                            code: { [Op.like]: `%${q.ordercode}%` }
+                            code: q.ordercode? { [Op.like]: `%${q.ordercode}%` } : {[Op.regexp]: '^'}
                         }
                     },
                     {
                         model: db.Store,
                         as: 'store',
                         where: {
-                            url: { [Op.like]: `%${q.url}%` }
+                            id: res.locals.store.id
                         }
                     },
                     {
                         model: db.User,
                         as: 'buyer',
                         where: {
-                            username: { [Op.like]: `%${q.username}%` }
+                            username: q.ordercode? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}
                         }
                     }
                 ]
