@@ -21,26 +21,31 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 
 app.use(function(req,res,next){
-    db.Store.find({
-        include: [
-            {
-                model: db.Provider,
-                as: 'provider',
-                include: [
-                    {
-                        model: db.User,
-                        as: 'user',
-                        where: {
-                            id: req.user.id
+    if(req.user){
+        db.Store.find({
+            include: [
+                {
+                    model: db.Provider,
+                    as: 'provider',
+                    include: [
+                        {
+                            model: db.User,
+                            as: 'user',
+                            where: {
+                                id: req.user.id
+                            }
                         }
-                    }
-                ]
-            }
-        ]
-    }).then(store=>{        
-        res.locals.store = store;
+                    ]
+                }
+            ]
+        }).then(store=>{        
+            res.locals.store = store;
+            next();
+        });
+    } 
+    else{
         next();
-    })    
+    }         
 })
 
 app.get('/', (req,res)=>{

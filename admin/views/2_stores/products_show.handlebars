@@ -12,21 +12,12 @@
 							<td colspan="3">
 								
 								<div class="category_box">
-									<select class="inputstyle">
-										<option>대분류선택</option>
-									</select>
-								</div>
-								
-								<div class="category_box">
-									<select class="inputstyle">
-										<option>중분류선택</option>
-									</select>
-								</div>
-								
-								<div class="category_box">
-									<select class="inputstyle">
-										<option>소분류선택</option>
-									</select>
+									<select class="inputstyle" name="category">
+                                            <option value="">선택안함</option> 
+                                            {{#each categories}}
+                                                <option value={{this.id}}>{{this.name}}</option> 
+                                            {{/each}}
+                                    </select>
 								</div>
 							</td>
 						</tr>
@@ -37,64 +28,54 @@
 								<div class="nation_city">
 									<h4>1.국가선택</h5>
 									<ul class="box">
-										<li class="on">이탈리아</li>
-										<li>인도</li>
-										<li>인도네시아</li>
-										<li>일본</li>
-										<li>자메이카</li>
-										<li>대한민국</li>
-										<li>잠비아</li>
+										{{#each nations}}
+											<li>{{this.nation}}</li>
+										{{/each}}
 									</ul>
 								</div>
 								
 								<div class="nation_city">
 									<h4>2.도시선택</h5>
 									<ul class="box">
-										<li>나폴리</li>
-										<li>로마</li>
-										<li class="on">밀라노</li>
-										<li>베네치아</li>
-										<li>블로나</li>
-										<li>제노바</li>
-										<li>피렌체</li>
-										<li>시에나</li>
+										{{#each cities}}
+											<li>{{this.city}}</li>
+										{{/each}}
 									</ul>
 								</div>
 							</td>
 							
 							<th>선택정보</th>
 							<td>
-								국가1 : 이탈리아<br>
-								도시1 : 밀라노;베네치아;블로나;토리노<br><br>
-								국가2 : 대한민국<br>
-								도시2 : 전체<br>
+								{{#each myNations}}
+									{{this.nation}}
+								{{/each}}
+								{{#each myCities}}
+									{{this.city}}
+								{{/each}}
 							</td>
 						</tr>
 						
 						<tr>
 							<th>상품코드</th>
-							<td>2014819901-728</td>
+							<td>{{productcode.code}}</td>
 							<th>상품등록일자</th>
-							<td>2018-09-02</td>
+							<td>{{product.createdAt}}</td>
 						</tr>
 						
 						
 						<tr>
 							<th>상품명 *</th>
 							<td colspan="3">
-								<div class="input_100box"><input type="text" class="inputstyle"></input></div>
+								<div class="input_100box"><input type="text" class="inputstyle" value={{product.title}}></input></div>
 							</td>
 						</tr>
 						
 						<tr>
 							<th>홍보키워드</th>
 							<td colspan="3">
-								<div class="input_12box"><input type="text" class="inputstyle"></input></div>
-								<div class="input_12box"><input type="text" class="inputstyle"></input></div>
-								<div class="input_12box"><input type="text" class="inputstyle"></input></div>
-								<div class="input_12box"><input type="text" class="inputstyle"></input></div>
-								<div class="input_12box"><input type="text" class="inputstyle"></input></div>
-								<div class="input_12box"><input type="text" class="inputstyle"></input></div>
+								{{#each tags}}
+									<div class="input_12box"><input type="text" class="inputstyle" value=[{this.tag}}></input></div>
+								{{/each}}
 							</td>
 						</tr>
 						
@@ -110,9 +91,9 @@
 						<tr>
 							<th>판매기간설정</th>
 							<td colspan="3">
-								<div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
+								<div class="calendar_box">{{product.startdate}}<span><img src="/images/sub/calendar.jpg"></span></div>
 								<div class="inline">-</div>
-								<div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
+								<div class="calendar_box">{{product.enddate}}<span><img src="/images/sub/calendar.jpg"></span></div>
 								<div class="priod_box">
 									<select class="inputstyle">
 										<option>90일</option>
@@ -126,8 +107,8 @@
 						<tr>
 							<th>예약불가자일자 설정</th>
 							<td colspan="3">
-								<div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-								<div class="alret_date">2018-09-02, 2018-09-02, 2018-09-02, 2018-09-02, 2018-09-02</div>
+								<div class="calendar_box"><span><img src="/images/sub/calendar.jpg"></span></div>
+								<div class="alret_date">{{#each unavailableDates}}{{this.date}}{{/each}}</div>
 							</td>
 						</tr>
 						
@@ -233,7 +214,7 @@
 									
 									
 									<div class="plus_button">
-										<img src="../images/sub/plus_option.png">
+										<img src="/images/sub/plus_option.png">
 									</div>
 								</div>
 							</td>
@@ -246,7 +227,7 @@
 							<td colspan="3">
 								<div class="compulsory_img">
 									<div class="compulory_text">대표이미지</div>
-									<div class="image"><img src="../images/sub/ex_img.jpg"></div>
+									<div class="image"><img src="/images/sub/ex_img.jpg"></div>
 									<div class="buttonarea">
 										<div class="change">변경</div>
 										<div class="delete">삭제</div>
@@ -256,7 +237,7 @@
 								<div class="compulsory_img">
 									<div class="compulory_text">추가이미지</div>
 									<div class="image">
-										<div class="plus_imgicon"><img src="../images/sub/plus_img.png"></div>
+										<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
 									</div>
 									<div class="buttonarea">
 										<div class="change">찾아보기</div>
@@ -267,7 +248,7 @@
 								<div class="compulsory_img">
 									<div class="compulory_text">추가이미지</div>
 									<div class="image">
-										<div class="plus_imgicon"><img src="../images/sub/plus_img.png"></div>
+										<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
 									</div>
 									<div class="buttonarea">
 										<div class="change">찾아보기</div>
@@ -278,7 +259,7 @@
 								<div class="compulsory_img">
 									<div class="compulory_text">추가이미지</div>
 									<div class="image">
-										<div class="plus_imgicon"><img src="../images/sub/plus_img.png"></div>
+										<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
 									</div>
 									<div class="buttonarea">
 										<div class="change">찾아보기</div>
@@ -314,23 +295,3 @@
 			</div>
 			
 		</div>
-
-<h1>Product Show Page</h1>
-
-<br>{{product.title}}
-<br>{{productcode.code}}
-<br>{{category.name}}
-<br><br>
-{{#each cities}}
-    <br>{{this.city}}
-{{/each}}
-
-<br><br>
-{{#each nations}}
-    <br>{{this.nation}}
-{{/each}}
-
-<br><br>
-{{#each tags}}
-    <br>{{this.tag}}
-{{/each}}

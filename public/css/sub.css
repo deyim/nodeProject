@@ -110,13 +110,13 @@
 
 
 .input_12box{
-	padding:6px;
+	padding:10px;
 	width:12%;
 	border:1px solid #e5e5e5;
 	font-size:14px;
 	box-sizing:border-box;
 	display:inline-block;
-	margin-left:0.5%;
+	margin:0.5%;
 }
 
 .input_12box:first-child{
@@ -131,7 +131,7 @@
 	font-size:14px;
 	box-sizing:border-box;
 	display:inline-block;
-	margin-left:0.5%;
+	margin:0.5%;
 }
 
 .input_8box:first-child{
@@ -1068,6 +1068,15 @@ margin-top:12px;
 	text-align:center;
 }
 
+.buttonarea .change{
+	padding:5px;
+	border:1px solid #e5e5e5;
+	font-size:13px;
+	box-sizing:border-box;
+	width:70px;
+	display:inline-block;
+}
+
 .compulsory_img .buttonarea .change{
 	padding:5px;
 	border:1px solid #e5e5e5;
@@ -1116,6 +1125,7 @@ margin-top:12px;
 	width:31px;
 	display:inline-block;
 	float:right;
+	padding: 5px;
 }
 
 

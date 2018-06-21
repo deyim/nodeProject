@@ -9,7 +9,11 @@ module.exports = ()=>{
     //products - add
     route.get('/products/add', controller.productsAdd)
         .post('/products/create', controller.productsCreate);
-    //products - show
+    route.get('/products/getproductcode', controller.productsGetProductcode);
+    route.get('/products/updatenation', controller.productsUpdateNation);
+    route.get('/products/updatecity', controller.productsUpdateCity);
+    route.get('/products/getunavailable', controller.productsGetUnavailables);
+        //products - show
     route.get('/products/:product_id', controller.findProduct, controller.productsShow)
         .post('/products/:product_id/', controller.findProduct, controller.productsUpdate);
     //products - delete

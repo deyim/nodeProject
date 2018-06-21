@@ -1,22 +1,24 @@
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
+// const dateConverter = require('../../lib/date_functions');
 const Op = db.Sequelize.Op;
 const perPage = 5;
+
+Date.prototype.yyyymmdd = function() {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+  
+    return [this.getFullYear(),
+            (mm>9 ? '' : '0') + mm,
+            (dd>9 ? '' : '0') + dd
+           ].join('-');
+};
 
 module.exports = {
     findProduct: (req,res,next)=>{
         db.Product.find({
             where: {
                 id: req.params.product_id,
-                // include: [
-                //     {
-                //         model: db.Store,
-                //         as: 'store',
-                //         where: {
-                //             id: res.locals.store.id
-                //         }
-                //     }
-                // ]
             }
         })
         .then(product=>{
@@ -25,6 +27,8 @@ module.exports = {
                 res.redirect('/stores/products');
             }
             req.product = product;
+
+           //find unavailable dates!!
 
             product.getProductcode()
             .then(productcode=>{
@@ -169,15 +173,36 @@ module.exports = {
     },
 
     productsShow: (req,res)=>{
-        objData = {
+        let objData = {
             product:req.product, 
             productcode:req.productcode, 
-            nations:req.nations, 
-            cities:req.cities, 
+            myNations:req.nations, 
+            myCities:req.cities, 
             tags:req.tags,
             category:req.category
         };
-        res.render('2_stores/products_show', objData);
+        
+        db.Category.findAll()
+        .then(categories=>{
+            objData.categories = categories;
+        });
+
+        db.Nation.findAll({
+            order: [
+                ['nation', 'ASC'],
+            ]
+        })
+        .then(nations=>{
+            objData.nations = nations;
+        });
+
+        db.City.findAll()
+        .then(cities=>{
+            objData.cities = cities;
+            res.render('2_stores/products_show', objData);
+        });
+        
+        
     },
     
     productsUpdate: (req,res)=>{
@@ -190,11 +215,83 @@ module.exports = {
 
     //products - add
     productsAdd: (req,res)=>{
-        res.render("2_stores/products_add");
+        let objData = {};
+
+        today = new Date();
+        objData.today = today.yyyymmdd();
+
+        db.Category.findAll()
+        .then(categories=>{
+            objData.categories = categories;
+        });
+
+        db.Nation.findAll({
+            order: [
+                ['nation', 'ASC'],
+            ]
+        })
+        .then(nations=>{
+            objData.nations = nations;
+        });
+
+        db.City.findAll({
+            order: [
+                'id'
+            ]
+        })
+        .then(cities=>{
+            objData.cities = cities;
+            res.render("2_stores/products_add", objData);
+        });
     },
 
     productsCreate: (req,res)=>{
+        //store = res.locals.store.id
+        //provider = req.user.id와 연결된 provider
+        
         res.render("2_stores/products_add_completed");
+    },
+    
+    productsGetProductcode: (req,res)=>{
+        db.Productcode.findOne({
+            where: {
+                usedChk: false
+            }
+        })
+        .then(productcode=>{
+            console.log(productcode);
+            res.json(productcode);
+        });        
+    },
+
+    productsUpdateNation: (req,res)=>{
+        // console.log('\n\n\n****',req.query);
+        db.Nation.findOne({
+            where: {
+                id: req.query.nation
+            }
+        })
+        .then(nation=>{
+            // console.log(nation);
+            res.json(nation);
+        });        
+    },
+
+    productsUpdateCity: (req,res)=>{
+        // console.log('\n\n\n****',req.query);
+        db.City.findOne({
+            where: {
+                id: req.query.city
+            }
+        })
+        .then(city=>{
+            // console.log(city);
+            res.json(city);
+        });         
+    },
+
+    productsGetUnavailables: (req,res)=>{
+        
     },
 
     //stores - delete
