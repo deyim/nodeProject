@@ -17,8 +17,7 @@
 	border-top:1px solid #e5e5e5;
 	border-left:1px solid #e5e5e5;
 	border-right:1px solid #e5e5e5;
-	box-sizing:border-box;
-	
+	box-sizing:border-box;	
 }
 
 .search_area .serach_box tbody th{
@@ -53,7 +52,7 @@
 	font-size:14px;
 }
 
-.category_box{
+.category_box select{
 	padding:6px;
 	width:160px;
 	border:1px solid #e5e5e5;
@@ -72,7 +71,7 @@
 	float:right;
 }
 
-.priod_box{
+.priod_box select{
 	padding:6px;
 	width:110px;
 	border:1px solid #e5e5e5;

@@ -1,41 +1,40 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title></title>
-        {{!-- <link rel="stylesheet" type="text/css" href="css/master_partials.css"> --}}
-    </head>
-    <style>
-        .header{
-            height: 20px;
-        }
-        .sidenav {
-            width: 220px;
-            height: 90%;
-            position: fixed;
-            z-index: 1;
-            top: 40px;
-            left: 0;
-            background-color: grey;
-            overflow-x: hidden;
-            padding-top: 20px;
-        }
+   <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-        .main {
-            margin-left: 220px; /* Same as the width of the sidenav */
-            font-size: 28px; /* Increased text to enable scrolling */
-            padding: 0px 10px;
-        }
-    </style>
-    <body>
+	<title> 소소행 판매 관리자 페이지 </title>	
+	<link rel="stylesheet" type="text/css" href="/css/common.css" />
+	<link rel="stylesheet" type="text/css" href="/css/include.css" />
+	<link rel="stylesheet" type="text/css" href="/css/main.css" />    
+	<link rel="stylesheet" type="text/css" href="/css/member.css" />
+	<link rel="stylesheet" type="text/css" href="/css/login.css" />
+	<link rel="stylesheet" type="text/css" href="/css/sub.css" />    
+	<link rel="stylesheet" type="text/css" href="/css/product.css" />
+	<link rel="stylesheet" type="text/css" href="/css/order.css" />
+	{{!-- <link rel="stylesheet" type="text/css" href="/css/jquery.bxslider.css" /> --}}
+	<link rel="stylesheet" type="text/css" href="/css/jquery.mCustomScrollbar.css" />
+	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css"> 
+
+	<link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	{{!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> --}}
+	<script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui.min.js"></script> 
+	<script type="text/javascript" src="/js/admin_master.js"></script>
+
+</head>
+    
+    <body class="wrap">
         <div class="header">
             {{> header}}
         </div>
-        <nav class="sidenav">
-            {{> nav}}
-        </nav>
-        <div class="main">
+        <div id="contents">
+            {{>nav}}
             {{{body}}}
-        </div>        
-        {{> footer}}
+        </div>
+        {{>footer}}
     </body>
 </html>

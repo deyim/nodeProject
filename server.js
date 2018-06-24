@@ -16,7 +16,7 @@ app.use(function(req, res, next) {
     next();
 });
 app.use(vhost('master.sosohang.com',master));
-app.use(vhost('admin.sosohang.com', admin));
+app.use(vhost('partner.sosohang.com', admin));
 
 var authRoutes = require('./app/routes/auth_routes')(passport);
 app.use('/auth', authRoutes);

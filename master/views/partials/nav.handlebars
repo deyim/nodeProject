@@ -1,69 +1,108 @@
-{{!-- <nav> --}}
-    <ul>
-        <li>관리</li>
-            <ul>
-                <li>회원 관리</li>
-                    <ul>
-                        <a href="/members/users"><li>일반 회원</li></a>
-                        <a href="/members/providers"><li>스토어 회원</li></a>
-                        <a href="/members/stores"><li>스토어 정보</li></a>
-                        <a href="/members/#"><li>휴면 회원</li></a>
-                    </ul>
-                <li>승인 관리</li>
-                    <ul>
-                        <a href="/approvals/stores"><li>스토어 개설</li></a>
-                        <a href="/approvals/"><li>스토어 폐쇄</li></a>
-                    </ul>
-                <li>스토어 관리</li>
-                    <ul>
-                        <a href="/stores/products"><li>상품 관리</li></a>
-                        <a href="/stores/posts"><li>게시글 관리</li></a>
-                        <a href="/stores/messages"><li>쪽지 관리</li></a>
-                        <a href="/stores/comments"><li>댓글 관리</li></a>
-                        <a href="/stores/notices"><li>전체공지 관리</li></a>
-                    </ul>
-                <li>주문/클레임 관리</li>
-                    <ul>
-                        <a href="/orders/ordered"><li>입금 확인중</li></a>
-                        <a href="/orders/paid"><li>신규 주문</li></a>
-                        <a href="/orders/placed"><li>발주 확인</li></a>
-                        <a href="/orders/used"><li>서비스 이용중</li></a>
-                        <a href="/orders/final"><li>구매 확정</li></a>
-                        <a href="/orders/cancel"><li>취소/환불</li></a>
-                    </ul>
-                <li>매출/정산 관리</li>
-                    <ul>
-                        <a href="/sales/"><li>전체 매출내역 조회</li></a>
-                        <a href="/sales/"><li>스토어별 매출내역 조회</li></a>
-                        <a href="/sales/"><li>정산내역 조회</li></a>
-                        <a href="/sales/"><li>출금신청 조회</li></a>
-                    </ul>
-                <li>사이트 관리</li>
-                    <ul>
-                        <a href="/sites/banners"><li>메인 배너</li></a>
-                        <a href="/sites/notices"><li>공지사항</li></a>
-                        <a href="/sites/faqs"><li>FAQ</li></a>
-                        <a href="/sites/masters"><li>관리자조회</li></a>
-                    </ul>
-            </ul>
-        <li>설정</li>
-            <ul>
-                <li>코드 설정</li>
-                    <ul>
-                        <a href="/codes/products"><li>상품 코드</li></a>
-                        <a href="/codes/orders"><li>주문 코드</li></a>
-                        <a href="/codes/notices"><li>공지사항 구분코드</li></a>
-                        <a href="/codes/faqs"><li>FAQ 구분코드</li></a>
-                    </ul>
-                <li>카테고리 설정</li>
-                    <ul>
-                        <a href="/categories/"><li>카테고리 관리</li></a>
-                    </ul>
-            </ul>
-        <li>통계</li>
-            <ul>
-                <a href="/counts/"><li>컨텐츠 공유</li></a>
-                <a href="/counts/"><li>방문자 수/페이지 뷰</li></a>
-            </ul>
+<div class="menuarea" data-mcs-theme="dark">
+                
+    <div class="dashboard">
+        DASHBOARD
+    </div>
+    
+    <ul class="menu">
+        {{!-- <li><a href="#">관리</a></li> --}}
+        
+        <li onclick="javascript:$('#m1').toggle();">
+            <a>회원관리<span><img src="/images/menu_arrow.png"></span></a>
+        </li>
+        
+        <ul style="display:block;" id="m1" class="sub_menu">
+            <li><a href="/members/users">· 일반회원</a></li>
+            <li><a href="/members/providers">· 스토어회원</a></li>
+            <li><a href="/members/stores">· 스토어정보</a></li>
+            <li><a href="/members/">· 휴먼회원</a></li>
+        </ul>
+        
+        <li onclick="javascript:$('#m2').toggle();">
+            <a>승인관리<span><img src="/images/menu_arrow.png"></span></a>
+        </li>
+        <ul style="display:none;" id="m2" class="sub_menu">
+            <li><a href="/approvals/stores">· 스토어 개설</a></li>
+            <li><a href="/approvals/">· 스토어 폐쇄</a></li>
+        </ul>
+        
+        
+        <li onclick="javascript:$('#m3').toggle();">
+            <a href="#">스토어관리<span><img src="/images/menu_arrow.png"></span></a>
+        </li>
+        
+        <ul style="display:none;" id="m3" class="sub_menu">
+            <li><a href="/stores/products">· 상품조회</a></li>
+            <li><a href="/stores/posts">· 게시글 관리</a></li>
+            <li><a href="/stores/messages">· 쪽지 관리</a></li>
+            <li><a href="/stores/comments">· 댓글 관리</a></li>
+            <li><a href="/stores/notices">· 전체공지 관리</a></li>
+        </ul>
+        
+        
+        
+        <li onclick="javascript:$('#m4').toggle();">
+            <a href="#">주문/클레임관리<span><img src="../images/menu_arrow.png"></span></a>
+        </li>
+        
+        <ul style="display:none;" id="m4" class="sub_menu">
+            <li><a href="/orders/ordered">· 입금확인중</a></li>
+            <li><a href="/orders/paid">· 신규주문</a></li>
+            <li><a href="/orders/placed">· 발주확인</a></li>
+            <li><a href="/orders/used">· 서비스 이용중</a></li>
+            <li><a href="/orders/final">· 구매확정</a></li>
+            <li><a href="/orders/cancel">· 취소/환불</a></li>
+        </ul>
+
+
+        <li onclick="javascript:$('#m4').toggle();">
+            <a href="#">매출/정산 관리<span><img src="/images/menu_arrow.png"></span></a>
+        </li>
+        
+        <ul style="display:none;" id="m4" class="sub_menu">
+            <li><a href="/sales/">· 전체 매출내역 조회</a></li>
+            <li><a href="/sales/">· 스토어별 매출내역 조회</a></li>
+            <li><a href="/sales/">· 정산내역 조회</a></li>
+            <li><a href="/sales/">· 출금신청 조회</a></li>
+        </ul>
+        
+
+        <li onclick="javascript:$('#m5').toggle();">
+            <a href="#">사이트관리<span><img src="/images/menu_arrow.png"></span></a>
+        </li>
+        
+        <ul style="display:none;" id="m5" class="sub_menu">
+            <li><a href="/sites/banners">· 매인배너</a></li>
+            <li><a href="/sites/notices">· 공지사항</a></li>
+            <li><a href="/sites/faqs">· FAQ</a></li>
+            <li><a href="/sites/masters">· 관리자 조회</a></li>
+        </ul>
+        
+        
+        
+        <li onclick="javascript:$('#m6').toggle();">
+            <a href="#">설정<span><img src="/images/menu_arrow.png"></span></a>
+        </li>
+        
+        <ul style="display:none;" id="m6" class="sub_menu">
+            <li><a href="#">코드설정</a></li>
+            <li><a href="/codes/products"> · 상품코드</a></li>
+            <li><a href="/codes/orders"> · 주문코드</a></li>
+            <li><a href="/codes/notices"> · 공지사항 구분코드</a></li>
+            <li><a href="/codes/faqs"> · FAQ 구분코드</a></li>
+            <li><a href="#">카테고리설정</a></li>
+            <li><a href="/categories"> · 카테고리 관리</a></li>
+        </ul>
+        
+        <li onclick="javascript:$('#m7').toggle();">
+            <a href="#">통계<span><img src="/images/menu_arrow.png"></span></a>
+        </li>
+        
+        <ul style="display:none;" id="m7" class="sub_menu">
+            <li><a href="#">통계</a></li>
+            <li><a href="/counts"> · 컨텐츠 공유</a></li>
+            <li><a href="/counts"> · 방문자수/페이지 뷰</a></li>
+        </ul>
     </ul>
-{{!-- </nav> --}}
+    
+</div>

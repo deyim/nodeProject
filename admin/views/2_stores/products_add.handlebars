@@ -26,7 +26,7 @@
 					<td>
 						<div class="nation_city">
 							<h4>1.국가선택</h5>
-							<select multiple size="10" class="inputstyle" name="nation" id="nation_select">
+							<select multiple size="4" class="inputstyle" name="nation" id="nation_select">
 								{{#each nations}}
 									<option class="nation_option" value={{this.id}}>{{this.nation}}</option> 
 								{{/each}}
@@ -40,10 +40,10 @@
 						
 						<div class="nation_city">
 							<h4>2.도시선택</h5>
-							<select multiple size="10" class="inputstyle" name="city" id="city_select">
-								{{#each cities}}
+							<select class="inputstyle" name="city" id="city_select">
+								{{!-- {{#each cities}}
 									<option class="city_option" value={{this.id}}>{{this.city}}</option> 
-								{{/each}}
+								{{/each}} --}}
 							</select>
 							{{!-- <ul class="box">
 								{{#each cities}}
@@ -66,7 +66,8 @@
 					<th>상품코드</th>
 					<td>
 						<div class="input_100box">
-							<input class="inputstyle" id="productcode" type="text" name="productcode">
+							<div id="productcode"></div>
+							<input class="inputstyle" id="productcode_input" type="hidden" name="productcode">
 						</div>						
 						<button id="codebutton">코드등록</button>
 						{{!-- 옆으로 붙여라 나중에 --}}
@@ -105,16 +106,16 @@
 				<tr>
 					<th>판매기간설정</th>
 					<td colspan="3">
-						<div class="calendar_box"><input type="date" name="startdate" value={{today}}><span><img src="/images/sub/calendar.jpg"></span></div>
+						<div class="calendar_box"><input type="date" name="startdate" id="src_date" value={{today}}><span><img src="/images/sub/calendar.jpg"></span></div>
 						<div class="inline">-</div>
-						<div class="calendar_box"><input type="date" name="enddate"><span><img src="/images/sub/calendar.jpg"></span></div>
-						<div class="priod_box">
-							<select class="inputstyle">
-								<option>90일</option>
-								<option>120일</option>
-								<option>150일</option>
+						<div class="calendar_box"><input type="date" name="enddate" id="target_date"><span><img src="/images/sub/calendar.jpg"></span></div>
+						{{!-- <div class="priod_box inline">
+							<select class="inputstyle" id="change_date">
+								<option value="90">90일</option>
+								<option value="120">120일</option>
+								<option value="150">150일</option>
 							</select>
-						</div>
+						</div> --}}
 					</td>
 				</tr>
 				
@@ -147,48 +148,53 @@
 					</td>
 				</tr>
 				
-				<tr>
+				<tr class="option_title">
 					<th>옵션/가격 *</th>
 					<td colspan="3">
 						<div class="listdg_button">
 							<div class="inline">옵션명</div>
-							<div class="input_80box"><input type="text" class="inputstyle"></input></div>
+							<div class="input_80box"><input type="text" class="inputstyle" id="option_name"></input></div>
 							
-							{{!-- <div class="inline">가격</div>
-							<div class="input_12box"><input type="text" class="inputstyle"></input></div> --}}
-							<div class="dg_button" id="add_option">옵션추가</div>						
-							{{!-- <div class="dg_button">옵션삭제</div> --}}
+							<div class="dg_button" id="add_option_first">옵션추가</div>						
 						</div>
 					</td>
 				</tr>
 				
-				<tr class="option_content">
-					<th>추가옵션/가격 *</th>
-					<td colspan="3">
-						<div class="listdg_button" id="price_content">							
-							<div class="inline"><input type="checkbox" name="periodType" value=""></input> 성인</div>
-							<div class="inline"><input type="checkbox" name="periodType" value=""></input> 아동</div>
-							<div class="input_8box">
-								<input type="text" class="inputstyle"></input>
-							</div>명
-							<div class="inline">-</div>
-							<div class="input_8box">
-								<input type="text" class="inputstyle"></input>
-							</div>명: 
-							<div class="input_12box">
-								<input type="text" class="inputstyle"></input>
+				<tr id="option_content">
+					{{!-- <div class="option_content"> --}}
+						<th>추가옵션/가격 *</th>
+						<td colspan="3" >
+							<div class="listdg_button" id="price_content">							
+								{{!-- <div class="inline"><input type="checkbox" name="" value=""></input> 성인</div>
+								<div class="inline"><input type="checkbox" name="" value=""></input> 아동</div> --}}
+								<div class="priod_box inline">
+									<select class="inputstyle" id="adult_or_child">
+										<option value="adult">성인</option>
+										<option value="child">아동</option>
+									</select>
+								</div>
+								<div class="input_8box">
+									<input type="text" id="start" name="start" class="inputstyle"></input>
+								</div>명
+								<div class="inline">-</div>
+								<div class="input_8box">
+									<input type="text" id="end" name="end" class="inputstyle"></input>
+								</div>명: 
+								<div class="input_8box">
+									<input type="text" id="price" name="price" class="inputstyle"></input>
+								</div>
+								<div class="inline">원</div>
+								
+								<div class="plus_button remove_price" >
+									<img src="/images/sub/plus_option.png">	
+								</div>
+								<div class="plus_button add_price" >
+									<img src="/images/sub/plus_option.png">	
+								</div>
+								
 							</div>
-							<div class="inline">원</div>
-							
-							<div class="plus_button remove_price" >
-								<img src="/images/sub/plus_option.png">	
-							</div>
-							<div class="plus_button add_price" >
-								<img src="/images/sub/plus_option.png">	
-							</div>
-							
-						</div>
-					</td>
+						</td>
+					{{!-- </div> --}}
 				</tr>
 				
 				
@@ -268,12 +274,15 @@
 </div>
 
 <script>
+
+
 	$(document).ready(function(){
 		$("#codebutton").click(function(){
 			$.ajax({
 				url: "/stores/products/getproductcode", 
 				success: function(result){
-					$("#productcode").val(result.code);
+					$("#productcode").text(result.code);
+					$("#productcode_input").val(result.code);
 			}});
 		});
 	});
@@ -287,17 +296,27 @@
 				},
 				success: function(result){
 					console.log("working");
-					$("#nation").val(result.nation);
+					$("#nation").val(result.nation.nation);
 					var $s = $('#city_select');
-					var optionTop = $s.find("option:contains('"+result.nation+"')").offset().top;
-					var selectTop = $s.offset().top;
-					$s.scrollTop($s.scrollTop()+optionTop-selectTop);
+					$('.city_option').remove();
+					$.each(result.cities, function (i, city) {
+						console.log(city);
+						$('#city_select').append($('<option>', { 
+							class: "city_option",
+							value: city.id,
+							text : city.city 
+						}));
+					});
+					
+					//var optionTop = $s.find("option:contains('"+result.nation+"')").offset().top;
+					//var selectTop = $s.offset().top;
+					//$s.scrollTop($s.scrollTop()+optionTop-selectTop);
 			}});
 		});
 	});
 
 	 $(document).ready(function(){
-		$(".city_option").click(function(){
+		 $(document).on('click', '.city_option', function(){
 			$.ajax({
 				url: "/stores/products/updatecity", 
 				data: {
@@ -308,7 +327,7 @@
 					if(originalValue===''){
 						originalValue = result.city;
 					}else{
-						originalValue = originalValue + ',' + result.city;
+						originalValue = originalValue + '; ' + result.city;
 					}										
 					$("#city").val(originalValue);
 			}});
@@ -329,20 +348,44 @@
 	}); 
 
 	$(document).ready(function(){
-		$(document).on('click', '.add_option', function(){
-			var price = $('#price_content').html();
-			var newdiv = $("<div class='listdg_button' id='price_content'>");
-			newdiv.html(price);
-        	$('#price_content').after(newdiv);
+		$('#option_content').hide();
+	});
+
+	$(document).ready(function(){
+		$(document).on('click', '#add_option_first', function(){
+			$('#option_content').find($('#price_content')).before("<div id='added_option_name'></div>");
+			$('#option_content').find($('#added_option_name')).text($('#option_name').val());
+			$('#option_content').show();
+			$('#option_name').val("");
+			$('#add_option_first').attr("id","add_option");
 		});
 	}); 
 
 	$(document).ready(function(){
+		$(document).on('click', '#add_option', function(){
+			var content = $('#option_content').html();
+			var newtr = $("<tr id='option_content'>");		
+			newtr.html(content);
+			
+			
+			$('#option_content').find($('#added_option_name')).text($('#option_name').val());
+			$('#option_content').find($('.prices')).remove();
+			$('#option_content').after(newtr);
+			$('#option_name').val("");
+		});
+	}); 
+
+	
+
+	$(document).ready(function(){
 		$(document).on('click', '.add_price', function(){
-			var price = $('#price_content').html();
-			var newdiv = $("<div class='listdg_button' id='price_content'>");
-			newdiv.html(price);
+			var newdiv = $("<div class='prices'></div>");
+			newdiv.text($('#adult_or_child').val()+' :    '+$('#start').val()+' 명    ~    '+$('#end').val()+' 명    '+$('#price').val()+' 원')
+			console.log(newdiv.text());
         	$('#price_content').after(newdiv);
+			$('#start').val("");
+			$('#end').val("");
+			$('#price').val("");
 		});
 	}); 
 
@@ -352,5 +395,25 @@
 			$(this).parent().remove();
 		});
 	}); 
+
+
+	{{!-- $(document).ready(function(){
+		$(document).on('click', '#change_date', function(){
+			var mydate = new Date($('#src_date').val());
+			console.log(mydate);
+			mydate.setDate(mydate.getDate() + $(this).val());
+			console.log(mydate);
+
+			var mm = mydate.getMonth() + 1; // getMonth() is zero-based
+    		var dd = mydate.getDate();
+  
+            var thisDate =  [mydate.getFullYear(),
+            (mm>9 ? '' : '0') + mm,
+            (dd>9 ? '' : '0') + dd
+           ].join('-');
+			
+			$('#target_date').val(thisDate);
+		});
+	});  --}}
 
 </script>

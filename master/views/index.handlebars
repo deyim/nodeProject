@@ -1,14 +1,73 @@
-<form action="auth/authenticate" method="POST">
-    <div>
-        <label>Username:</label>
-        <input type="text" name="username"/>
-    </div>
-    <div>
-        <label>Password:</label>
-        <input type="password" name="password"/>
-    </div>
-    <input type="submit" value="login"/>
-</form>
-{{#if message}}
-    <p>{{message}}</p>
-{{/if}}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+
+	<title> 소소행 판매 관리자 페이지 </title>	
+	<link rel="stylesheet" type="text/css" href="../css/common.css" />
+	<link rel="stylesheet" type="text/css" href="../css/include.css" />
+	<link rel="stylesheet" type="text/css" href="../css/main.css" />
+	<link rel="stylesheet" type="text/css" href="../css/member.css" />
+	<link rel="stylesheet" type="text/css" href="../css/login.css" />
+	<link rel="stylesheet" type="text/css" href="../css/jquery.bxslider.css" />
+	<link rel="stylesheet" type="text/css" href="../css/jquery.mCustomScrollbar.css" />
+
+
+	<link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="../js/jquery.mCustomScrollbar.concat.min.js"></script>
+	
+	<script>
+		(function($){
+			$(window).on("load",function(){
+				$(".menuarea").mCustomScrollbar();
+			});
+		})(jQuery);
+	</script>
+	
+</head>
+
+
+<body class="wrap">
+	<div id="login">
+		<div class="logo">
+			<img src="/images/login/logo.png">
+		</div>
+		<div class="login_nav">스토어로그인</div>
+		
+
+        <form action="auth/authenticate" method="POST">
+            <div class="input_area">
+                <div class="inputbox">
+                    <input type="text" class="inputstyle" name="username" placeholder="아이디"></input>
+                </div>
+                
+                <div class="inputbox">
+                    <input type="password" class="inputstyle" name="password" placeholder="비밀번호"></input>
+                </div>
+                
+                <div class="button"><input type="submit" value="로그인"/></div>
+            </div>
+            
+            <div class="loginmenu_area">
+                <div class="keep">
+                    <input type="checkbox" class="checkstyle"></input>
+                    로그인상태 유지
+                </div>
+                
+                <ul class="login_menu">
+                    <li>회원가입</li>
+                    <li>아이디찾기</li>
+                    <li>비밀번호찾기</li>
+                </ul>
+            </div>
+        </form>
+		
+		{{#if message}}
+		<div class="alert_text"> {{message}}</div>
+        {{/if}}
+	</div>
+</body>
+</html>

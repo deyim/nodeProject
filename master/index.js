@@ -15,7 +15,7 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, './views'));
 // app.use(express.static('public'));
-app.use(express.static(path.join(__dirname, '/views/public')));
+// app.use(express.static(path.join(__dirname, '/views/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 

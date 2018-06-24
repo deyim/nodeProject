@@ -8,7 +8,7 @@ module.exports = {
       {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Faqs', // name of Target model
+          model: 'FAQcodes', // name of Target model
           key: 'id', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
@@ -21,7 +21,7 @@ module.exports = {
         {
           type: Sequelize.INTEGER,
           references: {
-            model: 'Notices', // name of Target model
+            model: 'Noticecodes', // name of Target model
             key: 'id', // key in Target model that we're referencing
           },
           onUpdate: 'CASCADE',

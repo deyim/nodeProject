@@ -272,26 +272,40 @@ module.exports = {
             }
         })
         .then(nation=>{
-            // console.log(nation);
-            res.json(nation);
+
+            db.City.findAll({
+                include: [
+                    {
+                        model: db.Nation,
+                        as: 'nation',
+                        where: {
+                            id: req.query.nation
+                        }
+                    }
+                ]
+            })
+            .then(cities=>{
+                let obj = {nation,cities};
+                res.json(obj);
+            });            
         });        
     },
 
     productsUpdateCity: (req,res)=>{
-        // console.log('\n\n\n****',req.query);
+        console.log('\n\n\n****',req.query);
         db.City.findOne({
             where: {
                 id: req.query.city
             }
         })
         .then(city=>{
-            // console.log(city);
+            console.log(city);
             res.json(city);
         });         
     },
 
     productsGetUnavailables: (req,res)=>{
-        
+
     },
 
     //stores - delete

@@ -6,6 +6,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    ;
+    // queryInterface.createTable('Commenta');
   }
 };
