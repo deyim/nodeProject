@@ -3,153 +3,192 @@
         <div class="title">회원상세</div>
         <div class="nav">회원관리 > 일반회원 > 회원상세</div>
     </div>
-    
-    <div class="member_view">
-        <table cellpadding="0" cellspacing="0" class="de_table">
-            <tbody>
-                <tr>
-                    <th>가입일자</th>
-                    <td>2018.08.02</td>
-                </tr>
-                
-                <tr>
-                    <th>최종로그인</th>
-                    <td>2018.08.02</td>
-                </tr>
-                
-                <tr>
-                    <th>로그인 횟수</th>
-                    <td>2018.08.02</td>
-                </tr>
-                
-                <tr>
-                    <th>가입플랫폼</th>
-                    <td>소소행</td>
-                </tr>
-                
-                <tr>
-                    <th>아이디</th>
-                    <td>flywork@flywork.co.kr</td>
-                </tr>
-                
-                <tr>
-                    <th>닉네임</th>
-                    <td>
-                        <div class="nickname_box">
-                            <input type="text" class="inputstyle" value="flywork"></input>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>전화번호</th>
-                    <td>
-                        <div class="input_12box">
-                            <select type="text" class="inputstyle">
-                                <option>010</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_12box">
-                            <input type="text" class="inputstyle"></input>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_12box">
-                            <input type="text" class="inputstyle"></input>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>이메일 수신동의</th>
-                    <td>
-                        <div class="inline">
-                            <input type="radio"></input> 수신동의
-                        </div>
-                        <div class="inline">
-                            <input type="radio"></input> 수신하지 않음
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>SMS 수신동의</th>
-                    <td>
-                        <div class="inline">
-                            <input type="radio"></input> 수신동의
-                        </div>
-                        <div class="inline">
-                            <input type="radio"></input> 수신하지 않음
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>가입스토어</th>
-                    <td>0개</td>
-                </tr>
-                
-                <tr>
-                    <th>작성글수</th>
-                    <td>1개</td>
-                </tr>
-                
-                <tr>
-                    <th>보낸쪽지수</th>
-                    <td>3개</td>
-                </tr>
-                
-                <tr>
-                    <th>받은쪽지수</th>
-                    <td>3개</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    
-    <div class="bot_button">
-        <div class="wt_button">목록</div>
-        <div class="wt_button">수정</div>
-        <div class="dg_button">탈퇴처리</div>
+
+    <form method="POST">
+        <div class="member_view">
         
-    </div>
+                <table cellpadding="0" cellspacing="0" class="de_table">
+                    <tbody>
+                        <tr>
+                            <th>가입일자</th>
+                            <td>{{makeDate user.createdAt}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>최종로그인</th>
+                            <td>{{makeDate user.loginDate}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>로그인 횟수</th>
+                            <td>{{user.loginCnt}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>이름</th>
+                            <td>{{user.name}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>아이디</th>
+                            <td>{{user.username}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>닉네임</th>
+                            <td>
+                                <div class="nickname_box">
+                                    <input name = "nickname" type="text" class="inputstyle" value={{user.nickname}}></input>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th>전화번호</th>
+                            <td>
+                                <div class="input_12box">
+                                    <select type="text" class="inputstyle">
+                                        <option>010</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="inline"> -</div>
+                                
+                                <div class="input_12box">
+                                    <input type="text" class="inputstyle" name="phone1" value={{phone1 user.phone}}></input>
+                                </div>
+                                
+                                <div class="inline"> -</div>
+                                
+                                <div class="input_12box">
+                                    <input type="text" class="inputstyle" name="phone2" value={{phone2 user.phone}}></input>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th>이메일 수신동의</th>
+                            <td>
+                                <div class="inline">
+                                    <input type="checkbox" {{ifchecked user.recEmail}} name="recEmail" value="true"></input> 수신동의
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th>SMS 수신동의</th>
+                            <td>
+                                <div class="inline">
+                                    <input type="checkbox" {{ifchecked user.recSMS}} name="recSMS" value="true"></input> 수신동의
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th>가입스토어</th>
+                            <td>{{storesCnt}}개</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>작성글수</th>
+                            <td>{{posts}}개</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>보낸쪽지수</th>
+                            <td>{{sendings}}개</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>받은쪽지수</th>
+                            <td>{{receivings}}개</td>
+                        </tr>
+                    </tbody>
+                </table>
+            
+        </div>
+        
+        <div class="bot_button">
+            <div class="wt_button inline"><a href="/members/users">목록</a></div>
+            <div class="wt_button modify inline"><a href="#">수정</a></div>
+            <div class="dg_button delete inline"><a href="#">탈퇴</a></div>
+        </div>
+
+        <div class="alert_modify" style="display:none;">
+            <div class="layer_back_area"></div>
+		    <div class="layer_area">
+                <div class="showbox">
+                    <div class="showbox_cetearea">
+                        <div class="title">일반회원 수정</div>
+                        <div class="close"><img src="/images/sub/showbox_close.png"></div>
+				    </div>
+                
+				
+                    <div class="showbox_contents">
+                        정말 수정하시겠습니까?
+                        <div class="bot_button">
+                            <div class="wt_button inline">
+                                <a href="#"><input type="submit" value="수정"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+		    
+        </div>
+
+        <div class="alert_delete" style="display:none;">
+            <div class="layer_back_area"></div>
+		    <div class="layer_area">
+                <div class="showbox">
+                    <div class="showbox_cetearea">
+					<div class="title">일반 회원 삭제</div>
+					<div class="close"><img src="/images/sub/showbox_close.png"></div>
+				</div>
+				
+				<div class="showbox_contents">
+                    정말 삭제하시겠습니까?
+                    <div class="bot_button">
+                        <div class="wt_button inline">
+                            <a href="{{user.id}}/delete">탈퇴</a>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+		</div>
+	</div>
+
+
+
+    </form>
 </div>
 
+<script type="text/javascript">
+		$(function(){
+			$(".modify").click(function(){
+				$(".alert_modify").show();
+			});
+		});
+
+		$(function(){
+			$(".delete").click(function(){
+				$(".alert_delete").show();
+			});
+		});
 
 
+        $(function(){
+			$(".close").click(function(){
+				$(".alert_modify").hide();
+			});
+		});
 
 
-
-<h1>USERS_SHOW</h1>
-{{!-- {{#if req.session.alert}}
-    <script>alert('수정되었습니다.');</script>
-{{/if}} --}}
-
-<form method="post">
-    <input type="text" name="username" value="{{user.username}}">
-    <input type="text" name="nickname" value="{{user.nickname}}">
-    <input type="text" name="phone" value="{{user.phone}}">
-    <input type="submit" value="제출">
-    <a href="{{user.id}}/delete">탈퇴</a>
-</form>
-{{user.username}}
-<br>{{user.email}}
-<br>{{user.nickname}}
-<br>{{user.phone}}
-<br>{{user.createdAt}}
-<br>{{user.updatedAt}}
-<br>{{user.loginDate}}
-<br>{{user.loginCnt}}
-<br>{{user.recEmail}}
-<br>{{user.recSMS}}
-<br>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-<br>{{storesCnt}}개
-{{#each stores}} {{this.name}} {{/each}}
-<br>{{posts}}개
-<br>{{sendings}}개
-<br>{{receivings}}개
-
+        $(function(){
+			$(".close").click(function(){
+				$(".alert_delete").hide();
+			});
+		});
+		
+		
+	</script>

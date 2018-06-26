@@ -40,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: 'U'
       //user:U / provider:P / master:M
-    }
+    },
+    name: DataTypes.STRING(30)
   }, {
     hooks: {
       afterValidate: (user)=>{

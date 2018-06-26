@@ -5,17 +5,19 @@ const app = express();
 const passport = require('../config/passport.js')(app);
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
+const handlebarsHelpers = require('../lib/handlebars');
 
 var hbs = exphbs.create({
     defaultLayout: 'main',
     partialsDir: path.join(__dirname, './views/partials'),
     layoutsDir: path.join(__dirname, './views/layouts'),
+    helpers: handlebarsHelpers
 });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, './views'));
-// app.use(express.static('public'));
-// app.use(express.static(path.join(__dirname, '/views/public')));
+app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 

@@ -5,38 +5,26 @@
     </div>
     
     <div class="search_area">
+         <form method="get">
         <table class="serach_box" cellpadding='0' cellspacing='0'>
             <tbody>
                 <tr>
                     <th>회원가입일</th>
-                    <td colspan="3">
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-                        <div>-</div>
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-                        <div class="priod_box">
-                            <select class="inputstyle">
-                                <option>전체기간</option>
-                                <option>1개월</option>
-                                <option>2개월</option>
-                                <option>3개월</option>
-                                <option>4개월</option>
-                            </select>
-                        </div>
-                    </td>
+                    {{>date_search}}
                 </tr>
                 
                 <tr>
                     <th>스토어주소</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" name="url" class="inputstyle"></input>
                         </div>
                     </td>
                     
                     <th>아이디</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" name="username" class="inputstyle"></input>
                         </div>
                     </td>
                 </tr>
@@ -45,14 +33,14 @@
                     <th>사업자명</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" name="companyName" class="inputstyle"></input>
                         </div>
                     </td>
                     
                     <th>회원유형</th>
                     <td>
                         <div class="mem_inputbox">
-                            <select class="inputstyle">
+                            <select class="inputstyle" name="companyType">
                                 <option>전체회원</option>
                             </select>
                         </div>
@@ -60,21 +48,22 @@
                 </tr>
             </tbody>
         </table>
-        
-        <div class="serach_button">검색하기</div>
+        </form>
+        <div class="serach_button"><input type="submit" value="검색하기"></div>
     </div>
     
     
     <div class="list_all">
         <div class="list_info">
-            <div class="count">전체 스토어 수 : 93명</div>
+            <div class="count">전체 스토어 수 : {{storesCnt}}명</div>
             <ul class="message_button">
-                <li class="wh_button">선택스토어 삭제</li>
+                <li class="wh_button"><input type="submit" value="선택삭제"></li>
             </ul>
         </div>
         
         <table cellpadding="0" cellspacing="0" class="list_table">
             <thead>
+                
                 <tr>
                     <th><input type="checkbox"></input></th>
                     <th>번호</th>
@@ -85,135 +74,26 @@
                     <th>사업자명</th>
                     <th>개설승일자</th>
                 </tr>
+                
             </thead>
             
             <tbody>
+                {{#each stores}} 
                 <tr>
                     <th><input type="checkbox"></input></th>
                     <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
+                    <th>{{this.companyType}}</th>
+                    <th>{{this.companyName}}</th>
+                    <th>{{this.memberCnt}}</th>
                     <th>master@sosohang.co.kr</th>
                     <th>-</th>
-                    <th>2018.09.02</th>
+                    <th>{{this.approvalDate}}</th>
                 </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>플라이워크</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>플라이워크</th>
-                    <th>12,342명</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
+                {{/each}}
             </tbody>
         </table>
         
-        <div class="paging">
-            <ul class="paging_list">
-                <li class="arrow"><img src="../images/sub/arrow_prev.png"></li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li>6</li>
-                <li>7</li>
-                <li>8</li>
-                <li>9</li>
-                <li class="arrow"><img src="../images/sub/arrow_next.png"></li>
-            </ul>
-        </div>
+        {{>pages}}
     </div>
     
 </div>

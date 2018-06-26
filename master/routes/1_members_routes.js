@@ -6,7 +6,8 @@ module.exports = ()=>{
     route.post('/sendMessages', controller.sendMessage);
     //users - index
     route.get('/users', controller.usersIndex)
-        .post('/users', controller.writeMessages);
+        .post('/users', controller.deleteMultipleUsers);
+        // .post('/users', controller.writeMessages);
     //users - show, update
     route.get('/users/:user_id', controller.findUser, controller.usersShow)
         .post('/users/:user_id', controller.findUser, controller.usersUpdate);   

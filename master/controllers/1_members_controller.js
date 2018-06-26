@@ -3,7 +3,7 @@
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
-const perPage = 5;
+const perPage = 10;
 // const queryString = require('query-string');
 
 module.exports = {
@@ -52,19 +52,19 @@ module.exports = {
             req.user = user;
 
             user.getStores()
-            .then(stores=>{req.stores = stores});
-
-            user.getPosts()
-            .then(posts=>{req.posts = posts.length || 0;});
+            .then(stores=>{req.stores = stores;});
+           
             
             user.getSendings()
             .then(sendings=>{req.sendings = sendings.length || 0;});
 
             user.getReceivings()
             .then(receivings=>{req.receivings = receivings.length || 0;
-                next();
+                
             });
 
+            user.getPosts()
+            .then(posts=>{req.posts = posts.length || 0;next();});
            
         })
     },
@@ -104,8 +104,7 @@ module.exports = {
                 limit: perPage,
                 offset: perPage*(page-1)
             })
-            .then(users=>{
-                
+            .then(users=>{                
                res.render('1_members/users_index', {users:users.rows, usersCount:users.count});
             })
         }
@@ -114,13 +113,26 @@ module.exports = {
 
     //users - show
     usersShow: (req,res)=>{  
-        dataobj = {user:req.user, posts:req.posts, sendings:req.sendings, receivings:req.receivings, stores:req.stores, storesCnt:req.stores.length};
+        dataobj = {user:req.user, posts:req.posts, sendings:req.sendings, receivings:req.receivings, stores:req.stores};
+        dataobj.storesCnt = req.stores? req.stores.length : 0;
         res.render('1_members/users_show', dataobj);
     },   
 
     //users - update
     usersUpdate: (req,res)=>{
-        req.user.update(req.body)
+        let user = req.body;
+        user.phone = '010-'+user.phone1+'-'+user.phone2;
+        delete user.phone1;
+        delete user.phone2;
+
+        if(!req.body.recSMS){
+            user.recSMS = false;
+        }
+        if(!req.body.recEmail){
+            user.recEmail = false;
+        }
+        console.log('\n\n\n\n', user, req.body);
+        req.user.update(user)
         .then((()=>{
             res.redirect(`/members/users/${req.user.id}`);
         }));
@@ -129,6 +141,18 @@ module.exports = {
     //users - delete
     usersDelete: (req,res)=>{
         req.user.destroy();
+        res.redirect('/members/users');
+    },
+
+    deleteMultipleUsers: (req,res)=>{
+       
+        users = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < users.length; i++){
+            db.User.findById(users[i])
+            .then(user=>{
+                user.destroy();
+            });
+        };
         res.redirect('/members/users');
     },
     

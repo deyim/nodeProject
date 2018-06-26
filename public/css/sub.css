@@ -259,7 +259,7 @@
 }
 
 
-.bot_button .dg_button{
+.bot_button .dg_button a{
 	padding:10px 15px 10px 15px;
 	color:#fff;
 	text-align:center;
@@ -268,7 +268,7 @@
 	font-size:14px;
 }
 
-.bot_button .wt_button{
+.bot_button .wt_button a{
 	padding:10px 15px 10px 15px;
 	color:#777777;
 	text-align:center;

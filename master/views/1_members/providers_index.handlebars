@@ -10,9 +10,9 @@
                 <tr>
                     <th>개설승인일</th>
                     <td colspan="3">
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
+                        <div class="calendar_box"><input type="date" name="startdate"><span><img src="/images/sub/calendar.jpg"></span></div>
                         <div>-</div>
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
+                        <div class="calendar_box"><input type="date" name="enddate"><span><img src="/images/sub/calendar.jpg"></span></div>
                         <div class="priod_box">
                             <select class="inputstyle">
                                 <option>전체기간</option>
@@ -29,14 +29,14 @@
                     <th>아이디</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" name="username" class="inputstyle"></input>
                         </div>
                     </td>
                     
                     <th>닉네임</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" name="nickname" class="inputstyle"></input>
                         </div>
                     </td>
                 </tr>
@@ -45,28 +45,16 @@
                     <th>사업자명</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" name="companyName" class="inputstyle"></input>
                         </div>
                     </td>
                     
                     <th>회원유형</th>
                     <td>
                         <div class="mem_inputbox">
-                            <select type="text" class="inputstyle">
+                            <select type="text" name="companyType" class="inputstyle">
                                 <option>전체회원</option>
                             </select>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>메일링수신 / SMS수신</th>
-                    <td colspan="3">
-                        <div class="inline">
-                            <input type="radio"></input> 메일링
-                        </div>
-                        <div class="inline">
-                            <input type="radio"></input> SMS
                         </div>
                     </td>
                 </tr>
@@ -78,11 +66,13 @@
     
     
     <div class="list_all">
+        <form action="POST">
         <div class="list_info">
-            <div class="count">전체회원수 : 93명 · 메일링수신 : 23명 · SMS수신 : 14명</div>
+            <div class="count">전체회원수 :{{membersCnt}}3명 </div> 
+            {{!-- · 메일링수신 : 23명 · SMS수신 : 14명 --}}
             <ul class="message_button">
-                <li class="lg_button">전체회원 쪽지발송</li>
-                <li class="wh_button">선택회원 쪽지발송</li>
+                <li class="lg_button"><input type="submit" onclick="chooseAll()" value="전체회원 쪽지발송"></li>
+                <li class="wh_button"><input type="submit" value="선택회원 쪽지발송"></li>
             </ul>
         </div>
         
@@ -95,193 +85,30 @@
                     <th>아이디</th>
                     <th>닉네임</th>
                     <th>사업자명</th>
-                    <th>스토어개설수</th>
                     <th>개설 승인일자</th>
                 </tr>
             </thead>
             
             <tbody>
+                {{#each providers}}
                 <tr>
-                    <th><input type="checkbox"></input></th>
+                    <th><input name="checked" value={{this.id}} type="checkbox"></input></th>
                     <th>10</th>
-                    <th>국내_일반</th>
-                    <th>honggildong@naver.com</th>
-                    <th>flywork</th>
-                    <th>(주) 플라이워크</th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>honggildong@naver.com</th>
-                    <th>flywork</th>
-                    <th>(주) 플라이워크</th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>honggildong@naver.com</th>
-                    <th>flywork</th>
-                    <th>(주) 플라이워크</th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>honggildong@naver.com</th>
-                    <th>flywork</th>
-                    <th>(주) 플라이워크</th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>honggildong@naver.com</th>
-                    <th>flywork</th>
-                    <th>(주) 플라이워크</th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>honggildong@naver.com</th>
-                    <th>flywork</th>
-                    <th>(주) 플라이워크</th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>honggildong@naver.com</th>
-                    <th>flywork</th>
-                    <th>(주) 플라이워크</th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>honggildong@naver.com</th>
-                    <th>flywork</th>
-                    <th>(주) 플라이워크</th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_일반</th>
-                    <th>honggildong@naver.com</th>
-                    <th>flywork</th>
-                    <th></th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>국내_사업자</th>
-                    <th>master@naver.com</th>
-                    <th>flywork</th>
-                    <th>(주) 플라이워크</th>
-                    <th>2개</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
+                    <th>{{this.companyType}}</th>
+                    <th>{{this.email}}</th>
+                    <th>{{this.url}}</th>
+                    <th><a href="providers/{{this.id}}">{{this.companyName}}</a></th>
+                    <th>{{this.createdAt}}</th>
+                </tr>   
+                {{/each}}             
             </tbody>
         </table>
+        </form>
         
-        <div class="paging">
-            <ul class="paging_list">
-                <li class="arrow"><img src="../images/sub/arrow_prev.png"></li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li>6</li>
-                <li>7</li>
-                <li>8</li>
-                <li>9</li>
-                <li class="arrow"><img src="../images/sub/arrow_next.png"></li>
-            </ul>
-        </div>
+        {{>pages}}
     </div>
     
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1>PROVIDERS_INDEX</h1>
-
-<form method="get">
-    시작날짜: <input type="date" name="startdate"><br>
-    끝날짜: <input type="date" name="enddate"><br>
-    아이디: <input type="text" name="username" ><br>
-    닉네임: <input type="text" name="nickname" ><br>
-    사업자명: <input type="text" name="companyName" ><br>
-    회원유형: <input type="text" name="companyType" ><br>
-    이메일수신: <input type="checkbox" name="recEmail" checked><br>
-    SMS수신: <input type="checkbox" name="recSMS" checked><br>
-    <input type="submit" value="제출"><br>
-</form>
-
-
-회원수: {{providersCount}}
-<form method="POST" name="providersIndex"> 
-    <input type="submit" onclick="chooseAll()" value="전체회원 쪽지발송">
-    <input type="submit" value="선택회원 쪽지발송"><br>
-
-    {{#each providers}}
-        <input type="checkbox" name="checked" value={{this.id}} >
-        {{this.email}}
-        <a href="providers/{{this.id}}">{{this.companyName}}</a><br>
-        {{this.companyName}}
-        {{this.storeCnt}}
-        {{this.createdAt}}
-        <br>
-    {{/each}}
-</form>
-
-{{!-- pagination 쿼리 append형식으로 다시하기 --}}
-<a href="?page=1">1</a>
-<a href="?page=2">2</a>
-<a href="?page=3">3</a>
-<a href="?page=4">4</a>
-<a href="?page=4">5</a>
 
 <script>
     function chooseAll() {
