@@ -5,36 +5,40 @@
     </div>
     
     <div class="member_view">
+        <form action="POST">
         <table cellpadding="0" cellspacing="0" class="de_table">
             <tbody>
                 <tr>
                     <th>개설 승인일자</th>
-                    <td>2018.08.02</td>
+                    <td>{{makeDate store.approvalDate}}</td>
                     
                     <th>닉네임</th>
-                    <td>flywork</td>
+                    <td>{{user.nickname}}</td>
                 </tr>
                 
                 <tr>
                     <th>로그인 횟수</th>
-                    <td>3회</td>
+                    <td>{{user.loginCnt}}</td>
                     
                     <th>최종로그인</th>
-                    <td>2018.08.02</td>
+                    <td>{{makeDate user.loginDate}}</td>
                 </tr>
                 
                 <tr>
                     <th>사업자명</th>
                     <td>
                         <div class="input_100box">
-                            <input type="text" class="inputstyle" value="(주) 플라이워크"></input>
+                            <input type="text" class="inputstyle" value={{provider.companyName}}></input>
                         </div>
                     </td>
                     
                     
                     <th>사업자등록번호</th>
                     <td>
-                        <div class="input_12box">
+                        <div class="input_100box">
+                            <input type="text" class="inputstyle" value={{provider.companyNumber}}></input>
+                        </div>
+                        {{!-- <div class="input_12box">
                             <input type="text" class="inputstyle" value="580"></input>
                         </div>
                         
@@ -48,43 +52,43 @@
                         
                         <div class="input_25box">
                             <input type="text" class="inputstyle" value="00133"></input>
-                        </div>
+                        </div> --}}
                     </td>
                 </tr>
                 
                 <tr>
                     <th>아이디</th>
-                    <td>flywork@flywork.co.kr</td>
+                    <td>{{user.username}}</td>
                     
                     <th>회원유형</th>
-                    <td>국내_사업자</td>
+                    <td>{{provider.companyType}}</td>
                 </tr>
                 
                 <tr>
-                    <th>스토어 개설수</th>
-                    <td colspan="3">2개</td>
+                    <th>스토어 주소</th>
+                    <td colspan="3">www.sosohang.com/{{store.url}}</td>
                 </tr>
                 
                 <tr>
                     <th>대표자명</th>
-                    <td>김상현</td>
+                    <td>{{provider.CEO}}</td>
                     
                     <th>법인등록번호</th>
-                    <td></td>
+                    <td>{{provider.corporateNumber}}</td>
                 </tr>
                 
                 <tr>
                     <th>업태</th>
                     <td>
                         <div class="input_100box">
-                            <input type="text" class="inputstyle" value="정보서비스업 제조업 도소매 서비스"></input>
+                            <input type="text" class="inputstyle" value={{provider.businessType}}></input>
                         </div>
                     </td>
                     
                     <th>업종</th>
                     <td>
                         <div class="input_100box">
-                            <input type="text" class="inputstyle" value="재능컨텐츠 제공 하드웨어 전자상거래업"></input>
+                            <input type="text" class="inputstyle" value={{provider.businessCategory}}></input>
                         </div>
                     </td>
                 </tr>
@@ -93,7 +97,7 @@
                     <th>통신판매업신고번호</th>
                     <td colspan="3">
                         <div class="input_100box">
-                            <input type="text" class="inputstyle" value="2017-고양일산동-0613 "></input>
+                            <input type="text" class="inputstyle" value={{provider.commuNumber}}></input>
                         </div>
                     </td>
                 </tr>
@@ -101,7 +105,10 @@
                 <tr>
                     <th>대표전화번호</th>
                     <td>
-                        <div class="input_25box">
+                        <div class="input_100box">
+                            <input type="text" class="inputstyle" value={{provider.CEONumber}}></input>
+                        </div>
+                        {{!-- <div class="input_25box">
                             <select class="inputstyle">
                                 <option>031</option>
                                 <option>032</option>
@@ -118,12 +125,15 @@
                         
                         <div class="input_25box">
                             <input type="text" class="inputstyle" value="0149"></input>
-                        </div>
+                        </div> --}}
                     </td>
                     
                     <th>팩스번호</th>
                     <td>
-                        <div class="input_25box">
+                        <div class="input_100box">
+                            <input type="text" class="inputstyle" value={{provider.faxNumber}}></input>
+                        </div>
+                        {{!-- <div class="input_25box">
                             <select class="inputstyle">
                                 <option>031</option>
                                 <option>032</option>
@@ -140,23 +150,26 @@
                         
                         <div class="input_25box">
                             <input type="text" class="inputstyle" value="0149"></input>
-                        </div>
+                        </div> --}}
                     </td>
                 </tr>
                 
                 
                 
                 <tr>
-                    <th>담당자번호</th>
+                    <th>담당자</th>
                     <td>
                         <div class="input_100box">
-                            <input type="text" class="inputstyle" value="김상현"></input>
+                            <input type="text" class="inputstyle" value={{provider.staffName}}></input>
                         </div>
                     </td>
                     
                     <th>담당자 전화번호</th>
                     <td>
-                        <div class="input_25box">
+                        <div class="input_100box">
+                            <input type="text" class="inputstyle" value={{provider.staffNumber}}></input>
+                        </div>
+                        {{!-- <div class="input_25box">
                             <select class="inputstyle">
                                 <option>031</option>
                                 <option>032</option>
@@ -173,14 +186,24 @@
                         
                         <div class="input_25box">
                             <input type="text" class="inputstyle" value="0149"></input>
-                        </div>
+                        </div> --}}
                     </td>
                 </tr>
                 
                 
                 <tr>
                     <th>출금신청 입금계좌</th>
-                    <td colspan="3">기업은행 01088061978 / 김상현(플라이워크)</td>
+                    <td colspan="3">
+                        <div class="input_25box">
+                            <input type="text" class="inputstyle" value={{provider.accountNumber}}></input>
+                        </div>
+                        <div class="input_25box">
+                            <input type="text" class="inputstyle" value={{provider.accountName}}></input>
+                        </div>
+                        <div class="input_25box">
+                            <input type="text" class="inputstyle" value={{provider.accountBank}}></input>
+                        </div>
+                    </td>
                 </tr>
                 
                 <tr>
@@ -207,24 +230,8 @@
                         <div class="inline"> 원</div>
                     </td>
                     
-                </tr>
                 
-                <tr>
-                    <th>*이메일 수신동의</th>
-                    <td colspan="3">
-                        
-                        <div class="inline">
-                            <input type="radio"></input> 수신동의
-                        </div>
-                        
-                        <div class="inline">
-                            <input type="radio" checked></input> 수신하지 않음
-                        </div>
-                    </td>	
-                </tr>
-                
-                
-                <tr>
+                {{!-- <tr>
                     <th>*sms 수신동의</th>
                     <td colspan="3">
                         
@@ -237,27 +244,34 @@
                         </div>
                     </td>	
                 </tr>
-                
+
                 <tr>
-                    <th>가입스토어</th>
+                    <th>*이메일 수신동의</th>
                     <td colspan="3">
                         
-                        <div class="inline">2개</div>
+                        <div class="inline">
+                            <input type="radio" checked></input> 수신동의
+                        </div>
                         
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>ABCDE 플라이워크</option>
-                            </select>
+                        <div class="inline">
+                            <input type="radio"></input> 수신하지 않음
                         </div>
                     </td>	
-                </tr>
+                </tr> --}}
+                
+               
             </tbody>
         </table>
     </div>
     
+    <div class="bot_button inline">
+         <div class="dg_button" ><a href="/members/stores/{{store.id}}">스토어 수정하러 가기</a></div>
+    </div>
+    <div class="bot_button inline">
+         <div class="dg_button" ><a href="/members/users/{{user.id}}">회원정보 수정하러 가기</a></div>
+    </div>
     
-    
-    
+{{!--     
     <div class="member_view">
         <table cellpadding="0" cellspacing="0" class="de_table">
             <tbody>
@@ -282,7 +296,7 @@
                     <th>스토어로고이미지</th>
                     <td>
                         <div class="compulsory_img">
-                            <div class="image"><img src="../images/sub/ex_img.jpg"></div>
+                            <div class="image"><img src="/images/sub/ex_img.jpg"></div>
                         </div>
                     </td>
                     
@@ -290,7 +304,7 @@
                     <th>스토어 대표이미지</th>
                     <td>
                         <div class="compulsory_img">
-                            <div class="image"><img src="../images/sub/ex_img.jpg"></div>
+                            <div class="image"><img src="/images/sub/ex_img.jpg"></div>
                         </div>
                     </td>
                 </tr>
@@ -357,184 +371,8 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    
-    
-    
-    <div class="member_view">
-        <table cellpadding="0" cellspacing="0" class="de_table">
-            <tbody>
-                <tr>
-                    <th>스토어명</th>
-                    <td>플라이워크</td>
-                    
-                    <th>가입회원수</th>
-                    <td>32명</td>
-                </tr>
+    </div>            --}}
                 
-                <tr>
-                    <th>* 스토어소개</th>
-                    <td colspan="3">
-                        <div class="input_100box">
-                            <input type="text" class="inputstyle" placeholder="스토어소개글"></input>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>스토어로고이미지</th>
-                    <td>
-                        <div class="compulsory_img">
-                            <div class="image"><img src="../images/sub/ex_img.jpg"></div>
-                        </div>
-                    </td>
-                    
-                    
-                    <th>스토어 대표이미지</th>
-                    <td>
-                        <div class="compulsory_img">
-                            <div class="image"><img src="../images/sub/ex_img.jpg"></div>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th rowspan="3">* 국가 / 도시선택</th>
-                    <td colspan="3">
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>이탈리아</option>
-                                <option>프랑스</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>선택하세요</option>
-                                <option>밀라노</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline">로마; 나폴리; 밀라노; 베네치아; 볼로냐</div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td colspan="3">
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>프랑스</option>
-                                <option>이탈리아</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>선택하세요</option>
-                                <option>파리</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline">전체;</div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td colspan="3">
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>프랑스</option>
-                                <option>이탈리아</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>선택하세요</option>
-                                <option>파리</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline">전체;</div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    
-                
-                
-    
-    <div class="bot_button">
-        <div class="wt_button">목록</div>
-        <div class="wt_button">수정</div>
-        <div class="dg_button">탈퇴처리</div>
-        
-    </div>
+    {{>modify_delete id=provider.id url='/members/providers' }}
+    </form>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1>PROVIDERS_SHOW</h1>
-
-{{!-- <form method="post">
-    <input type="text" name="username" value="{{user.username}}">
-    <input type="text" name="nickname" value="{{user.nickname}}">
-    <input type="text" name="phone" value="{{user.phone}}">
-    <input type="submit" value="제출">
-    <a href="{{user.id}}/delete">탈퇴</a>
-</form> --}}
-
-provider:
-<br>{{provider.companyName}}
-<br>{{provider.companyName}}
-<br>{{provider.companyNumber}}
-<br>{{provider.companyType}}
-<br>{{provider.CEO}}
-<br>{{provider.corporateNumber}}
-<br>{{provider.busniessType}}
-<br>{{provider.businessCategory}}
-<br>{{provider.commuNumber}}
-<br>{{provider.CEONumber}}
-<br>{{provider.faxNumber}}
-<br>{{provider.staffName}}
-<br>{{provider.staffNumber}}
-<br>{{provider.accountNumber}}
-<br>{{provider.accountName}}
-<br>{{provider.accountBank}}
-<br>{{provider.rateType}}
-<br>{{provider.monthFee}}
-<br>{{provider.commission}}
-<br>{{provider.createdAt}}
-<br>{{provider.storeCnt}}
-<br><br>user: 
-<br>{{user.username}}
-<br>{{user.email}}
-<br>{{user.nickname}}
-<br>{{user.phone}}
-<br>{{user.createdAt}}
-<br>{{user.updatedAt}}
-<br>{{user.loginDate}}
-<br>{{user.loginCnt}}
-<br>{{user.recEmail}}
-<br>{{user.recSMS}}
-
-<br><br>stores:
-{{#each stores}}
-    <br>{{this.url}}
-    <br>{{this.membersCnt}}
-    <br>{{this.introduction}}
-    <br>{{this.storeLogoPath}}
-    <br>{{this.storeImgPath}}
-
-{{/each}}

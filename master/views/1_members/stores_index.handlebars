@@ -5,12 +5,12 @@
     </div>
     
     <div class="search_area">
-         <form method="get">
+        <form method="get">
         <table class="serach_box" cellpadding='0' cellspacing='0'>
             <tbody>
                 <tr>
                     <th>회원가입일</th>
-                    {{>date_search}}
+                    {{>date_search firstday=firstday}}
                 </tr>
                 
                 <tr>
@@ -41,19 +41,25 @@
                     <td>
                         <div class="mem_inputbox">
                             <select class="inputstyle" name="companyType">
-                                <option>전체회원</option>
+                                <option value="">전체회원</option>
+                                <option value="A">국내_일반</option>
+                                <option value="B">국내_사업자</option>
+                                <option value="C">해외_일반</option>
+                                <option value="D">해외_사업자</option>
                             </select>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        </form>
         <div class="serach_button"><input type="submit" value="검색하기"></div>
+        </form>
+        
     </div>
     
     
     <div class="list_all">
+        <form method="POST">
         <div class="list_info">
             <div class="count">전체 스토어 수 : {{storesCnt}}명</div>
             <ul class="message_button">
@@ -65,7 +71,7 @@
             <thead>
                 
                 <tr>
-                    <th><input type="checkbox"></input></th>
+                    <th><input type="checkbox" onclick="chooseAll()"></input></th>
                     <th>번호</th>
                     <th>회원유형</th>
                     <th>스토어명</th>
@@ -79,69 +85,24 @@
             
             <tbody>
                 {{#each stores}} 
+                
                 <tr>
-                    <th><input type="checkbox"></input></th>
+                    <th><input name="checked" value={{this.id}} type="checkbox"></input></th>
                     <th>10</th>
-                    <th>{{this.companyType}}</th>
-                    <th>{{this.companyName}}</th>
-                    <th>{{this.memberCnt}}</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>-</th>
-                    <th>{{this.approvalDate}}</th>
+                    <th><a href="/members/stores/{{this.id}}">{{this.provider.companyType}}</a></th>
+                    <th><a href="/members/stores/{{this.id}}">{{this.provider.companyName}}</a></th>
+                    <th><a href="/members/stores/{{this.id}}">{{this.memberCnt}}</a></th>
+                    <th><a href="/members/stores/{{this.id}}">{{this.provider.user.username}}</a></th>
+                    <th><a href="/members/stores/{{this.id}}">{{this.provider.companyName}}</a></th>
+                    <th><a href="/members/stores/{{this.id}}">{{makeDate this.approvalDate}}</a></th>
                 </tr>
+                
                 {{/each}}
             </tbody>
         </table>
+        </form>
         
         {{>pages}}
     </div>
     
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1>STORES_INDEX</h1>
-
-<form method="get">
-    개설승인일시작: <input type="date" name="startdate"><br>
-    개설승인일끝: <input type="date" name="enddate"><br>
-    아이디: <input type="text" name="username" ><br>
-    스토어주소: <input type="text" name="url" ><br>
-    사업자명: <input type="text" name="companyName" ><br>
-    회원유형: <input type="text" name="companyType" ><br>
-    <input type="submit" value="제출"><br>
-</form>
-
-스토어수: {{storesCnt}}
-<form method="POST" name="storesIndex"> 
-    <input type="submit" value="선택삭제"><br>
-
-    {{#each stores}}    
-        <input type="checkbox" name="checked" value={{this.id}} >
-        <a href="stores/{{this.id}}">{{this.name}}</a>
-        {{this.url}}
-        {{this.memberCnt}}
-        {{this.approvalDate}}
-        <br>
-    {{/each}}
-</form>
-
-<a href="?page=1">1</a>
-<a href="?page=2">2</a>
-<a href="?page=3">3</a>
-<a href="?page=4">4</a>
-<a href="?page=4">5</a>
-

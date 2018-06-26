@@ -19,7 +19,8 @@ module.exports = ()=>{
 
     //providers - index
     route.get('/providers', controller.providersIndex)
-        .post('/providers', controller.writeMessages);
+        .post('/providers', controller.deleteMultipleProviders);
+        // .post('/providers', controller.writeMessages);
     //providers - show, update
     route.get('/providers/:provider_id',  controller.findProvider, controller.providersShow)
         .post('/providers/:provider_id', controller.findProvider, controller.providersUpdate);

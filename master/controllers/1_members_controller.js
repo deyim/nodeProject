@@ -4,6 +4,7 @@ const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
 const perPage = 10;
+const dateFunctions = require('../../lib/date_functions');
 // const queryString = require('query-string');
 
 module.exports = {
@@ -18,14 +19,14 @@ module.exports = {
         })
         .then(message=>{
             for(var i = 0 ; i < receivers.length ; i++){
-                console.log('\n\n**',receivers[i] *= 1);
+                // console.log('\n\n**',receivers[i] *= 1);
                 db.Sentmessage.create({
                     senderId: req.user.id,
                     receiverId: receivers[i],
                     messageId: message.id
                 })
                 .then((sentmessage)=>{
-                    console.log(sentmessage);
+                    // console.log(sentmessage);
                 });
             }
             res.redirect('/members/users');
@@ -64,13 +65,14 @@ module.exports = {
             });
 
             user.getPosts()
-            .then(posts=>{req.posts = posts.length || 0;next();});
+            .then(posts=>{req.posts = posts.length || 0; next();});
            
         })
     },
 
     //users - index
     usersIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;        
@@ -80,7 +82,8 @@ module.exports = {
                 offset: perPage*(page-1)
             })
             .then(users=>{
-                res.render('1_members/users_index', {users:users.rows, usersCount:users.count});
+                objData = {users:users.rows, usersCount:users.count, firstday: firstday};
+                res.render('1_members/users_index', objData);
             });   
         }      
         else{          
@@ -104,8 +107,9 @@ module.exports = {
                 limit: perPage,
                 offset: perPage*(page-1)
             })
-            .then(users=>{                
-               res.render('1_members/users_index', {users:users.rows, usersCount:users.count});
+            .then(users=>{  
+               objData = {users:users.rows, usersCount:users.count, firstday: firstday};              
+               res.render('1_members/users_index', objData);
             })
         }
            
@@ -113,9 +117,9 @@ module.exports = {
 
     //users - show
     usersShow: (req,res)=>{  
-        dataobj = {user:req.user, posts:req.posts, sendings:req.sendings, receivings:req.receivings, stores:req.stores};
-        dataobj.storesCnt = req.stores? req.stores.length : 0;
-        res.render('1_members/users_show', dataobj);
+        objData = {user:req.user, posts:req.posts, sendings:req.sendings, receivings:req.receivings, stores:req.stores};
+        objData.storesCnt = req.stores? req.stores.length : 0;
+        res.render('1_members/users_show', objData);
     },   
 
     //users - update
@@ -131,7 +135,6 @@ module.exports = {
         if(!req.body.recEmail){
             user.recEmail = false;
         }
-        console.log('\n\n\n\n', user, req.body);
         req.user.update(user)
         .then((()=>{
             res.redirect(`/members/users/${req.user.id}`);
@@ -179,25 +182,37 @@ module.exports = {
             .then(user=>{req.user = user;});
 
             //stores
-            provider.getStores()
-            .then(stores=>{req.stores = stores; next();});
+            provider.getStore()
+            .then(store=>{req.store= store; next();});
     
         })
     },
 
     //providers - index
     providersIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
         if(Object.keys(req.query).length === 0){
             db.Provider.findAndCountAll({
                 limit: perPage,
-                offset: perPage*(page-1)
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.User,
+                        as: 'user',
+                    },
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        foreignKey: 'providerId'
+                    }                 
+                ]
             })
             .then(providers=>{
-                objectData = {providers:providers.rows, providersCount:providers.count}
-                res.render('1_members/providers_index', objectData);
+                objData = {providers:providers.rows, providersCount:providers.count, firstday:firstday}
+                res.render('1_members/providers_index', objData);
             });   
         }      
         else{
@@ -214,8 +229,8 @@ module.exports = {
                             ]
                         }
                         },
-                        {companyName:  { [Op.like]: `%${q.companyName}%` }},
-                        {companyType:  { [Op.like]: `%${q.companyType}%` }},
+                        {companyName:  q.companyName? { [Op.like]: `%${q.companyName}%` } : {[Op.regexp]: '^'}},
+                        {companyType:  q.companyType? { [Op.like]: `%${q.companyType}%` } : {[Op.regexp]: '^'}},
                     ]                
                 },
                 include:[
@@ -225,18 +240,18 @@ module.exports = {
                         where:{
                             [Op.and]:
                             [
-                                {username: { [Op.like]: `%${q.username}%` }},
-                                {nickname: { [Op.like]: `%${q.nickname}%` }},
-                                {recSMS: q.recSMS ? q.recSMS : false},
-                                {recEmail: q.recEmail ? q.recEmail : false},
+                                {username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}},
+                                {nickname: q.nickname? { [Op.like]: `%${q.nickname}%` } : {[Op.regexp]: '^'}},
+                                {recSMS: q.recSMS },
+                                {recEmail: q.recEmail },
                             ]
                         }                                
                     }
                 ]
             })
             .then(providers=>{
-                objectData = {providers:providers.rows, providersCount:providers.count}
-                res.render('1_members/providers_index', objectData);
+                objData = {providers:providers.rows, providersCount:providers.count, firstday:firstday}
+                res.render('1_members/providers_index', objData);                
             });   
         }
       
@@ -247,8 +262,7 @@ module.exports = {
             {
                 provider:req.provider, 
                 user: req.user, 
-                stores: req.stores, 
-                storesCnt: req.stores.length
+                store: req.store, 
             }
         );
         //고치는거는 스토어회원 정보만 고치는거로 하자. 
@@ -264,6 +278,17 @@ module.exports = {
     //providers - delete
     providersDelete: (req,res)=>{
         req.provider.destroy();
+        res.redirect('/members/providers');
+    },
+
+    deleteMultipleProviders: (req,res)=>{       
+        providers = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < providers.length; i++){
+            db.Provider.findById(providers[i])
+            .then(provider=>{
+                provider.destroy();
+            });
+        };
         res.redirect('/members/providers');
     },
     //providers - send messages
@@ -282,7 +307,7 @@ module.exports = {
                 res.redirect('/members/stores');
             }
             req.store = store;
-            db.Provider.findById(store.provider_id)
+            db.Provider.findById(store.providerId)
             .then(provider=>{
                 req.provider = provider;
             })
@@ -303,16 +328,23 @@ module.exports = {
     },
     //stores - index
     storesIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page; 
         if(Object.keys(req.query).length === 0){
             db.Store.findAndCountAll({
                 limit: perPage,
-                offset: perPage*(page-1)
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Provider,
+                        as: 'provider'
+                    }
+                ]
             })
             .then(stores=>{
-                objData = {stores:stores.rows, storesCnt:stores.count}
+                objData = {stores:stores.rows, storesCnt:stores.count, firstday:firstday}
                 res.render('1_members/stores_index', objData);
             });   
         }      
@@ -330,7 +362,7 @@ module.exports = {
                                 ]
                             }
                         },
-                        {url:  { [Op.like]: `%${q.url}%` }},
+                        {url:  q.url? { [Op.like]: `%${q.url}%` } : {[Op.regexp]: '^'}},
                     ]                    
                 },
                 include: [//provider 의 id, 사업자명, 회원유형
@@ -340,8 +372,8 @@ module.exports = {
                         where: {
                             [Op.and]:
                             [
-                                {companyName:{ [Op.like]: `%${q.companyName}%`}},
-                                {companyType:{ [Op.like]: `%${q.companyType}%`}},
+                                {companyName: q.companyName? { [Op.like]: `%${q.companyName}%` } : {[Op.regexp]: '^'}},
+                                {companyType: q.companyType? { [Op.like]: `%${q.companyType}%` } : {[Op.regexp]: '^'}},
                             
                             ]
                         },
@@ -352,7 +384,7 @@ module.exports = {
                                 where: {
                                     [Op.and]:
                                     [
-                                        {username:{ [Op.like]: `%${q.username}%`}},
+                                        {username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}},
                                     ]
                                 }
                             }
@@ -362,7 +394,7 @@ module.exports = {
                 ]
             })
             .then(stores=>{
-                objData = {stores:stores.rows, storesCnt:stores.count}
+                objData = {stores:stores.rows, storesCnt:stores.count, firstday:firstday}
                 res.render('1_members/stores_index', objData);
             })
         }

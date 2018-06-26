@@ -10,7 +10,7 @@
             <tbody>
                 <tr>
                     <th>회원가입일</th>
-                    {{>date_search}}
+                    {{>date_search today=today}}
                 </tr>
                 
                 <tr>
@@ -105,12 +105,3 @@
     </div>
     
 </div>
-
-<script>
-    function chooseAll() {
-        checkboxes = document.getElementsByName('checked');
-        for(i=0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = true;
-        }
-    }
-</script>

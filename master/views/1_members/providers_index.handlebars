@@ -5,82 +5,87 @@
     </div>
     
     <div class="search_area">
-        <table class="serach_box" cellpadding='0' cellspacing='0'>
-            <tbody>
-                <tr>
-                    <th>개설승인일</th>
-                    <td colspan="3">
-                        <div class="calendar_box"><input type="date" name="startdate"><span><img src="/images/sub/calendar.jpg"></span></div>
-                        <div>-</div>
-                        <div class="calendar_box"><input type="date" name="enddate"><span><img src="/images/sub/calendar.jpg"></span></div>
-                        <div class="priod_box">
-                            <select class="inputstyle">
-                                <option>전체기간</option>
-                                <option>1개월</option>
-                                <option>2개월</option>
-                                <option>3개월</option>
-                                <option>4개월</option>
-                            </select>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>아이디</th>
-                    <td>
-                        <div class="mem_inputbox">
-                            <input type="text" name="username" class="inputstyle"></input>
-                        </div>
-                    </td>
+        <form method="get">
+            <table class="serach_box" cellpadding='0' cellspacing='0'>
+                <tbody>
+                    <tr>
+                        <th>개설승인일</th>
+                        {{>date_search today=today}}
+                    </tr>
                     
-                    <th>닉네임</th>
-                    <td>
-                        <div class="mem_inputbox">
-                            <input type="text" name="nickname" class="inputstyle"></input>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>사업자명</th>
-                    <td>
-                        <div class="mem_inputbox">
-                            <input type="text" name="companyName" class="inputstyle"></input>
-                        </div>
-                    </td>
+                    <tr>
+                        <th>아이디</th>
+                        <td>
+                            <div class="mem_inputbox">
+                                <input type="text" name="username" class="inputstyle"></input>
+                            </div>
+                        </td>
+                        
+                        <th>닉네임</th>
+                        <td>
+                            <div class="mem_inputbox">
+                                <input type="text" name="nickname" class="inputstyle"></input>
+                            </div>
+                        </td>
+                    </tr>
                     
-                    <th>회원유형</th>
-                    <td>
-                        <div class="mem_inputbox">
-                            <select type="text" name="companyType" class="inputstyle">
-                                <option>전체회원</option>
-                            </select>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <div class="serach_button">검색하기</div>
+                    <tr>
+                        <th>사업자명</th>
+                        <td>
+                            <div class="mem_inputbox">
+                                <input type="text" name="companyName" class="inputstyle"></input>
+                            </div>
+                        </td>
+                        
+                        <th>회원유형</th>
+                        <td>
+                            <div class="mem_inputbox">
+                                <select type="text" name="companyType" class="inputstyle">
+                                    <option value="">전체회원</option>
+                                    <option value="A">국내_일반</option>
+                                    <option value="B">국내_사업자</option>
+                                    <option value="C">해외_일반</option>
+                                    <option value="D">해외_사업자</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>메일링수신 / SMS수신</th>
+                        <td>
+                            <div class="inline">
+                                <input type="checkbox" name="recEmail" checked> 메일링
+                            </div>
+                            <div class="inline">
+                                <input type="checkbox" name="recSMS" checked> SMS
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="serach_button"><input type="submit" value="검색하기"></div>
+        </form>
     </div>
     
     
     <div class="list_all">
-        <form action="POST">
+        <form method="POST">
         <div class="list_info">
-            <div class="count">전체회원수 :{{membersCnt}}3명 </div> 
+            <div class="count">전체회원수 :{{providersCount}}명 </div> 
             {{!-- · 메일링수신 : 23명 · SMS수신 : 14명 --}}
             <ul class="message_button">
-                <li class="lg_button"><input type="submit" onclick="chooseAll()" value="전체회원 쪽지발송"></li>
-                <li class="wh_button"><input type="submit" value="선택회원 쪽지발송"></li>
+                <li class="wh_button"><input type="submit" value="선택회원 삭제"></li>
+                {{!-- <li class="lg_button"><input type="submit" onclick="chooseAll()" value="전체회원 쪽지발송"></li>
+                <li class="wh_button"><input type="submit" value="선택회원 쪽지발송"></li> --}}
             </ul>
         </div>
         
         <table cellpadding="0" cellspacing="0" class="list_table">
             <thead>
                 <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>번호</th>
+                    <th><input type="checkbox" onclick="chooseAll()"></input></th>
+                    {{!-- <th>번호</th> --}}
                     <th>회원유형</th>
                     <th>아이디</th>
                     <th>닉네임</th>
@@ -93,28 +98,19 @@
                 {{#each providers}}
                 <tr>
                     <th><input name="checked" value={{this.id}} type="checkbox"></input></th>
-                    <th>10</th>
+                    {{!-- <th>10</th> --}}
                     <th>{{this.companyType}}</th>
-                    <th>{{this.email}}</th>
-                    <th>{{this.url}}</th>
+                    <th><a href="providers/{{this.id}}">{{this.user.username}}</a></th>
+                    <th><a href="providers/{{this.id}}">{{this.user.nickname}}</a></th>
                     <th><a href="providers/{{this.id}}">{{this.companyName}}</a></th>
-                    <th>{{this.createdAt}}</th>
+                    <th>{{makeDate this.createdAt}}</th>
                 </tr>   
                 {{/each}}             
             </tbody>
-        </table>
+        </table>        
         </form>
         
         {{>pages}}
     </div>
     
 </div>
-
-<script>
-    function chooseAll() {
-        checkboxes = document.getElementsByName('checked');
-        for(i=0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = true;
-        }
-    }
-</script>
