@@ -108,3 +108,29 @@ $(function(){
         $(".add_view").hide();
     });
 });
+
+
+//message index
+$(function(){
+    $(".message_title").click(function(){
+        $(".message_show").show();
+    });
+});
+
+$(function(){
+    $(".message_num").click(function(){
+        $(".message_list").show();
+    });
+});
+
+$(function(){
+    $(".close").click(function(){
+        $(".message_show").hide();
+    });
+});
+
+$(function(){
+    $(".close").click(function(){
+        $(".message_list").hide();
+    });
+});

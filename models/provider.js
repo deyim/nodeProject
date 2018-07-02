@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: true,
   });
   Provider.associate = function(models) {
-      Provider.belongsTo(models.User, {as: 'user'});
+      Provider.belongsTo(models.User, {as: 'user', foreignKey: 'userId'});
       Provider.hasOne(models.Store, {as: 'store', foreignKey: 'providerId'});
       Provider.hasMany(models.Board, {as: 'boards'});
       Provider.hasMany(models.Approval, {as: 'approvals', foreignKey: 'providerId'});

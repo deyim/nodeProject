@@ -5,38 +5,26 @@
     </div>
     
     <div class="search_area">
+        <form method="GET">
         <table class="serach_box" cellpadding='0' cellspacing='0'>
             <tbody>
                 <tr>
                     <th>쪽지발송일</th>
-                    <td colspan="3">
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-                        <div>-</div>
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-                        <div class="priod_box">
-                            <select class="inputstyle">
-                                <option>전체기간</option>
-                                <option>1개월</option>
-                                <option>2개월</option>
-                                <option>3개월</option>
-                                <option>4개월</option>
-                            </select>
-                        </div>
-                    </td>
+                    {{>date_search firstday=firstday}}
                 </tr>
                 
                 <tr>
                     <th>아이디</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" class="inputstyle" name="username"></input>
                         </div>
                     </td>
                     
                     <th>닉네임</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" class="inputstyle" name="nickname"></input>
                         </div>
                     </td>
                 </tr>
@@ -45,14 +33,14 @@
                     <th>스토어주소</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" class="inputstyle" name="url"></input>
                         </div>
                     </td>
                     
                     <th>사업자명</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" class="inputstyle" name="companyName"></input>
                         </div>
                     </td>
                 </tr>
@@ -65,9 +53,9 @@
     
     <div class="list_all">
         <div class="list_info">
-            <div class="count"><span>스토어발송 (38)</span> ｜ 회원발송 (91)</div>
+            <div class="count"><span>스토어발송 {{messagesCount}}</span> ｜ 회원발송 (91)</div>
             <ul class="message_button">
-                <li class="lg_button">선택내역 삭제</li>
+                <li class="lg_button" onclick="document.forms[0].submit()">선택내역 삭제</li>
             </ul>
         </div>
         
@@ -75,9 +63,8 @@
             <thead>
                 <tr>
                     <th><input type="checkbox"></input></th>
-                    <th>번호</th>
-                    <th>스토어주소</th>
-                    <th>사업자명</th>
+                    {{!-- <th>번호</th> --}}
+                    {{!-- <th>스토어주소</th> --}}
                     <th>아이디</th>
                     <th>쪽지내용</th>
                     <th>발송대상</th>
@@ -87,206 +74,88 @@
             </thead>
             
             <tbody>
+                {{#each messages}}
                 <tr>
                     <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
+                    {{!-- <th>10</th> --}}
+                    {{!-- <th>{{senderUrl this.sentMessages}}</th> --}}
+                    <th>{{senderUsername this.sentMessages}}</th>
+                    <th class="message_title">{{this.content}}</th>
+                    <th class="message_num">{{length this.sentMessages}}</th>
+                    <th>{{makeDate this.createdAt}}</th>
                 </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>abcded</th>
-                    <th>(주)플라이워크</th>
-                    <th>flywork@flywork.co.krr</th>
-                    <th class="message_title">[마감임박] 신규상품이 등록 되었습니다! 확인해보세요!</th>
-                    <th class="message_num">10명</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                
+
+                	<div class="message_show" style="display:none;">
+                        <div class="layer_back_area"></div>
+                        <div class="layer_area">
+                            <div class="showbox">
+                                <div class="showbox_cetearea">
+                                    <div class="title">쪽지</div>
+                                    <div class="close"><img src="/images/sub/showbox_close.png"></div>
+                                </div>
+                                
+                                <div class="showbox_contents">
+                                    <div class="titlearea">
+                                        {{!-- <div class="title">쪽지의 간략한 내용이 짧게 뿌려집니다.</div> --}}
+                                        <div class="info">{{senderUsername this.sentMessages}}{{makeDate this.createdAt}}</div>
+                                    </div>
+                                    
+                                    <div class="contents">
+                                        {{this.content}}
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="message_list" style="display:none;">
+                        <div class="layer_back_area"></div>
+                        <div class="layer_area">
+                            <div class="showbox">
+                                <div class="showbox_cetearea">
+                                    <div class="title">쪽지</div>
+                                    <div class="close"><img src="../images/sub/showbox_close.png"></div>
+                                </div>
+                                
+                                <div class="showbox_contents">
+                                    <div class="titlearea">
+                                        <div class="title">대상</div>
+                                        <div class="info">스토어·2018.09.02</div>
+                                    </div>
+                                    
+                                    {{!-- <div class="list_cont">
+                                        <table class="showbox_list" cellpadding="0" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>번호</th>
+                                                    <th>아이디</th>
+                                                    <th>닉네임</th>
+                                                    <th>가입일자</th>
+                                                </tr>
+                                            </thead>
+                                            
+                                            <tbody>
+                                                <tr>
+                                                    <th>55</th>
+                                                    <th>flywork@naver.com</th>
+                                                    <th>flywork</th>
+                                                    <th>2018.09.02</th>
+                                                </tr>
+                                            </tbody>
+                                            
+                                        </table>
+                                    </div> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {{/each}}
             </tbody>
         </table>
         
-        <div class="paging">
-            <ul class="paging_list">
-                <li class="arrow"><img src="../images/sub/arrow_prev.png"></li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li>6</li>
-                <li>7</li>
-                <li>8</li>
-                <li>9</li>
-                <li class="arrow"><img src="../images/sub/arrow_next.png"></li>
-            </ul>
-        </div>
+        {{>pages}}
     </div>
     
 </div>
-
-
-
-
-
-<script>
-		(function($){
-			$(window).on("load",function(){
-				$(".menuarea").mCustomScrollbar();
-			});
-		})(jQuery);
-	</script>
-	
-	<script type="text/javascript">
-		$(function(){
-			$(".message_title").click(function(){
-				$(".message_show").show();
-			});
-		});
-		
-		$(function(){
-			$(".message_num").click(function(){
-				$(".message_list").show();
-			});
-		});
-		
-		$(function(){
-			$(".close").click(function(){
-				$(".message_show").hide();
-			});
-		});
-		
-		$(function(){
-			$(".close").click(function(){
-				$(".message_list").hide();
-			});
-		});
-	</script>
-
-
-
-<h1>Messages Index</h1>
-
-<form method="get">
-    쪽지발송일시작: <input type="date" name="startdate"><br>
-    쪽지발송일일끝: <input type="date" name="enddate"><br>
-    아이디: <input type="text" name="username" ><br>
-    닉네임: <input type="text" name="nickname" ><br>
-    스토어주소: <input type="text" name="url" ><br>
-    사업자명: <input type="text" name="companyName" ><br>
-    <input type="submit" value="제출"><br>
-</form>
-
-쪽지 수: {{messagesCount}}
-<form method="POST" name="messagesIndex"> 
-    <input type="submit" value="삭제"><br>
-    <input type="submit" onclick="chooseAll()" value="전체삭제"><br>
-
-    {{#each messages}}    
-        <input type="checkbox" name="checked" value={{this.id}} >
-        <a href="/stores/messages/{{this.id}}">{{this.content}}</a>
-        {{this.createdAt}}
-        <br>
-    {{/each}}
-</form>
-
-<a href="?page=1">1</a>
-<a href="?page=2">2</a>
-<a href="?page=3">3</a>
-<a href="?page=4">4</a>
-<a href="?page=4">5</a>

@@ -202,23 +202,42 @@ module.exports = {
     },
 
     findPost: (req,res,next)=>{
-        db.Post.findById(req.params.post_id)
-        .then(post=>{
-            if(!post){
-                req.flash('error', '없는 포스트입니다.');
-                res.redirect('/stores/posts');
-            }
+        db.Post.findOne({
+            where:{
+                id: req.params.post_id
+            },
+            include:[
+                {
+                    model: db.Store,
+                    as: 'store'
+                },
+                {
+                    model: db.User,
+                    as: 'author'
+                }
+            ]
+        }).then((post)=>{
             req.post = post;
-
-            post.getStore()
-            .then(store=>{
-                req.store = store;
-                next();
-            })
+            next();
         });
+        // db.Post.findById(req.params.post_id)
+        // .then(post=>{
+        //     if(!post){
+        //         req.flash('error', '없는 포스트입니다.');
+        //         res.redirect('/stores/posts');
+        //     }
+        //     req.post = post;
+
+        //     post.getStore()
+        //     .then(store=>{
+        //         req.store = store;
+        //         next();
+        //     })
+        // });
     },
 
     postsIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;
@@ -228,10 +247,21 @@ module.exports = {
                 offset: perPage*(page-1),
                 where: {
                     noticeChk: false
-                }
+                },
+                include: [
+                    {
+                        model: db.User,
+                        as: 'author',
+                        foreignKey: 'authorId'
+                    },
+                    {
+                        model: db.Store,
+                        as: 'store'
+                    }
+                ]
             })
             .then(posts=>{
-                objData = {posts:posts.rows, postsCount:posts.count}
+                objData = {posts:posts.rows, postsCount:posts.count, firstday}
                 res.render('3_stores/posts_index', objData);
             });   
         }      
@@ -249,8 +279,8 @@ module.exports = {
                             ]
                             }
                         },
-                        { title: { [Op.like]: `%${q.title}%` }}, 
-                        { content: { [Op.like]: `%${q.content}%` }},
+                        { title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}},
+                        { content: q.content? { [Op.like]: `%${q.content}%` } : {[Op.regexp]: '^'}},
                         { noticeChk: false}
                     ]   
                     //스토어url, 제목,내용 (association included)                
@@ -263,14 +293,19 @@ module.exports = {
                         where:{
                             [Op.and]:
                             [
-                                {url: { [Op.like]: `%${q.url}%` }},
+                                {url: q.url? { [Op.like]: `%${q.url}%` } : {[Op.regexp]: '^'}},
                             ]
                         }                                
+                    },
+                    {
+                        model: db.User,
+                        as: 'author',
+                        foreignKey: 'authorId'
                     }
                 ]
             })
             .then(posts=>{
-                objData = {posts:posts.rows, postsCount:posts.count}
+                objData = {posts:posts.rows, postsCount:posts.count, firstday}
                 res.render('3_stores/posts_index', objData);
             })
         }
@@ -292,7 +327,7 @@ module.exports = {
     },
     
     postsUpdate: (req,res)=>{
-        req.post.update(req.post)
+        req.post.update(req.body)
         .then(()=>{
             req.session.alert = '수정되었습니다.'
             res.redirect(`/stores/posts/${req.post.id}`);
@@ -306,47 +341,74 @@ module.exports = {
     },
 
     findMessage: (req,res,next)=>{
-        db.Message.findById(req.params.message_id)
-        .then(message=>{
-            if(!message){
-                req.flash('error', '없는 메시지입니다.');
-                res.redirect('/members/messages');
-            }
-            req.message = message;
+       db.Messages.findOne({
+           where: {
+               id: req.params.message_id
+           },
+           include: [
+               {
+                   model: db.Sentmessage,
+                   as: 'sentMessages',
+                   foreignKey: 'messageId',
+                   include: [
+                       {
+                           model: db.User,
+                           as: "sender"
+                       },
+                       {
+                           model: db.User,
+                           as: "receivers"
+                       },
+                   ]
+               }
+           ]
+       }).then((message)=>{
+           req.message = message;
+           next();
+       })
+       
+        // db.Message.findById(req.params.message_id)
+        // .then(message=>{
+        //     if(!message){
+        //         req.flash('error', '없는 메시지입니다.');
+        //         res.redirect('/members/messages');
+        //     }
+        //     req.message = message;
 
-            message.getSentMessages()
-            .then(sentMessages =>{
-                receivers = [];
-                console.log('\n\n\n***',sentMessages.length);
-                db.User.findById(sentMessages[0].senderId)
-                .then(sender=>{
-                    // console.log('first sync');
-                    req.sender = sender;
-                });
+        //     message.getSentMessages()
+        //     .then(sentMessages =>{
+        //         receivers = [];
+        //         console.log('\n\n\n***',sentMessages.length);
+        //         db.User.findById(sentMessages[0].senderId)
+        //         .then(sender=>{
+        //             // console.log('first sync');
+        //             req.sender = sender;
+        //         });
                 
                
-                for(var i = 0 ; i < sentMessages.length ; i++){
-                // console.log('in loop',i);
-                    db.User.findById(sentMessages[i].receiverId)
-                    .then(receiver =>{
-                        receivers.push(receiver);
-                    // console.log('loop sync',i);//어차피 다 돌고 난 이후니깐 계속 i 는 length와 동일
-                    });
-                }
+        //         for(var i = 0 ; i < sentMessages.length ; i++){
+        //         // console.log('in loop',i);
+        //             db.User.findById(sentMessages[i].receiverId)
+        //             .then(receiver =>{
+        //                 receivers.push(receiver);
+        //             // console.log('loop sync',i);//어차피 다 돌고 난 이후니깐 계속 i 는 length와 동일
+        //             });
+        //         }
                 
-            })
-            .then(()=>{
-                setTimeout(function() {
-                    req.receivers = receivers;
-                    console.log(req.receivers, req.sender);
-                    next();
-                  }, 300);
+        //     })
+        //     .then(()=>{
+        //         setTimeout(function() {
+        //             req.receivers = receivers;
+        //             console.log(req.receivers, req.sender);
+        //             next();
+        //           }, 300);
                 
-            });           
-        });
+        //     });           
+        // });
     },
 
     messagesIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page; 
@@ -354,9 +416,38 @@ module.exports = {
             db.Message.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Sentmessage,
+                        as: 'sentMessages',
+                        foreignKey: 'messageId',
+                        include: [
+                            {
+                                model: db.User,
+                                as: "sender",
+                                include: [
+                                    {
+                                        model: db.Provider,
+                                        as: 'provider',
+                                        include: [
+                                            {
+                                                model: db.Store,
+                                                as: 'store'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                model: db.User,
+                                as: "receiver"
+                            },
+                        ]
+                    }
+                ]
             })
             .then(messages=>{
-                objData = {messages:messages.rows, messagesCount:messages.count}
+                objData = {messages:messages.rows, messagesCount:messages.count, firstday}
                 res.render('3_stores/messages_index', objData);
             });   
         }      
@@ -390,30 +481,30 @@ module.exports = {
                                 where: {
                                     [Op.and]:
                                     [
-                                        {username:{ [Op.like]: `%${q.username}%`}},
-                                        {nickname:{ [Op.like]: `%${q.nickname}%`}},
+                                        {username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}},
+                                        {nickname: q.nickname? { [Op.like]: `%${q.nickname}%` } : {[Op.regexp]: '^'}},
                                         {deletedAt: null}
                                     ]
                                 },
-                                // include: [
-                                //     {
-                                //         model: db.Provider,
-                                //         as: 'user',
-                                //         where: {
-                                //             companyName:{ [Op.like]: `%${q.companyName}%`},
-                                //         },
-                                //         include: [
-                                //             {
-                                //                 model: db.Store,
-                                //                 as: 'stores',
-                                //                 where: {
-                                //                     url:{ [Op.like]: `%${q.url}%`},
-                                //                 }
-                                //             }
-                                //         ]
-                                //     },
+                                include: [
+                                    {
+                                        model: db.Provider,
+                                        as: 'user',
+                                        where: {
+                                            companyName: q.companyName? { [Op.like]: `%${q.companyName}%` } : {[Op.regexp]: '^'},
+                                        },
+                                        include: [
+                                            {
+                                                model: db.Store,
+                                                as: 'stores',
+                                                where: {
+                                                    url: q.url? { [Op.like]: `%${q.url}%` } : {[Op.regexp]: '^'},
+                                                }
+                                            }
+                                        ]
+                                    },
                                     
-                                // ]
+                                ]
                             }
                         ]
 
@@ -421,8 +512,7 @@ module.exports = {
                 ]
             })
             .then(messages=>{
-                console.log(messages);
-                objData = {messages:messages.rows, messagesCount:messages.count}
+                objData = {messages:messages.rows, messagesCount:messages.count, firstday}
                 res.render('3_stores/messages_index', objData);
             })
         }

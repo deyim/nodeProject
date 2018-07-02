@@ -9,15 +9,15 @@
             <tbody>
                 <tr>
                     <th>게시글 등록일자</th>
-                    <td>2018-09-02</td>
+                    <td>{{makeDate post.createdAt}}</td>
                     
                     <th>스토어주소</th>
-                    <td>abced</td>
+                    <td>{{post.store.url}}</td>
                 </tr>
                 
                 <tr>
                     <th>작성자아이디</th>
-                    <td>flywork@flywork.co.kr</td>
+                    <td>{{post.author.username}}</td>
                     <th>회원유형</th>
                     <td>일반고객</td>
                 </tr>
@@ -26,7 +26,7 @@
                 <tr>
                     <th>제목 *</th>
                     <td colspan="3">
-                        <div class="input_100box"><input type="text" class="inputstyle"></input></div>
+                        <div class="input_100box"><input type="text" class="inputstyle" value={{post.title}}></input></div>
                     </td>
                 </tr>
             
@@ -34,13 +34,13 @@
                     <th>카테고리*</th>
                     <td colspan="3">
                         
-                        <div class="category_box">
+                        <div class="inline category_box">
                             <select class="inputstyle">
-                                <option>대분류선택</option>
+                                <option>커뮤니티</option>
                             </select>
                         </div>
                         
-                        <div class="category_box">
+                        <div class="inline category_box">
                             <select class="inputstyle">
                                 <option>중분류선택</option>
                             </select>
@@ -56,7 +56,7 @@
                 <tr>
                     <th>내용 *</th>
                     <td colspan="3">
-                        <div class="mar_t10"><textarea rows="15" class="textareastyle"></textarea></div>
+                        <div class="mar_t10"><textarea rows="15" class="textareastyle">{{post.content}}</textarea></div>
                     </td>
                 </tr>
                 
