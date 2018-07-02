@@ -10,7 +10,7 @@
             <tbody>
                 <tr>
                     <th>회원가입일</th>
-                    {{>date_search today=today}}
+                    {{>date_search firstday=firstday}}
                 </tr>
                 
                 <tr>
@@ -54,7 +54,7 @@
             </tbody>
         </table>
         
-        <div class="serach_button"><input type="submit" value="검색하기"></div>
+        <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
         </form>
     </div>
     

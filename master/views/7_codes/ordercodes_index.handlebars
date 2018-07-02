@@ -1,20 +1,99 @@
-<h1>order code index</h1>
+<div class="cont">
+    <div class="titlearea">
+        <div class="title">주문코드</div>
+        <div class="nav">설정 > 코드설정 > 주문코드</div>
+    </div>
+    
+    
+    
+    <div class="search_area">
+        <form method="get">
+        <table class="serach_box" cellpadding='0' cellspacing='0'>
+            
+            <tbody>
+                <tr>
+                    <th>주문코드</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" name = "productcode" class="inputstyle"></input>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
+        </form>
+    </div>
+    
+    <div class="list_all">
+        <div class="list_info">
+            <div class="count">카테고리  코드발행 : {{codesCount}}건 ｜ 미사용 : {{notUsedCount codes}}건</div>
+            <ul class="message_button">
+                <li class="lg_button" id="this_add">상품코드 추가발행</li>
+                <li class="wh_button">엑셀다운로드</li>
+            </ul>
+        </div>
+    
+    
+    
+        <div class="tablearea" style="margin-top:20px;">
+            <table class="sales_table" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        {{!-- <th>번호</th> --}}
+                        <th>상품코드</th>
+                        <th>상품코드 사용여부</th>                        
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {{#each codes}}  
+                    <tr>
+                        {{!-- <th>05</th> --}}
+                        <th>{{this.code}}</th>
+                        <th>{{usedChk this.usedChk}}</th>                        
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{>pages}}
+    </div> 
+</div>
+</div>
 
-<form method="get">
-    상품코드: <input type="text" name="ordercode"><br>    
-    <input type="submit" value="제출"><br>
-</form>
-<a href="orders/add">추가하기</a><br>
-상품코드: {{codesCount}}
-{{#each codes}}  
-    <br>{{this.code}}
-    <br>{{this.categoryId}}
-    <br>{{this.usedChk}}
-    <br>{{#each this.serviceUsers}} {{this.korName}}{{/each}}
-{{/each}}
 
-<a href="?page=1">1</a>
-<a href="?page=2">2</a>
-<a href="?page=3">3</a>
-<a href="?page=4">4</a>
-<a href="?page=4">5</a>
+
+
+<div class="add_view" style="display:none;">
+    <div class="layer_back_area"></div>
+    <div class="layer_area">
+        <div class="showbox">
+            <div class="showbox_cetearea">
+                <div class="title">상품코드 추가발행</div>
+                <div class="close"><img src="/images/sub/showbox_close.png"></div>
+            </div>
+            
+            <div class="showbox_contents">                
+                <div class="grey_contents">
+                        {{!-- <div class="list_all"> --}}
+                            {{!-- <div class="list_info"> --}}
+                                <form action="orders/generate" method="POST">
+                                    <div>발행개수</div>
+                                    <div class="input_25box" style="margin-top:10px;">
+                                        <input type="text" name="amount" class="inputstyle"></input>
+                                    </div>
+                                    <div class="inline">개</div>
+                                    <ul class="message_button">
+                                        <button onclick="document.forms[1].submit()">코드발행</button>
+                                        {{!-- <li class="lg_button"  >코드 발행</li> --}}
+                                    </ul>
+                                </form>
+                            {{!-- </div> --}}
+                        {{!-- </div> --}}
+                </div>
+            </div>    
+        </div>    
+    </div>
+</div>

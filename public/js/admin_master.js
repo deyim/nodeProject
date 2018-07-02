@@ -1,3 +1,9 @@
+(function($){
+    $(window).on("load",function(){
+        $(".menuarea").mCustomScrollbar();
+    });
+})(jQuery);
+
 function changeInputValue(value) {
     document.getElementById("changedInput").name = value
 }
@@ -17,13 +23,11 @@ function chooseAll() {
 
 $(document).ready(function(){
     $(document).on('change', '#change_date', function(){
-        
         if($(this).val()==0){
             $('#src_date').val('');
             $('#target_date').val('');
             return;
-        }
-        
+        }        
         var mydate = $('#src_date').val().split('-');
         mydate = new Date(mydate[0], mydate[1]-1, mydate[2]);
         
@@ -42,6 +46,13 @@ $(document).ready(function(){
 
     });
 }); 
+
+$(function(){
+    $(document).on('change', '#type_selector', function(){
+        let mytype = $(this).val();
+        $('#type').attr('name', mytype);
+    });
+})
 
 $(function(){
     $(".modify").click(function(){
@@ -63,3 +74,37 @@ $(function(){
     });
 });
 
+$(function(){
+    $("#order_code").click(function(){
+        $(".order_view").show();
+    });
+});
+
+
+$(function(){
+    $(".close").click(function(){
+        $(".order_view").hide();
+    });
+});
+
+$(function(){
+   let periodType = $("#checkPeriodType").val();
+   let periodTarget = "periodType_"+periodType;
+   $('#'+periodTarget).prop('checked', true);
+   let countType = $("#checkPeriodType").val();
+   let countTarget = "countType_"+countType;
+   $('#'+countTarget).prop('checked', true);
+});
+
+$(function(){
+    $("#this_add").click(function(){
+        $(".add_view").show();
+    });
+});
+
+
+$(function(){
+    $(".close").click(function(){
+        $(".add_view").hide();
+    });
+});

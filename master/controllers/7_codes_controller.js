@@ -9,25 +9,44 @@ module.exports = {
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
+        let categories;
+        db.Category.findAll()
+        .then(categories_=>{categories=categories_;});
         if(Object.keys(req.query).length === 0){
+            objData = {};
             db.Productcode.findAndCountAll({
                 limit: perPage,
-                offset: perPage*(page-1)
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Category,
+                        as: 'category'
+                    }                    
+                ]
             })
             .then(codes=>{                        
-                res.render("7_codes/productcodes_index",{codes:codes.rows, codesCount:codes.count});  
+                res.render("7_codes/productcodes_index",{codes:codes.rows, codesCount:codes.count, categories});  
             });  
         }
         else{
             db.Productcode.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Category,
+                        as: 'category',
+                        where: {
+                            id: q.category? q.category : {[Op.regexp]: '^'},
+                        }
+                    } 
+                ],
                 where: {
-                    code: q.productcode
+                    code: q.productcode? q.productcode : {[Op.regexp]: '^'},
                 }
             })
             .then(codes=>{                        
-                res.render("7_codes/productcodes_index",{codes:codes.rows, codesCount:codes.count});  
+                res.render("7_codes/productcodes_index",{codes:codes.rows, codesCount:codes.count, categories});  
             });  
         }
               
@@ -44,13 +63,14 @@ module.exports = {
     },
 
     productcodesGenerate: (req,res)=>{
+        console.log(req.body.category);
         let amount = req.body.amount;
         let codes = [];
         let tmp = ""
         
         db.Category.find({
             where: {
-                name: req.body.category
+                id: req.body.category
             }
         })
         .then(category=>{
@@ -61,7 +81,8 @@ module.exports = {
                 codes.push({categoryId: category.id, code: tmp, createdAt: Date.now()});
             }
             db.Productcode.bulkCreate(codes)
-            .then(()=>{                
+            .then((codes)=>{                
+                console.log(codes);
                 res.redirect("/codes/products")
             })
         });        

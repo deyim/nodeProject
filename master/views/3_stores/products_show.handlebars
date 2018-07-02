@@ -5,23 +5,23 @@
     </div>
     
     <div class="member_view">
-        
+        <form method="POST">
         <table cellpadding="0" cellspacing="0" class="de_table" style="margin-top:20px;">
             <tbody>
                 <tr>
                     <th>스토어주소</th>
-                    <td>abcde</td>
+                    <td>{{product.store.url}}</td>
                     
                     <th>아이디</th>
-                    <td> flywork@flywork.co.kr</td>
+                    <td>{{product.provider.user.username}}</td>
                 </tr>
                 
                 <tr>
                     <th>회원유형</th>
-                    <td>국내_사업자</td>
+                    <td>{{product.provider.companyType}}</td>
                     
                     <th>사업자명</th>
-                    <td>(주)플라이워크</td>
+                    <td>{{product.provider.companyName}}</td>
                 </tr>
                 
                 <tr>
@@ -30,13 +30,16 @@
                         
                         <div class="category_box">
                             <select class="inputstyle">
-                                <option>대분류선택</option>
+                                <option>여행상품</option>
                             </select>
                         </div>
                         
                         <div class="category_box">
-                            <select class="inputstyle">
-                                <option>중분류선택</option>
+                            <select class="inputstyle" name="category" id="category">
+                                <option value="">선택안함</option> 
+                                {{#each categories}}
+                                    <option value={{this.id}}>{{this.name}}</option> 
+                                {{/each}}
                             </select>
                         </div>
                     </td>
@@ -72,18 +75,18 @@
                 
                 <tr>
                     <th>상품코드</th>
-                    <td>45352841</td>
+                    <td>{{product.productcode.code}}</td>
                     
                     
                     <th>상품등록일자</th>
-                    <td>2018.09.02</td>
+                    <td>{{makeDate product.createdAt}}</td>
                 </tr>
                 
                 <tr>
                     <th>상품명</th>
                     <td>
                         <div class="input_100box">
-                            <input class="inputstyle" type="text">
+                            <input class="inputstyle" type="text" value={{product.title}}>
                                 
                             </input>
                         </div>
@@ -93,44 +96,43 @@
                 <tr>
                     <th>홍보키워드</th>
                     <td colspan="3">
-                        <div class="input_12box"><input type="text" class="inputstyle"></input></div>
-                        <div class="input_12box"><input type="text" class="inputstyle"></input></div>
-                        <div class="input_12box"><input type="text" class="inputstyle"></input></div>
-                        <div class="input_12box"><input type="text" class="inputstyle"></input></div>
-                        <div class="input_12box"><input type="text" class="inputstyle"></input></div>
-                        <div class="input_12box"><input type="text" class="inputstyle"></input></div>
+                        {{#each product.tags}}
+                        <div class="input_12box"><input type="text" class="inputstyle" value={{this.tag}}></input></div>
+                        {{/each}}
                     </td>
                 </tr>
                 
                 <tr>
                     <th>판매상태</th>
                     <td colspan="3">
-                        <div class="inline"><input type="checkbox"></input> 판매중</div>
-                        <div class="inline"><input type="checkbox"></input> 판매중지</div>
+                        <div class="inline"><input type="checkbox" {{ifchecked product.onSaleChk}}></input> 판매중</div>
+                        {{!-- <div class="inline"><input type="checkbox"></input> 판매중지</div> --}}
                     </td>
                 </tr>
                 
                 <tr>
                     <th>전시상태</th>
                     <td colspan="3">
-                        <div class="inline"><input type="checkbox"></input> 전시중</div>
-                        <div class="inline"><input type="checkbox"></input> 전시중지</div>
+                        <div class="inline"><input type="checkbox" {{ifchecked product.onDisplayChk}}></input> 전시중</div>
+                        {{!-- <div class="inline"><input type="checkbox"></input> 전시중지</div> --}}
                     </td>
                 </tr>
                 
                 <tr>
                     <th>상품특성</th>
-                    <td colspan="3">
-                        <div class="inline"><input type="checkbox"></input> 기간일자 상품</div>
-                        <div class="inline"><input type="checkbox"></input> 단일일자 상품</div>
+                    <td colspan="3" >
+                        <input type="hidden" value={{product.periodType}} id="checkPeriodType">
+                        <div class="inline"><input type="checkbox" id="periodType_A"></input> 기간일자 상품</div>
+                        <div class="inline"><input type="checkbox" id="periodType_B"></input> 단일일자 상품</div>
                     </td>
                 </tr>
                 
                 <tr>
                     <th>옵션유형</th>
                     <td colspan="3">
-                        <div class="inline"><input type="checkbox"></input> 단일옵션 상품</div>
-                        <div class="inline"><input type="checkbox"></input> 인원옵션 상품</div>
+                        <input type="hidden" value={{product.periodType}} id="checkCountType">
+                        <div class="inline"><input type="checkbox" id="countType_A"></input> 단일옵션 상품</div>
+                        <div class="inline"><input type="checkbox" id="countType_B"></input> 인원옵션 상품</div>
                     </td>
                 </tr>
                 
@@ -211,7 +213,7 @@
                             
                             
                             <div class="plus_button">
-                                <img src="../images/sub/plus_option.png">
+                                <img src="/images/sub/plus_option.png">
                             </div>
                         </div>
                     </td>
@@ -281,7 +283,7 @@
                             
                             
                             <div class="plus_button">
-                                <img src="../images/sub/plus_option.png">
+                                <img src="/images/sub/plus_option.png">
                             </div>
                         </div>
                     </td>
@@ -318,42 +320,5 @@
         <div class="wt_button">삭제</div>
         <div class="wt_button">목록</div>
     </div>
+    </form>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1>Product Show Page</h1>
-
-<br>{{product.title}}
-<br>{{productcode.code}}
-<br>{{category.name}}
-<br><br>
-{{#each cities}}
-    <br>{{this.city}}
-{{/each}}
-
-<br><br>
-{{#each nations}}
-    <br>{{this.nation}}
-{{/each}}
-
-<br><br>
-{{#each tags}}
-    <br>{{this.tag}}
-{{/each}}

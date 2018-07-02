@@ -33,7 +33,7 @@
                     <th>스토어로고이미지</th>
                     <td>
                         <div class="compulsory_img">
-                            <div class="image"><img src="/images/sub/ex_img.jpg"></div>
+                            <div class="image">`</div>
                         </div>
                     </td>
                     
@@ -45,50 +45,30 @@
                         </div>
                     </td>
                 </tr>
-                
+                {{!-- {{cities}} --}}
+                {{#each nations}}
                 <tr>
-                    <th rowspan="2">* 국가 / 도시선택</th>
+                    <th rowspan="1">* 국가 / 도시선택</th>
                     <td colspan="3">
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>이탈리아</option>
-                                <option>프랑스</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>선택하세요</option>
-                                <option>밀라노</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline">로마; 나폴리; 밀라노; 베네치아; 볼로냐</div>
+                        <div class="input_12box">
+                            {{this.nation}}
+                        </div>      
+
+                        {{#each ../cities}}   
+                            {{selectCities this ../this.id}}
+                        {{/each}}
                     </td>
                 </tr>
-                
+                {{/each}}
+
                 <tr>
-                    <td colspan="3">
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>프랑스</option>
-                                <option>이탈리아</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>선택하세요</option>
-                                <option>파리</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline">전체;</div>
-                    </td>
-                </tr>
+                    <th>업로드 파일</th>
+                    <td></td>
+                </tr>                
                 
             </tbody>
         </table>
+        
         <div class="bot_button">
             <div class="dg_button" ><a href="/members/providers/{{provider.id}}">스토어회원 수정하러 가기</a></div>
         </div>
@@ -124,12 +104,12 @@
                 <tr>
                     <th><input type="checkbox"></input></th>
                     {{!-- <th>20</th> --}}
-                    <th>{{this.username}}</th>
-                    <th>{{this.nickname}}</th>
-                    <th>{{this.nickname}}</th>
-                    <th>{{this.nickname}}</th>
-                    <th>{{this.nickname}}</th>
-                    <th>{{this.nickname}}</th>
+                    <th><a href="/members/users/{{this.id}}">{{this.username}}</a></th>
+                    <th><a href="/members/users/{{this.id}}">{{this.nickname}}</a></th>
+                    <th><a href="/members/users/{{this.id}}">{{makeDate this.StoreUsers.createdAt}}</a></th>
+                    <th><a href="/members/users/{{this.id}}">{{this.StoreUsers.visitCnt}}</a></th>
+                    <th><a href="/members/users/{{this.id}}">{{this.StoreUsers.orderCnt}}</a></th>
+                    <th><a href="/members/users/{{this.id}}">{{makeDate this.StoreUsers.visitDate}}</a></th>
                 </tr>
                 {{/each}}
                 

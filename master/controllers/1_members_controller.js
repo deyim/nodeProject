@@ -246,7 +246,12 @@ module.exports = {
                                 {recEmail: q.recEmail },
                             ]
                         }                                
-                    }
+                    }, 
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        foreignKey: 'providerId'
+                    }  
                 ]
             })
             .then(providers=>{
@@ -307,21 +312,28 @@ module.exports = {
                 res.redirect('/members/stores');
             }
             req.store = store;
-            db.Provider.findById(store.providerId)
+
+            store.getProvider()
             .then(provider=>{
                 req.provider = provider;
-            })
-            db.User.findAll({
-                include: [{
-                  model: db.Store,
-                  as: 'stores',
-                  required: true,
-                  through: {attributes:[]}
-                }]
-            }).then(users=>{
+            });
+
+            store.getUsers()
+            .then(users=>{
+                console.log(users[0]);
                 req.users = users;
+            });
+
+            store.getNations()
+            .then(nations=>{
+                req.nations = nations;
+            });
+
+            store.getCities()
+            .then(cities=>{
+                req.cities = cities;
                 next();
-            })
+            });
         })
         //회원 정보도 다 가져와야돼??
         
@@ -336,10 +348,19 @@ module.exports = {
             db.Store.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
+                where: {
+                    approvalChk: true
+                },
                 include: [
                     {
                         model: db.Provider,
-                        as: 'provider'
+                        as: 'provider',
+                        include: [
+                            {
+                                model: db.User,
+                                as: 'user'
+                            }
+                        ]
                     }
                 ]
             })
@@ -355,6 +376,7 @@ module.exports = {
                 where:{
                     [Op.and]:
                     [
+                        {approvalChk: true},
                         {createdAt: {
                                 [Op.and]:[
                                     {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
@@ -401,7 +423,9 @@ module.exports = {
     },
     //stores - show
     storesShow: (req,res)=>{
-        objData = {store:req.store, provider:req.provider, users:req.users};
+        objData = {store:req.store, provider:req.provider, 
+            users:req.users, nations:req.nations, 
+            cities:req.cities};
         res.render('1_members/stores_show',objData);
     },
     //stores - update

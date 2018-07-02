@@ -176,6 +176,11 @@
 	text-align:center;
 	padding:5px;
 	float:right;
+	cursor: pointer;
+}
+
+.search_button{
+	cursor: pointer;
 }
 
 .search_area .serach_button{
@@ -187,6 +192,7 @@
 	color:#363636;
 	font-size:14px;
 	margin:20px auto 0;
+	cursor: pointer;
 }
 
 .search_area .serach_button:hover{
@@ -198,6 +204,7 @@
 	display:block;
 	border:1px solid #363636;
 	font-size:14px;
+	cursor: pointer;
 }
 
 .inputstyle{
@@ -266,6 +273,7 @@
 	display:inline-block;
 	background-color:#3e3e3e;
 	font-size:14px;
+	cursor: pointer;
 }
 
 .bot_button .wt_button a{
@@ -277,6 +285,7 @@
 	font-size:14px;
 	border:1px solid #e5e5e5;
 	box-sizing:border-box;
+	cursor: pointer;
 }
 
 .bot_button .bl_button{
@@ -288,6 +297,7 @@
 	font-size:14px;
 	border:1px solid #e5e5e5;
 	box-sizing:border-box;
+	cursor: pointer;
 }
 
 
@@ -336,6 +346,7 @@
 .list_all .list_info .message_button{
 	display:inline-block;
 	float:right;
+	cursor: pointer;
 }
 
 
@@ -343,6 +354,7 @@
 	display:inline-block;
 	float:left;
 	margin-left:10px;
+	cursor: pointer;
 }
 
 .list_all .list_info .message_button .lg_button{
@@ -351,6 +363,7 @@
 	text-align:center;
 	padding:8px;
 	font-size:14px;
+	cursor: pointer;
 }
 
 .list_all .list_info .message_button .wh_button{
@@ -359,6 +372,7 @@
 	text-align:center;
 	padding:8px;
 	font-size:14px;
+	cursor: pointer;
 }
 
 
@@ -1117,6 +1131,7 @@ margin-top:12px;
 	width:90px;
 	padding:5px 0px 5px 0px;
 	display:inline-block;
+	cursor: pointer;
 	float:right;
 }
 
@@ -1124,6 +1139,7 @@ margin-top:12px;
 	width:31px;
 	display:inline-block;
 	float:right;
+	cursor: pointer;
 	padding: 5px;
 }
 

@@ -1,12 +1,38 @@
-<h1>faq code index</h1>
-
-
-{{#each codes}}  
-    <br>{{this.code}} <a href="/codes/faqs/delete/{{this.id}}">삭제</a>
-{{/each}}
-
-<form action="/codes/faqs/generate" method="post">
-    <label>코드값</label>
-    <input type="text" name="code">
-    <input type="submit" value="등록">
-</form>
+<div class="cont">
+    <div class="titlearea">
+        <div class="title">FAQ 구분코드</div>
+        <div class="nav">설정 > 코드설정 > FAQ 구분코드</div>
+    </div>
+    
+   <div class="member_view">
+        <table cellpadding="0" cellspacing="0" class="de_table">
+            <tbody>
+                {{#each codes}}
+                <tr>
+                    <th>코드값</th>
+                    <td>
+                        <div class="input_25box">
+                            {{this.code}}
+                        </div>
+                        
+                        
+                        <div class="inline dg_button"><a href="/codes/faqs/delete/{{this.id}}">삭제</a></div>
+                        
+                    </td>
+                </tr>
+                {{/each}}  
+                <tr>
+                    <th>코드값</th>
+                    <td>
+                        <form action="/codes/faqs/generate" method="post">
+                            <div class="input_25box">
+                                <input type="text" class="inputstyle" name="code"></input>
+                            </div>  
+                            <div class="inline serach_button" onclick="document.forms[0].submit()">생성하기</div>                 
+                        </form>
+                    </td>
+                </tr>                          
+            </tbody>
+        </table>
+    </div>
+</div>

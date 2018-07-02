@@ -4,7 +4,11 @@ const Op = db.Sequelize.Op
 
 module.exports = {
     categoryIndex: (req,res)=>{
-        db.Category.findAll()
+        db.Category.findAll({
+            order: [
+                ['id']
+            ]
+        })
         .then(categories=>{
             res.render("8_categories/categories_index", {categories});
         })
@@ -16,13 +20,6 @@ module.exports = {
             next();
         })
     },
-
-    // commuAdd: (req,res)=>{},
-    // commuEdit: (req,res)=>{},
-    // commuDelete: (req,res)=>{},
-    // noticeAdd: (req,res)=>{},
-    // noticeEdit: (req,res)=>{},
-    // noticeDelete: (req,res)=>{},
     categoryAdd: (req,res)=>{
         console.log(req.body);
         db.Category.create(req.body)
@@ -31,7 +28,12 @@ module.exports = {
         })
     },
     categoryEdit: (req,res)=>{
-        ss;
+        req.category.update({
+            name: req.body.name
+        })
+        .then(()=>{
+            res.redirect('/categories/');
+        })
     },
     categoryDelete: (req,res)=>{
         req.category.destroy();

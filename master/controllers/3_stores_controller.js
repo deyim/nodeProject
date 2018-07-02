@@ -2,61 +2,91 @@ const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op;
 const perPage = 5;
+const dateFunctions = require('../../lib/date_functions');
 
 module.exports = {
     findProduct: (req,res,next)=>{
-        db.Product.findById(req.params.product_id)
-        .then(product=>{
-            if(!product){
-                req.flash('error', '없는 상품입니다.');
-                res.redirect('/stores/products');
-            }
+        db.Product.find({
+            where: {
+                id: req.params.product_id
+            },
+            include: [
+                {
+                    model: db.Productcode,
+                    as: 'productcode'
+                },
+                {
+                    model: db.Store,
+                    as: 'store'
+                },
+                {
+                    model: db.Provider,
+                    as: 'provider',
+                    include: [
+                        {
+                            model: db.User,
+                            as: 'user'
+                        }
+                    ]
+                },
+                {
+                    model: db.Category,
+                    as: 'category'
+                },
+                {
+                    model: db.Tag,
+                    as: 'tags'
+                },
+                {
+                    model: db.Nation,
+                    as: 'nations'
+                },
+                {
+                    model: db.City,
+                    as: 'cities'
+                }
+            ]
+        }).then(product=>{
             req.product = product;
-
-            product.getProductcode()
-            .then(productcode=>{
-                req.productcode = productcode;
-            });
-
-            product.getCategory()
-            .then(category=>{
-                req.category = category;
-            });
-            
-            product.getTags()
-            .then(tags=>{
-                req.tags = tags;
-            });
-
-            product.getNations()
-            .then(nations=>{                
-                req.nations = nations;
-            });
-
-            product.getCities()
-            .then(cities=>{
-                req.cities = cities;
-                next();
-            });
+            next();
         });
     },
 
     productsIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;    
+        let categories;
+        db.Category.findAll()
+        .then(categories_=>{
+            categories = categories_;
+        });
         if(Object.keys(req.query).length === 0){
             db.Product.findAndCountAll({
                 limit: perPage,
-                offset: perPage*(page-1)
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Store,
+                        as: 'store'
+                    },
+                    {
+                        model: db.Category,
+                        as: 'category'
+                    },
+                    {
+                        model: db.Productcode,
+                        as: 'productcode'
+                    },
+                ]
             })
             .then(products=>{
-                objData = {products:products.rows, productsCount:products.count}
+                objData = {products:products.rows, productsCount:products.count, firstday, categories}
                 res.render('3_stores/products_index', objData);
             });   
         }      
         else{
-            let q = req.query;
             db.Product.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
@@ -71,7 +101,7 @@ module.exports = {
                                 ]
                             }
                         },
-                        { title: { [Op.like]: `%${q.title}%` }},
+                        { title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}},
                         { onSaleChk: q.onSaleChk ? q.onSaleChk : false},
                         { onDisplayChk: q.onDisplayChk ? q.onDisplayChk : false}
                     ],                                  
@@ -81,20 +111,24 @@ module.exports = {
                         model: db.Productcode,
                         as: 'productcode',
                         where:{
-                                code: { [Op.like]: `%${q.productcode}%` }
+                                code: q.productcode? { [Op.like]: `%${q.productcode}%` } : {[Op.regexp]: '^'},
                         }                                
                     },
                     {
                         model: db.Category,
                         as: 'category',
                         where:{
-                            name: { [Op.like]: `%${q.category}%` }
+                            name: q.category? { [Op.like]: `%${q.category}%` } : {[Op.regexp]: '^'},
                         }                                
                     },
+                    {
+                        model: db.Store,
+                        as: 'store'
+                    }
                 ]
             })
             .then(products=>{
-                objData = {products:products.rows, productsCount:products.count}
+                objData = {products:products.rows, productsCount:products.count, firstday, categories}
                 res.render('3_stores/products_index', objData);
             })
         }
@@ -102,11 +136,23 @@ module.exports = {
 
     productsStatusChange: (req,res)=>{
         products = req.body.checked.toString().split(',');
-        if(req.body.delete){
+        if(req.body.offDisplay){
             for(var i = 0 ; i < products.length; i++){
                 db.Product.findById(products[i])
                 .then(product=>{
-                    product.destroy();
+                    product.update({
+                        onDisplayChk: false
+                    }).then(()=>{});
+                });
+            };
+        }
+        else if(req.body.onDisplay){
+            for(var i = 0 ; i < products.length; i++){
+                db.Product.findById(products[i])
+                .then(product=>{
+                    product.update({
+                        onDisplayChk: true
+                    }).then(()=>{});
                 });
             };
         }
@@ -134,15 +180,12 @@ module.exports = {
     },
 
     productsShow: (req,res)=>{
-        objData = {
-            product:req.product, 
-            productcode:req.productcode, 
-            nations:req.nations, 
-            cities:req.cities, 
-            tags:req.tags,
-            category:req.category
-        };
-        res.render('3_stores/products_show', objData);
+        let product = req.product;
+        db.Category.findAll()
+        .then(categories=>{
+            res.render('3_stores/products_show', {product, categories});
+        })
+       
     },
     
     productsUpdate: (req,res)=>{
