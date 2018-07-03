@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     Order.belongsTo(models.Store, {as: 'store'});
     Order.belongsTo(models.Ordercode, {as: 'ordercode'});
     Order.hasMany(models.ServiceUser, {as: 'serviceUsers', foreignKey: 'orderId'});
-    Order.hasOne(models.Payinfo, {as: 'payinfo'});
+    Order.hasOne(models.Payinfo, {as: 'payinfo', foreignKey: 'orderId'});
     Order.hasOne(models.CancelRequest, {as: 'cancelRequest'});
   };
   return Order;

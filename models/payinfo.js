@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Payinfo.associate = function(models) {
     // associations can be defined here
+    Payinfo.belongsTo(models.Order, {as:'order', foreignKey:'orderId'});
   };
   return Payinfo;
 };

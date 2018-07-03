@@ -2,6 +2,7 @@ const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
 const perPage = 5;
+const dateFunctions = require('../../lib/date_functions');
 
 
 var makeObj = (order)=>{
@@ -58,47 +59,61 @@ async function ordersToArray(orders){
 module.exports = {   
     
     orderedIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
-        let objData = {};
+        
         if(Object.keys(req.query).length === 0){            
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { 
-                        paidChk: false 
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: false 
+                        }
                     },
-                }]
+                    {
+                        model: db.Store,
+                        as: 'store',
+                    },
+                    {
+                        model: db.Ordercode,
+                        as: 'ordercode'
+                    },
+                    {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId'
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product'
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                    },
+                    {
+                        model: db.User,
+                        as: 'buyer'
+                    }
+
+                ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('4_orders/ordered_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    console.log("\n\nhihihihihih", objData);
-                    res.render('4_orders/ordered_index', objData);
-                },1000);                
-            });       
+                console.log(orders);
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                res.render('4_orders/ordered_index', objData);
+            })   
         }      
         else{
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [{
-                    model: db.OrderStatus,
-                    as: 'orderStatus',
-                    where: { paidChk: false },
-                }],
                 where:{
                     [Op.and]:
                     [
@@ -110,54 +125,58 @@ module.exports = {
                             }
                         },  
                     ]   
-                    ///상품명, 주문번호, 주문자아이디, 판매스토어주소
                 },
                 include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: false 
+                        }
+                    },
                     {
                         model: db.Product,
                         as: 'product',
                         where:{
-                                title: { [Op.like]: `%${q.title}%` }
+                                title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'},
                         },
                     },
                     {
                         model: db.Ordercode,
                         as: 'ordercode',
                         where: {
-                            code: { [Op.like]: `%${q.ordercode}%` }
+                            code: q.ordercode? { [Op.like]: `%${q.ordercode}%` } : {[Op.regexp]: '^'}
                         }
+                    },
+                    {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId'
                     },
                     {
                         model: db.Store,
                         as: 'store',
                         where: {
-                            url: { [Op.like]: `%${q.url}%` }
+                            url: q.url? { [Op.like]: `%${q.url}%` } : {[Op.regexp]: '^'},
                         }
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers'
                     },
                     {
                         model: db.User,
                         as: 'buyer',
                         where: {
-                            username: { [Op.like]: `%${q.username}%` }
+                            username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'},
                         }
                     }
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('4_orders/ordered_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                res.render('4_orders/ordered_index', objData);
             })
-            .then(()=>{
-                setTimeout(()=>{
-                    console.log("\n\nhihihihihih", objData);
-                    res.render('4_orders/ordered_index', objData);
-                },1000);                
-            });   
         }
     },
 

@@ -1,0 +1,27 @@
+<div class="order_info_show" style="display:none;">
+    <div class="layer_back_area"></div>
+    <div class="layer_area">
+        <div class="showbox">
+            <div class="showbox_cetearea">
+                <div class="title">서비스이용자정보</div>
+                <div class="close"><img src="/images/sub/showbox_close.png"></div>
+            </div>
+            
+            <div class="showbox_contents">                             
+                <div class="grey_contents">
+                    {{serviceUsers}}
+                    {{#each serviceUsers}}
+                        서비스 이용자<br>
+                        이름(한글) : {{this.korName}}<br>
+                        이름(영문) : {{this.engName}}<br>
+                        생년월일 : {{makeDate this.birthday}}<br>
+                        한국 전화번호 : {{this.korPhone}}<br>
+                        현지 전화번호 : {{this.tourPhone}}<br>
+                        카카오톡 아이디 : {{this.kakaoId}}<br><br>
+                    {{/each}}
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

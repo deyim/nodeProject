@@ -1,3 +1,11 @@
+$(document).ready(function(){
+    $("#m1").hide();
+    // console.log($("[id^=m_]"));
+    // $("[id^=m_]").hide();
+    // $("#m").hide();
+}); 
+
+
 (function($){
     $(window).on("load",function(){
         $(".menuarea").mCustomScrollbar();

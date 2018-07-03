@@ -449,7 +449,7 @@ module.exports = {
             .then(messages=>{
                 objData = {messages:messages.rows, messagesCount:messages.count, firstday}
                 res.render('3_stores/messages_index', objData);
-            });   
+            });  
         }      
         else{
             db.Message.findAndCountAll({
