@@ -1,7 +1,71 @@
-<h1>master show</h1>
-<br>{{master.name}}
-<br>{{master.authority}}
-<br>{{masterUser.username}}
-<br>{{masterUser.email}}
-
-<a href="{{master.id}}/delete">삭제</a>
+<div class="cont">
+    <div class="titlearea">
+        <div class="title">관리자 생성</div>
+        <div class="nav">사이트관리 > 관리자생성</div>
+    </div>
+    
+    <div class="member_view">
+        <form method="post">
+        <table cellpadding="0" cellspacing="0" class="de_table">
+            <tbody>                
+                <tr>
+                    <th>아이디</th>
+                    <td>
+                        {{!-- <div class="nickname_box"> --}}
+                            {{master.user.username}}
+                            {{!-- <input type="text" class="inputstyle" name="username" value={{master.user.username}}></input> --}}
+                        {{!-- </div> --}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>관리자명</th>
+                    <td>
+                        <div class="nickname_box">
+                            <input type="text" class="inputstyle" name="name" value={{master.name}}></input>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>이메일</th>
+                    <td>
+                        {{!-- <div class="nickname_box"> --}}
+                            {{master.user.email}}
+                            {{!-- <input type="text" class="inputstyle" value={{master.user.email}}></input> --}}
+                        {{!-- </div> --}}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>전화번호</th>
+                    <td>
+                        {{!-- <div class="nickname_box"> --}}
+                            {{master.user.phone}}
+                            {{!-- <input type="text" class="inputstyle" value={{master.user.phone}}></input> --}}
+                        {{!-- </div> --}}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>권한</th>
+                    <td>
+                        <div class="input_25box">
+                            <select class="inputstyle" name="authority">
+                                <option value="">항목</option>
+                                <option value="A" {{typeSelect A ../master.authority}}>최고관리자</option>
+                                <option value="B" {{typeSelect B ../master.authority}}>일반관리자</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                
+                
+                
+            </tbody>
+        </table>
+            {{>modify_delete id=master.id url='/sites/masters'}}
+        </form>
+    </div>
+    
+ 
+</div>

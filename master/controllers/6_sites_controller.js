@@ -79,45 +79,55 @@ module.exports = {
     },
       
     findNotice: (req,res,next)=>{
-        db.Notice.findById(req.params.notice_id)
+
+        db.Noticecode.findAll()
+        .then(codes=>{
+            req.noticecodes = codes;
+        });
+
+        db.Notice.findOne({
+            where: {
+                id: req.params.notice_id
+            },
+            include: [
+                {
+                    model: db.Noticecode,
+                    as: 'noticecode'
+                }
+            ]
+        })
         .then(notice=>{
             req.notice = notice;
-            db.Noticecode.findAll()
-            .then(codes=>{                
-                req.noticecodes = codes;
-                next();
-            });
+            next();
         })
     },
 
     noticesIndex: (req,res)=>{
-        console.log(req.query);
         let q = req.query;
         let page = q.page||1;
-        delete q.page;  
+        delete q.page; 
+        let noticecodes;
+
+        db.Noticecode.findAll()
+        .then(codes=>{noticecodes=codes;});
+
         if(Object.keys(req.query).length === 0){
             db.Notice.findAndCountAll({
                 limit: perPage,
-                offset: perPage*(page-1)
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Noticecode,
+                        as: 'noticecode',
+                    }
+                ]
             })
-            .then(notices=>{
-                // console.log('\n\n\n****',notices);
-                db.Noticecode.findAll()
-                .then(codes=>{                    
-                    objData = {notices:notices.rows, noticesCount: notices.count, noticecodes:codes};
-                    res.render('6_sites/notices_index', objData);
-                });                
+            .then(notices=>{                 
+                objData = {notices:notices.rows, noticesCount: notices.count, noticecodes};
+                res.render('6_sites/notices_index', objData);     
             });
         }
         else{
-            // let type;            
-            // if(q.type === "사용자"){
-            //     type = "A";
-            // }else if(q.type === "스토어"){
-            //     type = "B";
-            // }else{
-            //     type = "";
-            // }
             db.Notice.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
@@ -127,22 +137,18 @@ module.exports = {
                         as: 'noticecode',
                         foreignKey: 'noticecodeId',
                         where: {
-                            code: { [Op.like]: `%${q.code}%` }
+                            code: q.code ? q.code : {[Op.regexp]: '^'}
                         }
                     }
                 ],
                 where: {
-                    type: { [Op.like]: `%${q.type}%` }
+                    type: q.type? q.type: {[Op.regexp]: '^'},
+                    title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'},
                 }
             })
             .then(notices=>{
-                console.log(notices);
-                db.Noticecode.findAll({
-                })
-                .then(codes=>{
-                    objData = {notices:notices.rows, noticesCount: notices.count, noticecodes:codes};
-                    res.render('6_sites/notices_index', objData);
-                });   
+                objData = {notices:notices.rows, noticesCount: notices.count, noticecodes};
+                res.render('6_sites/notices_index', objData); 
             });
         }
         
@@ -157,13 +163,15 @@ module.exports = {
     },
 
     noticeCreate: (req,res)=>{
+        console.log(req.body)
         let notice = req.body;
         notice.createdAt = Date.now();
         notice.updatedAt = Date.now();
 
         db.Notice.create(notice)
         .then((anotice)=>{
-            res.redirect("/sites/notices");
+            console.log(anotice);
+            res.redirect("/sites/notices/");
         })
     },
 
@@ -187,6 +195,17 @@ module.exports = {
         res.redirect("/sites/notices");
     },
 
+    noticeMultipleDelete: (req,res)=>{
+        let notices = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < notices.length; i++){
+            db.Notice.findById(notices[i])
+            .then(notice=>{
+                notice.destroy();
+            });
+        };
+        res.redirect('/sites/notices');
+    },
+
     /***********************
           sites/faqs
     ***********************/
@@ -195,30 +214,30 @@ module.exports = {
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
+        let faqcodes;
+
+        db.FAQcode.findAll()
+        .then(codes=>{faqcodes=codes;});
+
         if(Object.keys(req.query).length === 0){
             db.Faq.findAndCountAll({
                 limit: perPage,
-                offset: perPage*(page-1)
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.FAQcode,
+                        as: 'faqcode',
+                        foreignKey: 'faqcodeId',
+                    }
+                ],
             })
             .then(faqs=>{
-                db.FAQcode.findAll({
-                })
-                .then(codes=>{
-                    
-                    objData = {faqs:faqs.rows, faqsCount: faqs.count, faqcodes:codes};
-                    res.render('6_sites/faqs_index', objData);
-                });                
+                console.log(faqs);
+                objData = {faqs:faqs.rows, faqsCount: faqs.count, faqcodes};
+                res.render('6_sites/faqs_index', objData);   
             });
         }
         else{
-            let type;
-            if(q.type === "사용자"){
-                type = "A"
-            }else if(q.type === "스토어"){
-                type = "B";
-            }else{
-                type = "";
-            }
             db.Faq.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
@@ -228,36 +247,43 @@ module.exports = {
                         as: 'faqcode',
                         foreignKey: 'faqcodeId',
                         where: {
-                            code: { [Op.like]: `%${q.code}%` }
+                            code: q.code ? q.code : {[Op.regexp]: '^'}
                         }
                     }
                 ],
                 where: {
-                    type: { [Op.like]: `%${q.type}%` }
+                    type: q.type? q.type: {[Op.regexp]: '^'},
+                    title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'},
                 }
             })
             .then(faqs=>{
-                console.log('\n\n***', faqs, q.code);
-                db.FAQcode.findAll({
-                })
-                .then(codes=>{
-                    objData = {faqs:faqs.rows, faqsCount: faqs.count, faqcodes:codes};
-                    res.render('6_sites/faqs_index', objData);
-                });   
+                objData = {faqs:faqs.rows, faqsCount: faqs.count, faqcodes};
+                res.render('6_sites/faqs_index', objData);   
             });
         }
         
     },
 
     findFaq: (req,res,next)=>{
-        db.Faq.findById(req.params.faq_id)
+        db.FAQcode.findAll()
+        .then(codes=>{
+            req.faqcodes = codes;
+        });
+
+        db.Faq.findOne({
+            where: {
+                id: req.params.faq_id
+            },
+            include: [
+                {
+                    model: db.FAQcode,
+                    as: 'faqcode'
+                }
+            ]
+        })
         .then(faq=>{
             req.faq = faq;
-            faq.getFaqcode()
-            .then(code=>{
-                req.code = code;
-                next();
-            })
+            next();
         })
     },
 
@@ -281,7 +307,7 @@ module.exports = {
     },
 
     faqShow: (req,res)=>{
-        objData = {faq:req.faq, code:req.code};
+        objData = {faq:req.faq, faqcodes:req.faqcodes};
         res.render("6_sites/faqs_show",objData);
     },
 
@@ -296,31 +322,50 @@ module.exports = {
         req.faq.destroy();
         res.redirect("/sites/faqs");
     },
-    
+
+    faqsMultipleDelete: (req,res)=>{
+        let faqs = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < faqs.length; i++){
+            db.Faq.findById(faqs[i])
+            .then(faq=>{
+                faq.destroy();
+            });
+        };
+        res.redirect('/sites/faqs');
+    },
     /***********************
           sites/masters
     ***********************/
 
 
     findMaster: (req,res,next)=>{
-        db.Master.findById(req.params.master_id)
+        db.Master.findOne({
+            where: {
+                id: req.params.master_id
+            },
+            include: [
+                {
+                    model: db.User,
+                    as: 'user'
+                }
+            ]
+        })
         .then(master=>{
-            if(!master){
-                req.flash('error', '없는 마스터입니다.');
-                res.redirect('/masters/');
-            }
             req.master = master;
-            master.getUser()
-            .then((user)=>{
-                req.masterUser = user;
-                next();
-            })
-            
-        });
+            next();
+        })
     },
     mastersIndex: (req,res)=>{
-        db.Master.findAll()
+        db.Master.findAndCountAll({
+            include: [
+                {
+                    model: db.User,
+                    as: 'user'
+                }
+            ]
+        })
         .then(masters=>{
+            console.log(masters.rows);
             res.render("6_sites/master_index", {masters});
         });
     },
@@ -336,14 +381,11 @@ module.exports = {
             }
         })
         .then((user)=>{
-            console.log('\n\n\n****',user);
             db.Master.create({
                 name: req.body.name,
                 authority: req.body.authority,
-                userId: user.id
             })
             .then((master)=>{
-                console.log('\n\n\n****',master);
                 res.redirect("/sites/masters");
             })
             .catch(db.Sequelize.ValidationError, function (err) {
@@ -354,20 +396,30 @@ module.exports = {
     },
 
     mastersShow: (req,res)=>{
-        objData = {master: req.master, masterUser: req.masterUser};
+        objData = {master: req.master};
         res.render("6_sites/master_show", objData);
     },
     mastersUpdate: (req,res)=>{
         req.master.update(req.body)
-        .then((()=>{
-            req.session.alert = '수정되었습니다.'
+        .then(()=>{
             res.redirect('/sites/masters');
-        }));
+        });
     },
     //stores - delete
     mastersDelete: (req,res)=>{
         req.master.destroy();
         res.redirect('/sites/masters');
-    }
+    },
+
+    mastersMultipleDelete: (req,res)=>{
+        let masters = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < masters.length; i++){
+            db.Master.findById(masters[i])      
+            .then(master=>{
+                master.destroy();
+            });
+        };
+        res.redirect('/sites/masters');
+    },
     
 }

@@ -1,20 +1,69 @@
-<h1>notices_show</h1>
+ <div class="cont">
+    <div class="titlearea">
+        <div class="title">공지사항 등록</div>
+        <div class="nav">사이트관리 > 공지사항 > 공지사항 등록</div>
+    </div>
+    
+    
+    <form method="POST">
+    <div class="product_write">
+        <table cellpadding="0" cellspacing="0" class="de_table">
+            <tbody>
+                <tr>
+                    <th>* 구분</th>
+                    <td>
+                        <div class="input_25box">
+                            <select class="inputstyle code_selector" name="noticecodeId">
+                                <option value="">구분</option>
+                                {{#each codes}}                                    
+                                    <option value={{this.id}} {{codeSelect this.code ../notice.noticecode.code}}>{{this.code}}</option> 
+                                {{/each}}
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>* 항목</th>
+                    <td>
+                        <div class="input_25box">
+                            <select class="inputstyle type_selector" name="type">
+                                <option value="">항목</option>
+                                <option value="A" {{typeSelect this.type ../notice.type}}>사용자</option>
+                                <option value="B">스토어</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>* 제목</th>
+                    <td colspan="3">
+                        <div class="input_100box"><input type="text" name="title" class="inputstyle" value={{notice.title}}></input></div>
+                    </td>
+                </tr>
+            
+                
+                
+                <tr>
+                    <th>내용 *</th>
+                    <td colspan="3">
+                        <div class="mar_t10"><textarea rows="15" class="textareastyle" name="content" >{{notice.content}}</textarea></div>
+                    </td>
+                </tr>
+                
+                
+            </tbody>
+        </table>
+        
+    </div>
+    
+    {{>modify_delete id=notice.id url='/sites/notices'}}
+    {{!-- <div class="bot_button inclass">
+        <div class="bl_button" onclick="document.forms[0].submit()">등록</div>
+        <a href="/sites/notices/{{notice.id}}/delete"><div class="wt_button inclass"> 삭제</div></a>
+    </div> --}}
+    </form>
+    
+</div>
 
-<form action="" method="POST">
-    {{!-- <select id="codes" name="noticecodeId">
-        {{#each codes}}
-            <option value={{this.code}}>{{this.code}}</option>
-        {{/each}}
-    </select><br> --}}
-    **사용자, 스토어 체크할 것
-    <select id="types" name="type">
-        {{!-- javascript로 default value 표시해야 --}}
-        <option value="A">사용자</option>
-        <option value="B">스토어</option>
-    </select><br>
-    제목:<input type="text" name="title" value={{notice.title}}>
-    내용:<input type="text" name="content" value={{notice.content}}>
-    <input type="submit" value="제출">
-</form>
-
-<a href="/sites/notices/{{notice.id}}/delete">삭제</a>

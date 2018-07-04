@@ -1,16 +1,67 @@
-<h1>faqs_add</h1>
-
-<form action="" method="POST">
-    <select name="faqcodeId">
-        {{#each codes}}
-            <option value={{this.id}}>{{this.code}}</option> 
-        {{/each}}
-    </select>
-    <select name="type">
-        <option value="A">사용자</option>
-        <option value="B">스토어</option>
-    </select><br>
-    제목:<input type="text" name="title">
-    내용:<input type="text" name="content">
-    <input type="submit" value="제출">
-</form>
+ <div class="cont">
+    <div class="titlearea">
+        <div class="title" >FAQ 등록</div>
+        <div class="nav">사이트 관리 > FAQ > FAQ 등록</div>
+    </div>
+    
+    
+    <form method="POST">
+    <div class="product_write">
+        <table cellpadding="0" cellspacing="0" class="de_table">
+            <tbody>
+                <tr>
+                    <th>* 구분</th>
+                    <td>
+                        <div class="input_25box">
+                            <select class="inputstyle" name="faqcodeId">
+                                <option value="">구분</option>
+                                {{#each codes}}
+                                    <option value={{this.id}}>{{this.code}}</option> 
+                                {{/each}}
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>* 항목</th>
+                    <td>
+                        <div class="input_25box">
+                            <select class="inputstyle" name="type">
+                                <option value="">항목</option>
+                                <option value="A">사용자</option>
+                                <option value="B">스토어</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>* 제목</th>
+                    <td colspan="3">
+                        <div class="input_100box"><input type="text" name="title" class="inputstyle"></input></div>
+                    </td>
+                </tr>
+            
+                
+                
+                <tr>
+                    <th>내용 *</th>
+                    <td colspan="3">
+                        <div class="mar_t10"><textarea rows="15" class="textareastyle" name="content"></textarea></div>
+                    </td>
+                </tr>
+                
+                
+            </tbody>
+        </table>
+        
+    </div>
+    
+    <div class="bot_button inclass">
+        <div class="bl_button" onclick="document.forms[0].submit()">등록</div>
+        <a href="/sites/faqs"><div class="wt_button inclass"> 목록</div></a>
+    </div>
+    </form>
+    
+</div>

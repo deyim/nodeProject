@@ -1,33 +1,86 @@
-<h1>notices_index</h1>
-<form action="">
-    {{!-- <input type="text" name="code" list="codes"> --}}
-    <select name="code">
-        {{#each noticecodes}}
-            <option value={{this.code}}>{{this.code}}</option> 
-        {{/each}}
-    </select>
-    <select name="type">
-        <option value="">선택안함</option>
-        <option value="A">사용자</option>
-        <option value="B">스토어</option>
-    </select>
-    <input type="submit", value="제출">
-</form>
+<div class="cont">
+    <div class="titlearea">
+        <div class="title">회사 공지사항</div>
+        <div class="nav">사이트 관리 > 회사 공지사항</div>
+    </div>
+    
+    
+    
+    <div class="search_area">
+        <form method="get">
+        <table class="serach_box" cellpadding='0' cellspacing='0'>
+            <tbody>
+                <tr>
+                    <th>검색어</th>
+                    <td>                        
+                        <div class="input_12box">
+                            <select class="inputstyle" name="code">
+                                <option value="">구분</option>
+                                {{#each noticecodes}}
+                                    <option value={{this.code}}>{{this.code}}</option> 
+                                {{/each}}
+                            </select>
+                        </div>
+                        
+                        <div class="input_12box">
+                            <select class="inputstyle" name="type">
+                                <option value="">항목</option>
+                                <option value="A">사용자</option>
+                                <option value="B">스토어</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input_80box">
+                            <input type="text" class="inputstyle" name="title"></input>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="serach_button" onclick="document.forms[0].submit()" >검색하기</div>
+        </form>
+    </div>
 
-<a href="/sites/notices/add">공지사항 추가하기</a>
-
-<form action="" method="POST">
-    <input type="submit" value="선택 삭제"><br>
-    {{#each notices}}    
-        <input type="checkbox" name="checked" value={{this.id}} >
-        <a href="/sites/notices/{{this.id}}">{{this.title}}</a>
-        {{this.type}}
-        {{this.createdAt}}<br>
-    {{/each}}
-</form>
-
-    {{!-- {{#if (type=='A')}}
-        일반FAQ
-    {{else}}
-        회사FAQ
-    {{/if}} --}}
+    <div class="list_all">
+        <form method="POST">
+            <div class="list_info">
+                <div class="count">전체 : {{noticesCount}}건</div>
+                <ul class="message_button">
+                    <li class="lg_button"> <a href="/sites/notices/add">FAQ 추가하기</a></li>
+                    <li class="wh_button" onclick="document.forms[1].submit()"> 선택삭제</li>
+                </ul>
+            </div>
+            
+            <table cellpadding="0" cellspacing="0" class="list_table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox"></input></th>
+                        {{!-- <th>번호</th> --}}
+                        <th>구분</th>
+                        <th>항목</th>
+                        <th>제목</th>
+                        <th>등록자</th>
+                        <th>등록일자</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {{#each notices}}
+                    <tr>
+                        <th><input type="checkbox" name="checked" value={{this.id}} ></input></th>
+                        {{!-- <th>10</th> --}}
+                        <th>{{this.noticecode.code}}</th>
+                        <th>{{typeChk this.type}}</th>
+                        <th><a href="/sites/notices/{{this.id}}">{{this.title}}</a></th>
+                        <th>최고관리자</th>
+                        <th>{{makeDate this.createdAt}}</th>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </form>
+        {{>pages}}
+    </div>
+    
+</div>
