@@ -142,3 +142,16 @@ $(function(){
         $(".message_list").hide();
     });
 });
+
+$(function(){
+    $(".info_view").click(function(){
+        $(".order_info_show").show();
+    });
+});
+
+
+$(function(){
+    $(".close").click(function(){
+        $(".order_info_show").hide();
+    });
+});

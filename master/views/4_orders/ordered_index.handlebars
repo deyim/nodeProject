@@ -4,55 +4,8 @@
         <div class="title">입금확인중</div>
         <div class="nav">주문/클레임관리 > 입금확인중</div>
     </div>
-    <div class="search_area">
-        <form method="GET">
-        <table class="serach_box" cellpadding='0' cellspacing='0'>
-            
-            <tbody>
-                <tr>
-                    <th>주문일자</th>
-                    {{>date_search firstday=firstday}}
-                </tr>
-                
-                <tr>
-                    <th>상품명</th>
-                    <td>
-                        <div class="mem_inputbox">
-                            <input type="text" name="title" class="inputstyle"></input>
-                        </div>
-                    </td>
-                    
-                    <th>주문번호</th>
-                    <td>
-                        <div class="mem_inputbox">
-                            <input type="text" name="ordercode" class="inputstyle"></input>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>주문자아이디</th>
-                    <td>
-                        <div class="mem_inputbox">
-                            <input type="text" name="username" class="inputstyle"></input>
-                        </div>
-                    </td>
-                    
-                    <th>판매스토어주소</th>
-                    <td>
-                        <div class="mem_inputbox">
-                            <input type="text" name="url" class="inputstyle"></input>
-                        </div>
-                    </td>
-                </tr>
-                
-            </tbody>
-        </table>
-        
-        <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
-       </form>
-    </div>
     
+    {{>order_query}}
     
     <div class="list_all">
         <div class="list_info">
@@ -106,7 +59,7 @@
                                     <li>예약일자 : {{this.startdate}}</li>
                                     <li>선택옵션 : {{this.option}}</li>
                                 </ul>
-                                <div class="info_view">서비스이용자 정보보기</div>
+                                <div class="info_view"><a href="/orders/users/{{this.id}}">서비스이용자 정보보기</a></div>
                             </div>
                         </div>
                     </td>
@@ -117,32 +70,39 @@
                     </th>
                     
                     <th>{{this.store.url}}</th>
-
-                    <div class="order_info_show" style="display:none;">
-                        <div class="layer_back_area"></div>
+                    
+                    {{!-- <th>{{#each serviceUsers}}{{this.korName}}{{/each}}</th> --}}
+                   {{!-- {{this.store.url}}
+                   <th>
+                   <div class="order_info_show" style="display:none;">
+                        {{this.store.url}}
                         <div class="layer_area">
                             <div class="showbox">
                                 <div class="showbox_cetearea">
                                     <div class="title">서비스이용자정보</div>
                                     <div class="close"><img src="/images/sub/showbox_close.png"></div>
                                 </div>
-                                
+                                {{this.serviceUsers}}
                                 <div class="showbox_contents">                             
                                     <div class="grey_contents">
-                                       {{this.store.url}}
-                                       {{this.serviceUsers}}
-                                        {{!-- {{#each this.serviceUsers}}
-                                            {{this.korName}}<br>
-                                        {{/each}} --}}
-                                    </div>
-                                    
+                                        {{serviceUsers}}
+                                        {{#each serviceUsers}}
+                                            서비스 이용자<br>
+                                            이름(한글) : {{this.korName}}<br>
+                                            이름(영문) : {{this.engName}}<br>
+                                            생년월일 : {{makeDate this.birthday}}<br>
+                                            한국 전화번호 : {{this.korPhone}}<br>
+                                            현지 전화번호 : {{this.tourPhone}}<br>
+                                            카카오톡 아이디 : {{this.kakaoId}}<br><br>
+                                        {{/each}}
+                                    </div>                                    
                                 </div>
                             </div>
                         </div>
-                        </div>
-                        </div>
-                    
-                    {{>service_users serviceUsers=this.serviceUsers}}
+                    </div>
+                   </th>
+                     --}}
+                    {{!-- {{>service_users serviceUsers=this.serviceUsers}} --}}
                 </tr>
                 {{/each}}
             </tbody>
@@ -152,85 +112,3 @@
     </div>
     
 </div>
-
-
-
-
-
-<script>
-    (function($){
-        $(window).on("load",function(){
-            $(".menuarea").mCustomScrollbar();
-        });
-    })(jQuery);
-</script>
-
-<script type="text/javascript">
-    $(function(){
-        $(".info_view").click(function(){
-            $(".order_info_show").show();
-        });
-    });
-    
-    
-    $(function(){
-        $(".close").click(function(){
-            $(".order_info_show").hide();
-        });
-    });
-    
-    
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1>ordered_index</h1>
-
-<form method="get">
-    시작날짜: <input type="date" name="startdate"><br>
-    끝날짜: <input type="date" name="enddate"><br>
-    상품명: <input type="text" name="title" ><br>
-    주문번호: <input type="text" name="ordercode" ><br>
-    주문자아이디: <input type="text" name="username" ><br>
-    판매스토어주소: <input type="text" name="url" ><br>
-    <input type="submit" value="제출"><br>
-</form>
-
-입금확인중: {{ordersCount}}
-<form method="POST" name="ordersIndex"> 
-    <input type="submit" value="삭제"><br>
-    <input type="submit" onclick="chooseAll()" value="전체삭제"><br>
-
-    {{#each orders}}  
-        {{this.order.ordercode}}
-        <input type="checkbox" name="checked" value={{this.order.id}} >
-        <a href="/stores/ordered/{{this.order.id}}">{{this.product.title}}</a>
-        <br>{{this.order.price}}
-        <br>{{this.order.createdAt}}
-        <br>{{this.ordercode.code}}
-        <br>{{this.buyer.username}}
-        <br>{{this.store.url}}
-        <br>service users
-        <br>{{#each this.serviceUsers}} {{this.korName}}{{/each}}
-    {{/each}}
-</form>
-
-<a href="?page=1">1</a>
-<a href="?page=2">2</a>
-<a href="?page=3">3</a>
-<a href="?page=4">4</a>
-<a href="?page=4">5</a>

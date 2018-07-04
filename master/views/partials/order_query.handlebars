@@ -1,0 +1,64 @@
+<div class="search_area">
+        <form method="GET">
+        <table class="serach_box" cellpadding='0' cellspacing='0'>
+            
+            <tbody>
+                <tr>
+                    <th>주문일자</th>
+                    {{>date_search firstday=firstday}}
+                </tr>
+                
+                <tr>
+                    <th>상품명</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" name="title" class="inputstyle"></input>
+                        </div>
+                    </td>
+                    
+                    <th>주문번호</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" name="ordercode" class="inputstyle"></input>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>주문자아이디</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" name="username" class="inputstyle"></input>
+                        </div>
+                    </td>
+                    
+                    <th>판매스토어주소</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" name="url" class="inputstyle"></input>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>주문자이름</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" name="name" class="inputstyle"></input>
+                        </div>
+                    </td>
+                    
+                    <th>여행자핸드폰번호</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" name="korPhone" class="inputstyle"></input>
+                        </div>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+        
+        <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
+       </form>
+    </div>
