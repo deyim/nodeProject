@@ -309,45 +309,74 @@ module.exports = {
 
 
     findStore: (req,res,next)=>{ 
-        db.Store.findById(req.params.store_id)
-        .then(store=>{
-            if(!store){
-                req.flash('error', '없는 스토어입니다.');
-                res.redirect('/members/stores');
-            }
+        db.Store.findOne({
+            where: {
+                id: req.params.store_id
+            },
+            include: [
+                {
+                    model: db.Provider,
+                    as: 'provider'
+                },
+                {
+                    model: db.User,
+                    as: 'users'
+                },
+                {
+                    model: db.Nation,
+                    as: 'nations'
+                },
+                {
+                    model: db.City,
+                    as: 'cities'
+                }
+            ]
+        }).then(store=>{
             req.store = store;
-
-            store.getProvider()
-            .then(provider=>{
-                req.provider = provider;
-            });
-
-            store.getUsers()
-            .then(users=>{
-                console.log(users[0]);
-                req.users = users;
-            });
-
-            store.getNations()
-            .then(nations=>{
-                req.nations = nations;
-            });
-
-            store.getCities()
-            .then(cities=>{
-                req.cities = cities;
-                next();
-            });
+            next();
         })
+        
+        // db.Store.findById(req.params.store_id)
+        // .then(store=>{
+        //     if(!store){
+        //         req.flash('error', '없는 스토어입니다.');
+        //         res.redirect('/members/stores');
+        //     }
+        //     req.store = store;
+
+        //     store.getProvider()
+        //     .then(provider=>{
+        //         req.provider = provider;
+        //     });
+
+        //     store.getUsers()
+        //     .then(users=>{
+        //         console.log(users[0]);
+        //         req.users = users;
+        //     });
+
+        //     store.getNations()
+        //     .then(nations=>{
+        //         req.nations = nations;
+        //     });
+
+        //     store.getCities()
+        //     .then(cities=>{
+        //         req.cities = cities;
+        //         next();
+        //     });
+        // })
         //회원 정보도 다 가져와야돼??
         
     },
     //stores - index
     storesIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
+        
         let q = req.query;
         let page = q.page||1;
         delete q.page; 
+
         if(Object.keys(req.query).length === 0){
             db.Store.findAndCountAll({
                 limit: perPage,
@@ -369,7 +398,7 @@ module.exports = {
                 ]
             })
             .then(stores=>{
-                objData = {stores:stores.rows, storesCnt:stores.count, firstday:firstday}
+                objData = {stores:stores.rows, storesCnt:stores.count, firstday, q};
                 res.render('1_members/stores_index', objData);
             });   
         }      
@@ -392,6 +421,11 @@ module.exports = {
                     ]                    
                 },
                 include: [//provider 의 id, 사업자명, 회원유형
+                    {
+                        model: db.User,
+                        as: 'users',
+                        foreignKey: 'storeId'
+                    },
                     {
                         model: db.Provider,
                         as: 'provider',
@@ -416,20 +450,19 @@ module.exports = {
                             }
                         ]
                         
-                    }
+                    },
+                    
                 ]
             })
             .then(stores=>{
-                objData = {stores:stores.rows, storesCnt:stores.count, firstday:firstday}
+                objData = {stores:stores.rows, storesCnt:stores.count, firstday, q}
                 res.render('1_members/stores_index', objData);
             })
         }
     },
     //stores - show
     storesShow: (req,res)=>{
-        objData = {store:req.store, provider:req.provider, 
-            users:req.users, nations:req.nations, 
-            cities:req.cities};
+        objData = {store:req.store, nations:req.store.nations, cities:req.store.cities};
         res.render('1_members/stores_show',objData);
     },
     //stores - update

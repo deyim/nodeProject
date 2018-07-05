@@ -24,7 +24,7 @@
                     <th>* 스토어소개</th>
                     <td colspan="3">
                         <div class="input_100box">
-                            <input type="text" class="inputstyle" placeholder="스토어소개글"></input>
+                            <input type="text" class="inputstyle" value="{{store.introduction}}"></input>
                         </div>
                     </td>
                 </tr>
@@ -100,7 +100,7 @@
             </thead>
             
             <tbody>
-                {{#each users}}
+                {{#each store.users}}
                 <tr>
                     <th><input type="checkbox"></input></th>
                     {{!-- <th>20</th> --}}
