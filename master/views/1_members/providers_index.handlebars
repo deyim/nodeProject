@@ -10,21 +10,22 @@
                 <tbody>
                     <tr>
                         <th>개설승인일</th>
-                        {{>date_search today=today}}
+                         {{>date_search firstday=firstday startdate=q.startdate enddate=q.enddate}}
+                        <td rowspan="4"><div class="serach_button" onclick="document.forms[0].submit()">검색하기</div></td>
                     </tr>
                     
                     <tr>
                         <th>아이디</th>
                         <td>
                             <div class="mem_inputbox">
-                                <input type="text" name="username" class="inputstyle"></input>
+                                <input type="text" name="username" vlaue="{{q.username}}" class="inputstyle"></input>
                             </div>
                         </td>
                         
                         <th>닉네임</th>
                         <td>
                             <div class="mem_inputbox">
-                                <input type="text" name="nickname" class="inputstyle"></input>
+                                <input type="text" name="nickname" vlaue="{{q.nickname}}" class="inputstyle"></input>
                             </div>
                         </td>
                     </tr>
@@ -33,14 +34,14 @@
                         <th>사업자명</th>
                         <td>
                             <div class="mem_inputbox">
-                                <input type="text" name="companyName" class="inputstyle"></input>
+                                <input type="text" name="companyName" vlaue="{{q.companyName}}" class="inputstyle"></input>
                             </div>
                         </td>
                         
                         <th>회원유형</th>
                         <td>
                             <div class="mem_inputbox">
-                                <select type="text" name="companyType" class="inputstyle">
+                                <select type="text" name="companyType" vlaue="{{q.companyType}}" class="inputstyle">
                                     <option value="">전체회원</option>
                                     <option value="A">국내_일반</option>
                                     <option value="B">국내_사업자</option>
@@ -52,19 +53,17 @@
                     </tr>
                     <tr>
                         <th>메일링수신 / SMS수신</th>
-                        <td>
+                        <td colspan="3">
                             <div class="inline">
-                                <input type="checkbox" name="recEmail" checked> 메일링
+                                <input type="checkbox" name="recEmail" {{ifchecked q.recEmail q.}}> 메일링
                             </div>
                             <div class="inline">
-                                <input type="checkbox" name="recSMS" checked> SMS
+                                <input type="checkbox" name="recSMS" {{ifchecked q.recSMS q}}> SMS
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            
-            <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
         </form>
     </div>
     
@@ -89,6 +88,7 @@
                     <th>회원유형</th>
                     <th>아이디</th>
                     <th>닉네임</th>
+                    <th>대표명</th>
                     <th>사업자명</th>
                     <th>개설 승인일자</th>
                 </tr>
@@ -99,10 +99,11 @@
                 <tr>
                     <th><input name="checked" value={{this.id}} type="checkbox"></input></th>
                     {{!-- <th>10</th> --}}
-                    <th>{{this.companyType}}</th>
+                    <th>{{setCompanyType this.companyType}}</th>
                     <th><a href="providers/{{this.id}}">{{this.user.username}}</a></th>
                     <th><a href="providers/{{this.id}}">{{this.user.nickname}}</a></th>
                     <th><a href="providers/{{this.id}}">{{this.companyName}}</a></th>
+                    <th>{<a href="providers/{{this.id}}">{this.CEO}}</a></th>
                     <th>{{makeDate this.createdAt}}</th>
                 </tr>   
                 {{/each}}             

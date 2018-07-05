@@ -155,21 +155,16 @@
 	margin-top:10px;
 }
 
-#contents .menuarea .select_store{
+#contents .menuarea .dashboard{
 	width:100%;
 	padding:10px 20px 10px 20px;
 	background-color:#1a2226;
 	color:#56717d;
 	box-sizing:border-box;
-	margin-top:20px;
+	margin-top:0px;
 }
 
-#contents .menuarea .select_store .store_input{
-	width:100%;
-	background-color:#1a2226;
-	color:#56717d;
-	border:0px solid #000;
-}
+
 
 #contents .menuarea .menu{
 	width:100%;

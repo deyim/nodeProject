@@ -86,7 +86,15 @@
                         
                         <tr>
                             <th>가입스토어</th>
-                            <td>{{storesCnt}}개</td>
+                            <td>{{storesCnt}}개 
+                                <div class="input_25box">
+									<select class="inputstyle">
+                                        {{#each stores}}
+										    <option>{{this.url}}</option>
+                                        {{/each}}
+									</select>
+								</div>
+                            </td>
                         </tr>
                         
                         <tr>

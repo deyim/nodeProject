@@ -61,7 +61,7 @@
                     <td>{{user.username}}</td>
                     
                     <th>회원유형</th>
-                    <td>{{provider.companyType}}</td>
+                    <td>{{setCompanyType provider.companyType}}</td>
                 </tr>
                 
                 <tr>
@@ -264,11 +264,9 @@
         </table>
     </div>
     
-    <div class="bot_button inline">
-         <div class="dg_button" ><a href="/members/stores/{{store.id}}">스토어 수정하러 가기</a></div>
-    </div>
-    <div class="bot_button inline">
-         <div class="dg_button" ><a href="/members/users/{{user.id}}">회원정보 수정하러 가기</a></div>
+    <div class="bot_button">
+         <div class="wt_button inline" ><a href="/members/stores/{{store.id}}">스토어 수정하러 가기</a></div>
+         <div class="wt_button inline" ><a href="/members/users/{{user.id}}">회원정보 수정하러 가기</a></div>
     </div>
     
 {{!--     

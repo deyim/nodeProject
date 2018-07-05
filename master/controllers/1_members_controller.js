@@ -73,16 +73,18 @@ module.exports = {
     //users - index
     usersIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
+
         let q = req.query;
         let page = q.page||1;
-        delete q.page;        
+        delete q.page;  
+              
         if(Object.keys(q).length === 0){
             db.User.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1)
             })
             .then(users=>{
-                objData = {users:users.rows, usersCount:users.count, firstday: firstday};
+                objData = {users:users.rows, usersCount:users.count, firstday, q};
                 res.render('1_members/users_index', objData);
             });   
         }      
@@ -108,7 +110,7 @@ module.exports = {
                 offset: perPage*(page-1)
             })
             .then(users=>{  
-               objData = {users:users.rows, usersCount:users.count, firstday: firstday};              
+               objData = {users:users.rows, usersCount:users.count, firstday, q};              
                res.render('1_members/users_index', objData);
             })
         }
@@ -191,9 +193,11 @@ module.exports = {
     //providers - index
     providersIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
+
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
+
         if(Object.keys(req.query).length === 0){
             db.Provider.findAndCountAll({
                 limit: perPage,
@@ -211,7 +215,7 @@ module.exports = {
                 ]
             })
             .then(providers=>{
-                objData = {providers:providers.rows, providersCount:providers.count, firstday:firstday}
+                objData = {providers:providers.rows, providersCount:providers.count, firstday, q}
                 res.render('1_members/providers_index', objData);
             });   
         }      
@@ -242,8 +246,8 @@ module.exports = {
                             [
                                 {username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}},
                                 {nickname: q.nickname? { [Op.like]: `%${q.nickname}%` } : {[Op.regexp]: '^'}},
-                                {recSMS: q.recSMS },
-                                {recEmail: q.recEmail },
+                                {recSMS: q.recSMS ? q.recSMS : false},
+                                {recEmail: q.recEmail ? q.recEmail : false},
                             ]
                         }                                
                     }, 
@@ -255,7 +259,7 @@ module.exports = {
                 ]
             })
             .then(providers=>{
-                objData = {providers:providers.rows, providersCount:providers.count, firstday:firstday}
+                objData = {providers:providers.rows, providersCount:providers.count, firstday, q}
                 res.render('1_members/providers_index', objData);                
             });   
         }
