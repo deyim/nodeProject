@@ -1,11 +1,11 @@
 <div class="cont">
     <div class="titlearea">
-        <div class="title">스토어개설</div>
-        <div class="nav">승인관리 > 스토어개설 > 상세</div>
+        <div class="title">스토어정보</div>
+        <div class="nav">승인관리 > 스토어정보</div>
     </div>
     
-    
     <div class="member_view">
+        <form method="POST">
         <div class="search_title">
             <div class="title">스토어정보</div>
         </div>
@@ -14,18 +14,17 @@
             <tbody>
                 <tr>
                     <th>스토어명</th>
-                    <td colspan="3">
-                        <div class="input_100box">
-                            <input type="text" class="inputstyle" placeholder="스토어명"></input>
-                        </div>
-                    </td>
+                    <td>{{store.name}}</td>
+                    
+                    <th>가입회원수</th>
+                    <td>{{store.memberCnt}}</td>
                 </tr>
                 
                 <tr>
                     <th>* 스토어소개</th>
                     <td colspan="3">
                         <div class="input_100box">
-                            <input type="text" class="inputstyle" placeholder="스토어소개글"></input>
+                            <input type="text" class="inputstyle" value="{{store.introduction}}"></input>
                         </div>
                     </td>
                 </tr>
@@ -34,7 +33,7 @@
                     <th>스토어로고이미지</th>
                     <td>
                         <div class="compulsory_img">
-                            <div class="image"><img src="../images/sub/ex_img.jpg"></div>
+                            <div class="image">`</div>
                         </div>
                     </td>
                     
@@ -42,406 +41,40 @@
                     <th>스토어 대표이미지</th>
                     <td>
                         <div class="compulsory_img">
-                            <div class="image"><img src="../images/sub/ex_img.jpg"></div>
+                            <div class="image"><img src="/images/sub/ex_img.jpg"></div>
                         </div>
                     </td>
                 </tr>
-                
+                {{!-- {{cities}} --}}
+                {{#each nations}}
                 <tr>
-                    <th rowspan="2">* 국가 / 도시선택</th>
+                    <th rowspan="1">* 국가 / 도시선택</th>
                     <td colspan="3">
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>이탈리아</option>
-                                <option>프랑스</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>선택하세요</option>
-                                <option>밀라노</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline">로마; 나폴리; 밀라노; 베네치아; 볼로냐</div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td colspan="3">
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>프랑스</option>
-                                <option>이탈리아</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>선택하세요</option>
-                                <option>파리</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline">전체;</div>
-                    </td>
-                </tr>
-                
-                
-                <tr>
-                    <th>사업자명</th>
-                    <td>
-                        <div class="input_100box">
-                            <input type="text" class="inputstyle" value="(주) 플라이워크"></input>
-                        </div>
-                    </td>
-                    
-                    
-                    <th>사업자등록번호</th>
-                    <td>
                         <div class="input_12box">
-                            <input type="text" class="inputstyle" value="580"></input>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_12box">
-                            <input type="text" class="inputstyle" value="03"></input>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_25box">
-                            <input type="text" class="inputstyle" value="00133"></input>
-                        </div>
+                            {{this.nation}}
+                        </div>      
+
+                        {{#each ../cities}}   
+                            {{selectCities this ../this.id}}
+                        {{/each}}
                     </td>
                 </tr>
-                
+                {{/each}}
+
                 <tr>
-                    <th>아이디</th>
-                    <td>flywork@flywork.co.kr</td>
-                    
-                    <th>회원유형</th>
-                    <td>국내_사업자</td>
-                </tr>
-                
-                <tr>
-                    <th>스토어 개설수</th>
-                    <td colspan="3">2개</td>
-                </tr>
-                
-                <tr>
-                    <th>대표자명</th>
-                    <td>김상현</td>
-                    
-                    <th>법인등록번호</th>
+                    <th>업로드 파일</th>
                     <td></td>
-                </tr>
-                
-                <tr>
-                    <th>업태</th>
-                    <td>
-                        <div class="input_100box">
-                            <input type="text" class="inputstyle" value="정보서비스업 제조업 도소매 서비스"></input>
-                        </div>
-                    </td>
-                    
-                    <th>업종</th>
-                    <td>
-                        <div class="input_100box">
-                            <input type="text" class="inputstyle" value="재능컨텐츠 제공 하드웨어 전자상거래업"></input>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>통신판매업신고번호</th>
-                    <td colspan="3">
-                        <div class="input_100box">
-                            <input type="text" class="inputstyle" value="2017-고양일산동-0613 "></input>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>대표전화번호</th>
-                    <td>
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>031</option>
-                                <option>032</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_25box">
-                            <input type="text" class="inputstyle" value="906"></input>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_25box">
-                            <input type="text" class="inputstyle" value="0149"></input>
-                        </div>
-                    </td>
-                    
-                    <th>팩스번호</th>
-                    <td>
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>031</option>
-                                <option>032</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_25box">
-                            <input type="text" class="inputstyle" value="906"></input>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_25box">
-                            <input type="text" class="inputstyle" value="0149"></input>
-                        </div>
-                    </td>
-                </tr>
-                
-                
-                
-                <tr>
-                    <th>담당자번호</th>
-                    <td>
-                        <div class="input_100box">
-                            <input type="text" class="inputstyle" value="김상현"></input>
-                        </div>
-                    </td>
-                    
-                    <th>담당자 전화번호</th>
-                    <td>
-                        <div class="input_25box">
-                            <select class="inputstyle">
-                                <option>031</option>
-                                <option>032</option>
-                            </select>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_25box">
-                            <input type="text" class="inputstyle" value="906"></input>
-                        </div>
-                        
-                        <div class="inline"> -</div>
-                        
-                        <div class="input_25box">
-                            <input type="text" class="inputstyle" value="0149"></input>
-                        </div>
-                    </td>
-                </tr>
-                
-                
-                <tr>
-                    <th>출금신청 입금계좌</th>
-                    <td colspan="3">기업은행 01088061978 / 김상현(플라이워크)</td>
-                </tr>
-                
-                <tr>
-                    <th>*중계 수수료 방식</th>
-                    <td>
-                        <div class="inline">
-                            <input type="radio"></input> 월정액
-                        </div>
-                        <div class="inline">
-                            <input type="radio"></input> 판매수수료
-                        </div>
-                    </td>	
-                    
-                    
-                    <th>*적용요율(비용)</th>
-                    <td>
-                        <div class="input_25box">
-                            <input type="text" class="inputstyle" value="100,000"></input>
-                        </div>
-                        <div class="inline"> 원</div>
-                    </td>
-                    
-                </tr>
-                
-                
-                
+                </tr>                
                 
             </tbody>
         </table>
-    </div>
-    
-    
-    
-    <div class="list_all">
-        <div class="search_title">
-            <div class="title">회원정보</div>
-        </div>
-    
         
-        <table cellpadding="0" cellspacing="0" class="list_table">
-            <thead>
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>번호</th>
-                    <th>아이디</th>
-                    <th>닉네임</th>
-                    <th>스토어가입일자</th>
-                    <th>스토어방문횟수</th>
-                    <th>주문건수</th>
-                    <th>최종방문일자</th>
-                </tr>
-            </thead>
-            
-            <tbody>
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>20</th>
-                    <th>master@sosohang.co.kr</th>
-                    <th>flywork</th>
-                    <th>2018.09.02</th>
-                    <th>2회</th>
-                    <th>-</th>
-                    <th>2018.09.02</th>
-                </tr>
-            </tbody>
-        </table>
-        
-        <div class="paging">
-            <ul class="paging_list">
-                <li class="arrow"><img src="../images/sub/arrow_prev.png"></li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li>6</li>
-                <li>7</li>
-                <li>8</li>
-                <li>9</li>
-                <li class="arrow"><img src="../images/sub/arrow_next.png"></li>
-            </ul>
+        <div class="bot_button">
+            <div class="dg_button" ><a href="/members/providers/{{provider.id}}">스토어회원 수정하러 가기</a></div>
         </div>
+
+        {{>modify_delete id=store.id url='/members/stores' }}
+        </form>
     </div>
-    
+        
 </div>
-
-
-
-
-
-
-
-
-
-
-<h1>STORES_SHOW</h1>
-
-{{store.name}} <br>
-{{provider.companyName}} <br>

@@ -71,7 +71,7 @@ module.exports = {
                 ]               
             })
             .then(stores=>{
-                objData = {stores:stores.rows, storesCnt:stores.count, firstday:firstday};
+                objData = {stores:stores.rows, storesCnt:stores.count, firstday, q};
                 res.render('2_approvals/stores_index', objData);
             });   
         }      
@@ -123,7 +123,7 @@ module.exports = {
                 ]
             })
             .then(stores=>{ 
-                objData = {stores:stores.rows, storesCnt:stores.count, firstday:firstday};
+                objData = {stores:stores.rows, storesCnt:stores.count, firstday, q};
                 res.render('2_approvals/stores_index', objData);
             })
         }

@@ -10,21 +10,22 @@
             <tbody>
                 <tr>
                     <th>회원가입일</th>
-                    {{>date_search firstday=firstday}}
+                    {{>date_search firstday=firstday startdate=q.startdate enddate=q.enddate}}
+                    <td rowspan="3"><div class="serach_button" onclick="document.forms[0].submit()">검색하기</div></td>
                 </tr>
                 
                 <tr>
                     <th>스토어주소</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" name="url" class="inputstyle"></input>
+                            <input type="text" name="url" class="inputstyle" value="{{q.url}}"></input>
                         </div>
                     </td>
                     
                     <th>아이디</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" name="username" class="inputstyle"></input>
+                            <input type="text" name="username" class="inputstyle" value="{{q.username}}"></input>
                         </div>
                     </td>
                 </tr>
@@ -33,7 +34,7 @@
                     <th>사업자명</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" name="companyName" class="inputstyle"></input>
+                            <input type="text" name="companyName" class="inputstyle" value="{{q.companyName}}"></input>
                         </div>
                     </td>
                     
@@ -53,7 +54,7 @@
             </tbody>
         </table>
         {{!-- <input type="submit" value="검색하기"> --}}
-        <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
+
         </form>
         
     </div>
