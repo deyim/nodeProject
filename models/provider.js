@@ -53,10 +53,23 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
-    commission: {
+    monthRate: {
       type: DataTypes.FLOAT,
       defaultValue: 0
     },
+    frCompanyName: {
+      type: DataTypes.STRING(30)
+    },
+    frNation: {
+      type: DataTypes.STRING(30)
+    },
+    frCity: {
+      type: DataTypes.STRING(30)
+    },
+    frPhone: {
+      type: DataTypes.STRING(30)
+    }
+
   }, {
     paranoid: true,
   });

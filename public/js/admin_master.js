@@ -1,8 +1,6 @@
+//common
 $(document).ready(function(){
     $("#m1").hide();
-    // console.log($("[id^=m_]"));
-    // $("[id^=m_]").hide();
-    // $("#m").hide();
 }); 
 
 
@@ -155,3 +153,5 @@ $(function(){
         $(".order_info_show").hide();
     });
 });
+
+
