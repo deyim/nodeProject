@@ -10,7 +10,8 @@
             <tbody>
                 <tr>
                     <th>등록일</th>
-                    {{>date_search firstday=firstday}}
+                     {{>date_search firstday=firstday startdate=q.startdate enddate=q.enddate}}
+                    <td rowspan="3"><div class="serach_button" onclick="document.forms[0].submit()">검색하기</div></td>
                 </tr>
                 
                 <tr>
@@ -19,14 +20,14 @@
                        <div class="priod_box">
                             <select class="inputstyle" id="type_selector">
                                 <option value="">선택안함</option>
-                                <option value="title">제목</option>
-                                <option value="content">내용</option>
+                                <option value="title" {{ifselected q.title}}>제목</option>
+                                <option value="content" {{ifselected q.content}}>내용</option>
                             </select>
                         </div>
                         
                         
                         <div class="input_80box">
-                            <input type="text" class="inputstyle" name="" id="type"></input>
+                            <input type="text" class="inputstyle" name="" id="type" value="{{q.title}}{{q.content}}"></input>
                         </div>
                     </td>
                 </tr>
@@ -35,14 +36,13 @@
                     <th>스토어주소</th>
                     <td>
                         <div class="input_100box">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" class="inputstyle" name="url" value="{{q.url}}"></input>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        
-        <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
+       
         </form>
     </div>
     
@@ -56,8 +56,8 @@
         <div class="list_info">
             <div class="count">전체게시글수 : {{postsCount}}개</div>
             <ul class="message_button">
-                <li class="lg_button"><input type="submit" value="선택 삭제"></li>
-                <li class="wh_button"><input type="submit" onclick="chooseAll()" value="전체 삭제"></li>
+                <li class="lg_button" onclick="document.forms[1].submit()">선택삭제</li>
+                <li class="wh_button" onclick="chooseAll(); document.forms[1].submit()">모두삭제</li>
                 
             </ul>
         </div>

@@ -54,10 +54,13 @@ $(document).ready(function(){
 }); 
 
 $(function(){
+    let mytype = $('#type_selector').val();
+    $('#type').attr('name', mytype);
     $(document).on('change', '#type_selector', function(){
         let mytype = $(this).val();
         $('#type').attr('name', mytype);
     });
+    
 })
 
 $(function(){

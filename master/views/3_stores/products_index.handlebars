@@ -11,7 +11,8 @@
             <tbody>
                 <tr>
                     <th>상품등록일</th>
-                    {{>date_search firstday=firstday}}
+                     {{>date_search firstday=firstday startdate=q.startdate enddate=q.enddate}}
+                    <td rowspan="5"><div class="serach_button" onclick="document.forms[0].submit()">검색하기</div></td>
                 </tr>
                 
                 <tr>
@@ -20,51 +21,18 @@
                         <div class="priod_box">
                             <select class="inputstyle" id="type_selector">
                                 <option value="">선택안함</option>
-                                <option value="title">상품명</option>
-                                <option value="productcode">상품코드</option>
+                                <option value="title" {{ifselected q.title}}>상품명</option>
+                                <option value="productcode" {{ifselected q.productcode}}>상품코드</option>
                             </select>
                         </div>
                         
                         
                         <div class="input_80box">
-                            <input type="text" class="inputstyle" name="" id="type"></input>
+                            <input type="text" class="inputstyle" name="" id="type" value="{{q.title}}{{q.productcode}}" ></input>
                         </div>
                     </td>
                 </tr>
-                
-                
-                <tr>
-                    <th>판매상태</th>
-                    <td>
-                        판매중: 
-                        <input type="checkbox" name="onSaleChk" checked>
-                        {{!-- <div class="inline">
-                            <input type="radio"></input> 전체
-                        </div>
-                        <div class="inline">
-                            <input type="radio"></input> 판매중
-                        </div>
-                        <div class="inline">
-                            <input type="radio"></input> 판매중지
-                        </div> --}}
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>전시상태</th>
-                    <td>
-                        전시중:
-                        <input type="checkbox" name="onDisplayChk" checked>
-                        {{!-- <div class="inline">
-                            <input type="radio"></input> 전시중
-                        </div>
-                        <div class="inline">
-                            <input type="radio"></input> 전시중단
-                        </div> --}}
-                        
-                    </td>
-                </tr>
-                
+
                 <tr>
                     <th>카테고리</th>
                     <td>
@@ -79,17 +47,38 @@
                             <select class="inputstyle" name="category" id="category">
                                 <option value="">선택안함</option> 
                                 {{#each categories}}
-                                    <option value={{this.id}}>{{this.name}}</option> 
+                                    <option value={{this.id}} {{categorySelected ../q.category this.id}}>{{this.name}}</option> 
                                 {{/each}}
                             </select>
                         </div>
                         
                     </td>
                 </tr>
+                
+                
+                <tr>
+                    <th>판매상태</th>
+                    <td>
+                        &nbsp&nbsp전체:
+                        <input type="checkbox" name="" >
+                        &nbsp&nbsp판매중: 
+                        <input type="checkbox" name="onSaleChk" {{ifchecked q.onSaleChk q}}>
+                    </td>
+              
+                <tr></tr>
+                    <th>전시상태</th>
+                    <td>
+                        &nbsp&nbsp전체:
+                        <input type="checkbox" name="" >
+                        &nbsp&nbsp전시중:
+                        <input type="checkbox" name="onDisplayChk" {{ifchecked q.onDisplayChk q}}>                        
+                    </td>
+                </tr>
+                
+                
             </tbody>
         </table>
-        
-       <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
+   
        </form>
     </div>
     

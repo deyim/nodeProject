@@ -26,6 +26,9 @@ module.exports = ()=>{
      //messages - index
      route.get('/messages', controller.messagesIndex)
         .post('/messages', controller.messagesMultipleDelete);
+        
+    route.get('/messages_users', controller.messagesUsersIndex)
+        .post('/messages_users', controller.messagesUsersMultipleDelete);
      //messages - show
      route.get('/messages/:message_id', controller.findMessage, controller.messagesShow);
      //messages - delete

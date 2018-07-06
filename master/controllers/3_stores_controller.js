@@ -82,7 +82,7 @@ module.exports = {
                 ]
             })
             .then(products=>{
-                objData = {products:products.rows, productsCount:products.count, firstday, categories}
+                objData = {products:products.rows, productsCount:products.count, firstday, categories, q}
                 res.render('3_stores/products_index', objData);
             });   
         }      
@@ -128,7 +128,7 @@ module.exports = {
                 ]
             })
             .then(products=>{
-                objData = {products:products.rows, productsCount:products.count, firstday, categories}
+                objData = {products:products.rows, productsCount:products.count, firstday, categories, q}
                 res.render('3_stores/products_index', objData);
             })
         }
@@ -220,20 +220,6 @@ module.exports = {
             req.post = post;
             next();
         });
-        // db.Post.findById(req.params.post_id)
-        // .then(post=>{
-        //     if(!post){
-        //         req.flash('error', '없는 포스트입니다.');
-        //         res.redirect('/stores/posts');
-        //     }
-        //     req.post = post;
-
-        //     post.getStore()
-        //     .then(store=>{
-        //         req.store = store;
-        //         next();
-        //     })
-        // });
     },
 
     postsIndex: (req,res)=>{
@@ -261,7 +247,7 @@ module.exports = {
                 ]
             })
             .then(posts=>{
-                objData = {posts:posts.rows, postsCount:posts.count, firstday}
+                objData = {posts:posts.rows, postsCount:posts.count, firstday, q}
                 res.render('3_stores/posts_index', objData);
             });   
         }      
@@ -305,7 +291,7 @@ module.exports = {
                 ]
             })
             .then(posts=>{
-                objData = {posts:posts.rows, postsCount:posts.count, firstday}
+                objData = {posts:posts.rows, postsCount:posts.count, firstday, q}
                 res.render('3_stores/posts_index', objData);
             })
         }
@@ -365,46 +351,7 @@ module.exports = {
        }).then((message)=>{
            req.message = message;
            next();
-       })
-       
-        // db.Message.findById(req.params.message_id)
-        // .then(message=>{
-        //     if(!message){
-        //         req.flash('error', '없는 메시지입니다.');
-        //         res.redirect('/members/messages');
-        //     }
-        //     req.message = message;
-
-        //     message.getSentMessages()
-        //     .then(sentMessages =>{
-        //         receivers = [];
-        //         console.log('\n\n\n***',sentMessages.length);
-        //         db.User.findById(sentMessages[0].senderId)
-        //         .then(sender=>{
-        //             // console.log('first sync');
-        //             req.sender = sender;
-        //         });
-                
-               
-        //         for(var i = 0 ; i < sentMessages.length ; i++){
-        //         // console.log('in loop',i);
-        //             db.User.findById(sentMessages[i].receiverId)
-        //             .then(receiver =>{
-        //                 receivers.push(receiver);
-        //             // console.log('loop sync',i);//어차피 다 돌고 난 이후니깐 계속 i 는 length와 동일
-        //             });
-        //         }
-                
-        //     })
-        //     .then(()=>{
-        //         setTimeout(function() {
-        //             req.receivers = receivers;
-        //             console.log(req.receivers, req.sender);
-        //             next();
-        //           }, 300);
-                
-        //     });           
-        // });
+       });       
     },
 
     messagesIndex: (req,res)=>{
@@ -416,6 +363,9 @@ module.exports = {
             db.Message.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
+                where: {
+                    storeChk: true
+                },
                 include: [
                     {
                         model: db.Sentmessage,
@@ -447,8 +397,136 @@ module.exports = {
                 ]
             })
             .then(messages=>{
-                objData = {messages:messages.rows, messagesCount:messages.count, firstday}
+                objData = {messages:messages.rows, messagesCount:messages.count, firstday, q}
                 res.render('3_stores/messages_index', objData);
+            });  
+        }      
+        else{
+            console.log(q);
+            db.Message.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where:{
+                    storeChk: true,
+                    createdAt: {
+                        [Op.and]:[
+                            {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                            {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                            {deletedAt: null}
+                        ]
+                    }
+                    //sentmessage의 아이디, 닉네임 / 스토어주소, 사업자명               
+                },
+                //user(sender), provider()
+                include: [
+                    {
+                        model: db.Sentmessage,
+                        as: 'sentMessages',
+                        foreignKey: 'messageId',
+                        include: [
+                            {
+                                model: db.User,
+                                as: 'sender',
+                                where: {
+                                    [Op.and]:
+                                    [
+                                        {username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}},
+                                        {nickname: q.nickname? { [Op.like]: `%${q.nickname}%` } : {[Op.regexp]: '^'}},
+                                    ]
+                                },
+                                // include: [
+                                //     {
+                                //         model: db.Provider,
+                                //         as: 'provider',
+                                //         where: {
+                                //             companyName: q.companyName? { [Op.like]: `%${q.companyName}%` } : {[Op.regexp]: '^'},
+                                //         },
+                                //         include: [
+                                //             {
+                                //                 model: db.Store,
+                                //                 as: 'store',
+                                //                 where: {
+                                //                     url: q.url? { [Op.like]: `%${q.url}%` } : {[Op.regexp]: '^'},
+                                //                 }
+                                //             }
+                                //         ]
+                                //     },
+                                    
+                                // ]
+                            },
+                            {
+                                model: db.User,
+                                as: "receiver"
+                            },
+                        ]
+                    },
+                   
+                ]
+            })
+            .then(messages=>{
+                console.log(messages);
+                objData = {messages:messages.rows, messagesCount:messages.count, firstday, q}
+                res.render('3_stores/messages_index', objData);
+            })
+        }
+    },
+
+    messagesMultipleDelete: (req,res)=>{       
+        messages = req.body.checked.toString().split(',');
+        for(var i = 0 ; i < messages.length; i++){
+            db.Message.findById(messages[i])
+            .then(message=>{
+                message.destroy();
+            });
+        };
+        res.redirect('/stores/messages');
+    },
+
+    messagesUsersIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page; 
+        if(Object.keys(req.query).length === 0){
+            db.Message.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where: {
+                    storeChk: false
+                },
+                include: [
+                    {
+                        model: db.Sentmessage,
+                        as: 'sentMessages',
+                        foreignKey: 'messageId',
+                        include: [
+                            {
+                                model: db.User,
+                                as: "sender",
+                                include: [
+                                    {
+                                        model: db.Provider,
+                                        as: 'provider',
+                                        include: [
+                                            {
+                                                model: db.Store,
+                                                as: 'store'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                model: db.User,
+                                as: "receiver"
+                            },
+                        ]
+                    }
+                ]
+            })
+            .then(messages=>{
+                objData = {messages:messages.rows, messagesCount:messages.count, firstday, q}
+                res.render('3_stores/messages_users_index', objData);
             });  
         }      
         else{
@@ -456,6 +534,7 @@ module.exports = {
                 limit: perPage,
                 offset: perPage*(page-1),
                 where:{
+                    storeChk: false,
                     [Op.and]:
                     [
                         {createdAt: {
@@ -512,13 +591,13 @@ module.exports = {
                 ]
             })
             .then(messages=>{
-                objData = {messages:messages.rows, messagesCount:messages.count, firstday}
-                res.render('3_stores/messages_index', objData);
+                objData = {messages:messages.rows, messagesCount:messages.count, firstday, q}
+                res.render('3_stores/messages_users_index', objData);
             })
         }
     },
 
-    messagesMultipleDelete: (req,res)=>{       
+    messagesUsersMultipleDelete: (req,res)=>{       
         messages = req.body.checked.toString().split(',');
         for(var i = 0 ; i < messages.length; i++){
             db.Message.findById(messages[i])

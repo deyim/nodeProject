@@ -64,10 +64,9 @@
                 <tr>
                     <th><input type="checkbox"></input></th>
                     {{!-- <th>번호</th> --}}
-                    <th>스토어주소</th>
                     <th>아이디</th>
                     <th>쪽지내용</th>
-                    <th>발송대상</th>
+                    <th>수신 스토어 주소</th>
                     <th>발송일자</th>
                     
                 </tr>
@@ -78,7 +77,6 @@
                 <tr>
                     <th><input type="checkbox"></input></th>
                     {{!-- <th></th> --}}
-                    <th>{{senderUrl this.sentMessages}}</th>
                     <th>{{senderUsername this.sentMessages}}</th>
                     <th class="message_title">{{this.content}}</th>
                     <th class="message_num">{{length this.sentMessages}}</th>
