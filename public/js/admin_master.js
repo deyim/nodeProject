@@ -157,4 +157,29 @@ $(function(){
     });
 });
 
+//admin - members index
+$(function(){
+    $(".message_write").click(function(){
+        $(".message_window").show();
+    });
+})
 
+$(function(){
+    $(".close").click(function(){
+        $(".message_window").hide();
+    });
+});
+
+//admin - members show
+
+// $(function(){
+//     $(".message_write").click(function(){
+//         $(".message_window").show();
+//     });
+// })
+
+// $(function(){
+//     $(".close").click(function(){
+//         $(".message_window").hide();
+//     });
+// });

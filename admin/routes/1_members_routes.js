@@ -3,10 +3,10 @@ module.exports = ()=>{
     const route = express.Router();
     const controller = require('../controllers/1_members_controller');
    
-    route.post('/sendMessages', controller.sendMessage);
+    // route.post('/sendMessages', controller.sendMessages);
     //users - index
     route.get('/users', controller.usersIndex)
-        .post('/users', controller.writeMessages);
+        .post('/users', controller.sendMessages);
     //users - show, update
     route.get('/users/:user_id', controller.findUser, controller.usersShow)
     //users - delete

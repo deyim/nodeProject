@@ -1,66 +1,67 @@
 <div class="cont">
-			<div class="titlearea">
-				<div class="title">회원정보</div>
-				<div class="nav">회원관리 > 회원조회 > 회원상세</div>
-			</div>
-			
-			<div class="member_view">
-				<table cellpadding="0" cellspacing="0" class="de_table">
-					<tbody>
-						<tr>
-							<th>가입일자</th>
-							<td>{{createdAt}}</td>
-						</tr>
-						
-						<tr>
-							<th>아이디</th>
-							<td>{{user.username}}</td>
-						</tr>
-						
-						<tr>
-							<th>닉네임</th>
-							<td>
-                                {{user.nickname}}
-							</td>
-						</tr>
-						
-						<tr>
-							<th>주문횟수</th>
-							<td>{{orders}}회</td>
-						</tr>
-						
-						<tr>
-							<th>작성글수</th>
-							<td>{{posts}}회</td>
-						</tr>
-						
-						<tr>
-							<th>댓글수</th>
-							<td>{{comments}}개</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			
-			<div class="bot_button">
-				<a href="/members/users"><div class="wt_button">목록</div></a>
-				<div class="dg_button">탈퇴처리</div>
+	<div class="titlearea">
+		<div class="title">회원정보</div>
+		<div class="nav">회원관리 > 회원조회 > 회원상세</div>
+	</div>
+	
+	<div class="member_view">
+		<table cellpadding="0" cellspacing="0" class="de_table">
+			<tbody>
+				<tr>
+					<th>가입일자</th>
+					<td>{{storeCreatedAt user.stores}}</td>
+				</tr>
 				
-			</div>
-		</div>
+				<tr>
+					<th>아이디</th>
+					<td>{{user.username}}</td>
+				</tr>
+				
+				<tr>
+					<th>닉네임</th>
+					<td>
+						{{user.nickname}}
+					</td>
+				</tr>
+				
+				<tr>
+					<th>주문횟수</th>
+					<td>{{orders}}회</td>
+				</tr>
+				
+				<tr>
+					<th>작성글수</th>
+					<td>{{posts}}회</td>
+				</tr>
+				
+				<tr>
+					<th>댓글수</th>
+					<td>{{comments}}개</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="bot_button">
+		<div class="inline_dg_button" onclick="document.location.href='/members/users'">목록</div>
+		<div class="inline_dg_button delete">탈퇴처리</div>
+	</div>
 
-
-
-<h1>USERS_SHOW</h1>
-
-<br>{{user.username}}
-<br>{{user.email}}
-<br>{{user.nickname}}
-<br>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-<br>{{posts}}
-<br>{{orders}}
-<br>{{comments}}
-
-
-<a href="/members/users">목록</a>
-<a href="/members/users/{{user.id}}/delete">탈퇴처리</a>
+	<div class="alert_delete" style="display:none;">
+    <div class="layer_back_area"></div>
+    <div class="layer_area">
+        <div class="showbox">
+            <div class="showbox_cetearea">
+            <div class="title">삭제</div>
+            <div class="close"><img src="/images/sub/showbox_close.png"></div>
+        </div>
+        
+        <div class="showbox_contents">
+            정말 삭제하시겠습니까?
+            <div class="bot_button">
+                <div class="wt_button" onclick="document.location.href='/members/users/{{user.id}}/delete'">삭제</div>
+            </div>
+        </div>
+    </div>            
+</div>
+</div>

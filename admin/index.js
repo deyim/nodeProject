@@ -6,11 +6,13 @@ const passport = require('../config/passport.js')(app);
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const db = require('../models/index');
+const handlebarsHelpers = require('../lib/handlebars');
 
 var hbs = exphbs.create({
     defaultLayout: 'main',
     partialsDir: path.join(__dirname, './views/partials'),
     layoutsDir: path.join(__dirname, './views/layouts'),
+    helpers: handlebarsHelpers
 });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
@@ -22,26 +24,14 @@ app.use(flash());
 
 app.use(function(req,res,next){
     if(req.user){
-        db.Store.find({
-            include: [
-                {
-                    model: db.Provider,
-                    as: 'provider',
-                    include: [
-                        {
-                            model: db.User,
-                            as: 'user',
-                            where: {
-                                id: req.user.id
-                            }
-                        }
-                    ]
-                }
-            ]
-        }).then(store=>{        
-            res.locals.store = store;
-            next();
-        });
+        req.user.getProvider()
+        .then(provider => {
+            provider.getStore()
+            .then(store=>{
+                res.locals.store = store;
+                next();
+            })
+        })
     } 
     else{
         next();

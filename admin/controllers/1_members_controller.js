@@ -2,6 +2,7 @@ const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
 const perPage = 10;
+const dateFunctions = require('../../lib/date_functions');
 
 var makeObj = (user)=>{
     return new Promise (resolve=>{
@@ -40,8 +41,8 @@ module.exports = {
           members/common
     ***********************/
 
-    sendMessage: (req,res)=>{
-        receivers = req.body.receivers.split(',');
+    sendMessages: (req,res)=>{
+        receivers = req.body.checked.split(',');
         db.Message.create({
             content: req.body.content
         })
@@ -61,84 +62,63 @@ module.exports = {
         });
         
     },
-
-    writeMessages: (req,res)=>{
-        res.render('1_members/send_messages', {receivers: req.body.checked});
-    },
-
     /***********************
           members/users
     ***********************/
 
     //middleware, find a user by id
     findUser: (req,res,next)=>{
-        db.User.findById(req.params.user_id)
-        .then(user=>{
-            if(!user){
-                req.flash('error', '없는 유저입니다.');
-                res.redirect('/members/users');
-            }
-            req.user = user;
-
-            user.getPosts({
-                where: {
-                    storeId: res.locals.store.id
-                }
-            })
-            .then(posts=>{
-                console.log('\n\n\n****',posts.length);
-                req.posts = posts.length || 0;
-            });
-            
-            user.getOrders({
-                where: {
-                    storeId: res.locals.store.id
-                }
-            })
-            .then(orders=>{
-                req.orders = orders.length || 0;                
-            });
-
-            db.StoreUsers.find({
-                where: {
-                    userId: user.id,
-                    storeId: res.locals.store.id
-                }
-            }).then((asso)=>{
-                req.createdAt = asso.createdAt
-            })
-
-            user.getCommentas({
-                include: [
-                    {
-                        model: db.Post,
-                        as: 'post',
-                        include: [
-                            {
-                                model: db.Store,
-                                as: 'store',
-                                where: {
-                                    id: res.locals.store.id
-                                }
-                            }
-                        ]
+        db.User.findOne({
+            where: {
+                id: req.params.user_id
+            },
+            include: [
+                {
+                    model: db.Post,
+                    as: 'posts',
+                    required:false,
+                    where: {
+                        storeId: res.locals.store.id
                     }
-
-                ]
-            })
-            .then(comments=>{
-                console.log('\n\n***',comments);
-                req.comments = comments.length || 0;
-                next();}
-            );
-            
-            
-           
-        })
+                },
+                {
+                    model: db.Order,
+                    as: 'orders',
+                    required: false,
+                    where: {
+                        storeId: res.locals.store.id
+                    }
+                },
+                {
+                    model: db.Comment,
+                    as: 'comments',
+                    required: false,
+                    where: {
+                        storeId: res.locals.store.id
+                    }
+                },
+                {
+                    model: db.Store,
+                    as: 'stores',
+                    through: { 
+                        where: {storeId: res.locals.store.id},
+                        attributes: ['createdAt','orderCnt']
+                    },
+                },
+            ]
+        }).then(user=>{
+            console.log(user);
+            req.user = user;
+            req.orders = user.orders? user.orders.length : 0;
+            req.posts = user.posts? user.posts.length : 0;
+            req.comments = user.comments? user.comments.length : 0;
+            next();
+        });
     },
 
     //users - index
     usersIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;    
@@ -149,20 +129,21 @@ module.exports = {
                 where: {
                     userStatus: 'U'
                 },
-                include:{
-                    model: db.Store,
-                    as: 'stores',
-                    where: {
-                        id: res.locals.store.id,
+                include:[
+                    {
+                        model: db.Store,
+                        as: 'stores',
+                        required: true,
+                        through: { 
+                            where: {storeId: res.locals.store.id},
+                            attributes: ['createdAt','orderCnt']
+                        },
                     },
-                },
+                ]
             })
             .then(users=>{
-                res.render('1_members/users_index', {users:users.rows, usersCount: users.count});                
-                // var myObj = usersToArray(users);
-                // setTimeout(()=>{
-                //     res.render('1_members/users_index', myObj);
-                // },1000);                
+                objData = {users:users.rows, usersCount: users.count, firstday, q}
+                res.render('1_members/users_index', objData);                           
             });   
         }      
         else{          
@@ -217,6 +198,7 @@ module.exports = {
             }
         })
         .then(()=>{
+            console.log('\n\n\n**deleted');
             res.redirect("/members/users");
         })
     },
