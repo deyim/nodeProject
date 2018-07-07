@@ -9,14 +9,17 @@
     <div class="search_area">
         <form method="get">
         <table class="serach_box" cellpadding='0' cellspacing='0'>
-            
+        
             <tbody>
                 <tr>
                     <th>제품코드</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" name = "productcode" class="inputstyle"></input>
+                            <input type="text" name = "productcode" class="inputstyle" value="{{q.productcode}}"></input>
                         </div>
+                    </td>
+                    <td rowspan="2">
+                        <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
                     </td>
                 </tr>
                 <tr>
@@ -26,7 +29,7 @@
                             <select class="inputstyle" name="category" id="category">
                                 <option value="">선택안함</option> 
                                 {{#each categories}}
-                                    <option value={{this.id}}>{{this.name}}</option> 
+                                    <option value={{this.name}} {{optionSelected ../q.category this.name}}>{{this.name}}</option> 
                                 {{/each}}
                             </select>
                         </div>
@@ -35,7 +38,7 @@
             </tbody>
         </table>
         
-        <div class="serach_button" onclick="document.forms[0].submit()">검색하기</div>
+        
         </form>
     </div>
     

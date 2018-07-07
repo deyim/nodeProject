@@ -9,34 +9,24 @@
             <tbody>
                 <tr>
                     <th>등록일</th>
-                    <td colspan="3">
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-                        <div>-</div>
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-                        <div class="priod_box">
-                            <select class="inputstyle">
-                                <option>전체기간</option>
-                                <option>1개월</option>
-                                <option>2개월</option>
-                                <option>3개월</option>
-                                <option>4개월</option>
-                            </select>
-                        </div>
-                    </td>
+                     {{>date_search firstday=firstday startdate=q.startdate enddate=q.enddate}}
+                    <td rowspan="3"><div class="serach_button" onclick="document.forms[0].submit()">검색하기</div></td>
                 </tr>
                 
                 <tr>
                     <th>구분</th>
                     <td>
-                        <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                       <div class="priod_box">
+                            <select class="inputstyle" id="type_selector">
+                                <option value="">선택안함</option>
+                                <option value="title" {{ifselected q.title}}>제목</option>
+                                <option value="content" {{ifselected q.content}}>내용</option>
+                            </select>
                         </div>
-                    </td>
-                    
-                    <th>아이디</th>
-                    <td>
-                        <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                        
+                        
+                        <div class="input_80box">
+                            <input type="text" class="inputstyle" name="" id="type" value="{{q.title}}{{q.content}}"></input>
                         </div>
                     </td>
                 </tr>
@@ -45,155 +35,54 @@
                     <th>스토어주소</th>
                     <td  colspan="3">
                         <div class="mem_inputbox">
-                            <input type="text" class="inputstyle"></input>
+                            <input type="text" class="inputstyle" name="url" value="{{q.url}}"></input>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        
-        <div class="serach_button">검색하기</div>
+
     </div>
     
     
     <div class="list_all">
+        <form method="POST">
         <div class="list_info">
-            <div class="count">전체공지수 : 91건</div>
+            <div class="count">전체공지수 : {{noticesCount}}건</div>
             <ul class="message_button">
-                <li class="lg_button">전체삭제</li>
-                <li class="wh_button">선택삭제</li>
+                <li class="lg_button" onclick="document.forms[1].submit()">전체삭제</li>
+                <li class="wh_button" onclick="chooseAll(); document.forms[1].submit()">선택삭제</li>
             </ul>
         </div>
         
         <table cellpadding="0" cellspacing="0" class="list_table">
             <thead>
                 <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>번호</th>
+                    <th><input type="checkbox" onclick="chooseAll()"></input></th>
+                    {{!-- <th>번호</th> --}}
                     <th>스토어주소</th>
                     <th>제목</th>
                     <th>내용</th>
-                    <th>작성자아이디</th>
                     <th>등록날짜</th>
                 </tr>
             </thead>
             
             <tbody>
+                {{#each notices}}
                 <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>스토어 이름</th>
-                    <th>제목이 들어가는 곳 입니다. 제목이 들어가는 곳</th>
-                    <th>내용이 들어가는 곳 입니다. 내용이 들어가는 곳, 내용내용내용내용...</th>
-                    <th>flywork.naver.com</th>
-                    <th>2018.09.02</th>
+                    <th><input type="checkbox" name="checked" value={{this.id}} ></th>
+                    {{!-- <th>10</th> --}}
+                    <th>{{this.store.url}}</th>
+                    <th><a href="/stores/notices/{{this.id}}">{{this.title}}</a></th>
+                    <th><a href="/stores/notices/{{this.id}}">{{this.content}}</a></th>
+                    <th>{{makeDate this.createdAt}}</th>
                 </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>스토어 이름</th>
-                    <th>제목이 들어가는 곳 입니다. 제목이...</th>
-                    <th>내용이 들어가는 곳 입니다. 내용이 들어가는 곳, 내용내용내용내용...</th>
-                    <th>flywork.naver.com</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>스토어 이름</th>
-                    <th>제목이 들어가는 곳 입니다. 제목이...</th>
-                    <th>내용이 들어가는 곳 입니다. 내용이 들어가는 곳, 내용내용내용내용...</th>
-                    <th>flywork.naver.com</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>스토어</th>
-                    <th>제목이 들어가는 곳 입니다. 제목이 들어가는 곳</th>
-                    <th>내용이 들어가는 곳 입니다. 내용이 들어가는 곳, 내용내용내용내용...</th>
-                    <th>flywork.naver.com</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>10</th>
-                    <th>스토어 이름</th>
-                    <th>제목이 들어가는 곳 입니다. 제목이 들어가는 곳</th>
-                    <th>내용이 들어가는 곳 입니다. 내용이 들어가는 곳, 내용내용내용내용...</th>
-                    <th>flywork.naver.com</th>
-                    <th>2018.09.02</th>
-                </tr>
-                
-                
-                
+                {{/each}}
             </tbody>
         </table>
+        </form>
         
-        <div class="paging">
-            <ul class="paging_list">
-                <li class="arrow"><img src="../images/sub/arrow_prev.png"></li>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li>6</li>
-                <li>7</li>
-                <li>8</li>
-                <li>9</li>
-                <li class="arrow"><img src="../images/sub/arrow_next.png"></li>
-            </ul>
-        </div>
+        {{>pages}}
     </div>
     
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1>Notices Index</h1>
-
-<form method="get">
-    등록일시작: <input type="date" name="startdate"><br>
-    등록일끝: <input type="date" name="enddate"><br>
-    제목: <input type="text" name="title" ><br>
-    내용: <input type="text" name="content" ><br>
-    스토어주소: <input type="text" name="url" ><br>
-    <input type="submit" value="제출"><br>
-</form>
-
-전체공지 수: {{noticesCount}}
-<form method="POST" name="noticesIndex"> 
-    <input type="submit" value="삭제"><br>
-    {{#each notices}}    
-        <input type="checkbox" name="checked" value={{this.id}} >
-        <a href="/stores/notices/{{this.id}}">{{this.content}}</a>
-        {{this.createdAt}}
-        <br>
-    {{/each}}
-</form>
-
-<a href="?page=1">1</a>
-<a href="?page=2">2</a>
-<a href="?page=3">3</a>
-<a href="?page=4">4</a>
-<a href="?page=4">5</a>

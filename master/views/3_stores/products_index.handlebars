@@ -47,7 +47,7 @@
                             <select class="inputstyle" name="category" id="category">
                                 <option value="">선택안함</option> 
                                 {{#each categories}}
-                                    <option value={{this.id}} {{categorySelected ../q.category this.id}}>{{this.name}}</option> 
+                                    <option value={{this.id}} {{optionSelected ../q.category this.id}}>{{this.name}}</option> 
                                 {{/each}}
                             </select>
                         </div>

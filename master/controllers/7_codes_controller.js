@@ -25,10 +25,11 @@ module.exports = {
                 ]
             })
             .then(codes=>{                        
-                res.render("7_codes/productcodes_index",{codes:codes.rows, codesCount:codes.count, categories});  
+                res.render("7_codes/productcodes_index",{codes:codes.rows, codesCount:codes.count, categories, q});  
             });  
         }
         else{
+            console.log(q);
             db.Productcode.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
@@ -37,16 +38,16 @@ module.exports = {
                         model: db.Category,
                         as: 'category',
                         where: {
-                            id: q.category? q.category : {[Op.regexp]: '^'},
+                            name: q.category?  (q.category) : {[Op.regexp]: '^'},
                         }
                     } 
                 ],
                 where: {
-                    code: q.productcode? q.productcode : {[Op.regexp]: '^'},
+                    code: q.productcode? { [Op.like]: `%${q.productcode}%` }  : {[Op.regexp]: '^'},
                 }
             })
             .then(codes=>{                        
-                res.render("7_codes/productcodes_index",{codes:codes.rows, codesCount:codes.count, categories});  
+                res.render("7_codes/productcodes_index",{codes:codes.rows, codesCount:codes.count, categories, q});  
             });  
         }
               

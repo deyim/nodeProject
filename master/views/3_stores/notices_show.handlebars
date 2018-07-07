@@ -9,22 +9,16 @@
             <tbody>
                 <tr>
                     <th>전체공지 등록일자</th>
-                    <td>2018-09-02</td>
+                    <td>{{notice.createdAt}}</td>
                     
                     <th>스토어주소</th>
-                    <td>abcdef</td>
+                    <td>{{notice.store.url}}</td>
                 </tr>
-                
-                <tr>
-                    <th>작성자아이디</th>
-                    <td colspan="3">flywork@flywork.co.kr</td>
-                </tr>
-                
                 
                 <tr>
                     <th>제목 *</th>
                     <td colspan="3">
-                        <div class="input_100box"><input type="text" class="inputstyle"></input></div>
+                        <div class="input_100box"><input type="text" class="inputstyle" value="{{notice.title}}"></input></div>
                     </td>
                 </tr>
             
@@ -33,7 +27,7 @@
                 <tr>
                     <th>내용 *</th>
                     <td colspan="3">
-                        <div class="mar_t10"><textarea rows="15" class="textareastyle"></textarea></div>
+                        <div class="mar_t10"><textarea rows="15" class="textareastyle">{{notice.content}}</textarea></div>
                     </td>
                 </tr>
                 
@@ -49,28 +43,6 @@
         <div id="mydate"></div>
     </div>
     
-    <div class="bot_button">
-        <div class="bl_button">등록</div>
-        <div class="wt_button">목록</div>
-    </div>
+    {{>modify_delete id=notice.id url='/stores/notices' }}
     
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h1>notice show</h1>
-{{notice.title}}
-{{author.username}}
-{{store.url}}
-
-<a href="/stores/notices/{{notice.id}}/delete">삭제</a>

@@ -1,68 +1,53 @@
 <div class="cont">
-			<div class="titlearea">
-				<div class="title">카테고리설정</div>
-				<div class="nav">설정 > 카테고리 설정 > 카테고리관리</div>
-			</div>
-			
-			<div class="list_all" style="border:0;">
-				
-				<table cellpadding="0" cellspacing="0" class="list_table">
-					<thead>
-						<tr>
-							<th>카테고리</th>
-							<th>순서</th>
-							<th>관리</th>
-						</tr>
-					</thead>
-					
-					<tbody>
-                        {{#each categories}}
-						<tr>
-                            <form action="/categories/edit/{{this.id}}" method="post">
-                                <th>
-                                    <input type="hidden" class="inputstyle" value={{this.id}}></input>
-                                    <div class="input_100box"><input type="text" class="inputstyle" name="name" value={{this.name}}></input></div>
-                                </th>
-                                <th></th>
-                                <th>
-                                    <div class="category_button">
-                                        <div onclick="document.forms[0].submit()">수정</div>
-                                        <a href="delete/{{this.id}}">삭제</a>
-                                    </div>
-                                </th>
-                            </form>
-							
-						</tr>
-                        {{/each}}
-                        <tr>
-                            <form action="/categories/add" method="post">
-                            <th>
-								<div class="input_100box"><input type="text" class="inputstyle" name="name"></input></div>
-							</th>
-                            <th>
-								<div class="category_button">
-									<div onclick="document.forms[0].submit()">등록</div>
-								</div>
-							</th>
-                            </form>
-                        </tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
+    <div class="titlearea">
+        <div class="title">카테고리설정</div>
+        <div class="nav">설정 > 카테고리 설정 > 카테고리관리</div>
+    </div>
+    
+    <div class="list_all" style="border:0;">
+        
+        <table cellpadding="0" cellspacing="0" class="list_table">
+            <thead>
+                <tr>
+                    <th>카테고리</th>
+                    <th>순서</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {{#each categories}}
+                <tr>
+                    <form action="/categories/edit/{{this.id}}" method="post">
+                        <th>
+                            <input type="hidden" class="inputstyle" value={{this.id}}></input>
+                            <div class="input_100box"><input type="text" class="inputstyle" name="name" value={{this.name}}></input></div>
+                        </th>
+                        <th></th>
+                        <th>
+                            <div class="category_button">                                        
+                                <div onclick="document.forms[0].submit()">수정</div>
+                                <div onclick="document.location.href='delete/{{this.id}}'">삭제</div>
+                            </div>
+                        </th>
+                    </form>
+                    
+                </tr>
+                {{/each}}
+                <tr>
+                    <form action="/categories/add" method="post">
+                    <th>
+                        <div class="input_100box"><input type="text" class="inputstyle" name="name"></input></div>
+                    </th>
+                    <th>
+                        <div class="category_button">
+                            <div onclick="document.forms[0].submit()">등록</div>
+                        </div>
+                    </th>
+                    </form>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-
-
-
-{{!-- <form action="categoryAction"></form> --}}
-<h1>Category Index</h1>
-<form action="/categories/add" method="post">
-        <input type="text" name="name">
-        <input type="submit" value="추가">
-</form>
-
-    <form action="edit/{{this.id}}">
-        <input type="text" value={{this.name}}>
-        <input type="submit" value="수정">
-    </form>
-    <a href="delete/{{this.id}}">삭제</a>

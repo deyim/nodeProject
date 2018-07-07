@@ -136,7 +136,7 @@ module.exports = {
             })
             .then(orders=>{
                 console.log(orders);
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/ordered_index', objData);
             })   
         }      
@@ -209,7 +209,7 @@ module.exports = {
             })
             .then(orders=>{
                 console.log(orders);
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/ordered_index', objData);
             })
         }
@@ -264,7 +264,7 @@ module.exports = {
                 ]
             })
             .then(orders=>{
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/paid_index', objData);
             })   
         }      
@@ -337,7 +337,7 @@ module.exports = {
                 }
             })
             .then(orders=>{
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/paid_index', objData);
             }) 
         }
@@ -392,7 +392,7 @@ module.exports = {
             })
             .then(orders=>{
                 console.log(orders);
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/placed_index', objData);
             })   
         }      
@@ -466,7 +466,7 @@ module.exports = {
                 },
             })
             .then(orders=>{
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/placed_index', objData);
             })  
         }
@@ -527,7 +527,7 @@ module.exports = {
                 ]
             })
             .then(orders=>{
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/used_index', objData);
             }) 
         }      
@@ -604,7 +604,7 @@ module.exports = {
             })
             .then(orders=>{
                 console.log(orders);
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/used_index', objData);
             }) 
         }
@@ -663,7 +663,7 @@ module.exports = {
                 ]
             })
             .then(orders=>{
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/final_index', objData);
             }) 
         }      
@@ -740,7 +740,7 @@ module.exports = {
                 },
             })
             .then(orders=>{
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/final_index', objData);
             }) 
         }
@@ -792,7 +792,7 @@ module.exports = {
                 ]
             })
             .then(orders=>{
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/cancel_index', objData);
             }) 
         }      
@@ -862,7 +862,7 @@ module.exports = {
                 ]
             })
             .then(orders=>{
-                objData = {orders:orders.rows, ordersCount:orders.count, firstday};
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/cancel_index', objData);
             })   
         }

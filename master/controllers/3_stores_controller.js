@@ -647,67 +647,88 @@ module.exports = {
     },
     
     commentsIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page; 
-        if(Object.keys(req.query).length === 0){
-            db.Commenta.findAndCountAll({
-                limit: perPage,
-                offset: perPage*(page-1)
-            })
-            .then(comments=>{
-                objData = {comments:comments.rows, commentsCount:comments.count};
-                res.render('3_stores/commentas_index', objData);
-            });   
-        }      
+
+        let type={};
+        if(q.type=='A'){
+            type.model = db.Post;
+            type.as = 'post';
+            type.required = true;
+        }
+        else if(q.type=='B'){
+            type.model = db.Post;
+            type.as = 'post';
+            type.where = {
+                noticeChk: true
+            };
+            type.required = true;
+        }
         else{
-            db.Commenta.findAndCountAll({
+            type.model = db.Product;
+            type.as = 'product';
+            type.required = true;
+        }
+        console.log('\n\n\n',type);
+        if(Object.keys(req.query).length === 0){
+            db.Comment.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                where:{
-                    [Op.and]:
-                    [
-                        {createdAt: {
-                                [Op.and]:[
-                                    {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
-                                    {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
-                                ]
-                            }
-                        },
-                        {content: { [Op.like]: `%${q.content}%`}}
-                    ]                    
-                },
-                include: [//provider 의 id, 사업자명, 회원유형
+                include: [
                     {
                         model: db.User,
                         as: 'author',
-                        where: {
-                            [Op.and]:
-                            [
-                                {username:{ [Op.like]: `%${q.username}%`}},
-                                {nickname:{ [Op.like]: `%${q.nickname}%`}},
-                            
-                            ]
-                        },
-                        include: [
-                            {
-                                model: db.User,
-                                as: 'user',
-                                where: {
-                                    [Op.and]:
-                                    [
-                                        {username:{ [Op.like]: `%${q.username}%`}},
-                                    ]
-                                }
-                            }
-                        ]
-                        
-                    }
+                        foreignKey: 'authorId'
+                    },
                 ]
             })
             .then(comments=>{
-                objData = {comments:comments.rows, comments:comments.count}
-                res.render('3_stores/commentas_index', objData);
+                objData = {comments:comments.rows, commentsCount:comments.count, firstday, q};
+                res.render('3_stores/comments_index', objData);
+            });   
+        }      
+        else{
+            db.Comment.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                // where:{
+                //     [Op.and]:
+                //     [
+                //         {createdAt: {
+                //                 [Op.and]:[
+                //                     {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                //                     {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                //                 ]
+                //             }
+                //         },
+                //         {content: q.content? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}},
+                //     ]                    
+                // },
+                // include: [//provider 의 id, 사업자명, 회원유형
+                //     {
+                //         model: db.User,
+                //         as: 'author',
+                //         where: {
+                //             [Op.and]:
+                //             [
+                //                 {username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}},
+                //                 {nickname: q.nickname? { [Op.like]: `%${q.nickname}%` } : {[Op.regexp]: '^'}},
+                //             ]
+                //         },
+                //     },
+                //     {
+                //         model: db.Product,
+                //         as: 'product',
+                //         required: true
+                //     }
+                //     // type
+                // ]
+            })
+            .then(comments=>{
+                objData = {comments:comments.rows, comments:comments.count, firstday, q}
+                res.render('3_stores/comments_index', objData);
             })
         }
     },
@@ -738,30 +759,30 @@ module.exports = {
     },
     
     findNotice: (req,res,next)=>{
-        db.Post.findById(req.params.notice_id)
+        db.Post.findOne({
+            where: {
+                id: req.params.notice_id,
+                noticeChk: true
+            },
+            include: [
+                {
+                    model: db.User,
+                    as: 'author'
+                },
+                {
+                    model: db.Store,
+                    as: 'store'
+                },
+            ]
+        })
         .then(notice=>{
-            if(!notice){
-                req.flash('error', '없는 공지입니다.');
-                res.redirect('/stores/notices');
-            }
             req.notice = notice;
-
-            notice.getAuthor()
-            .then(author=>{
-                req.author =author;
-            });
-
-            notice.getStore()
-            .then(store=>{
-                req.store = store;
-                next();
-            })
-            
-
-        });
+            next();
+        })
     },
 
     noticesIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page; 
@@ -771,10 +792,16 @@ module.exports = {
                 offset: perPage*(page-1),
                 where: {
                     noticeChk: true
-                }
+                },
+                include: [
+                    {
+                        model: db.Store,
+                        as:'store'
+                    }
+                ]
             })
             .then(notices=>{
-                objData = {notices:notices.rows, noticesCount:notices.count};
+                objData = {notices:notices.rows, noticesCount:notices.count, firstday, q};
                 res.render('3_stores/notices_index', objData);
             });   
         }      
@@ -808,7 +835,7 @@ module.exports = {
                 ]
             })
             .then(notices=>{
-                objData = {notices:notices.rows, noticesCount:notices.count};
+                objData = {notices:notices.rows, noticesCount:notices.count, firstday, q};
                 res.render('3_stores/notices_index', objData);
             })
         }
@@ -826,7 +853,7 @@ module.exports = {
     },
 
     noticesShow: (req,res)=>{
-        objData = {notice: req.notice, author:req.author, store:req.store}
+        objData = {notice:req.notice}
         res.render('3_stores/notices_show',objData);
     },
     noticesUpdate: (req,res)=>{

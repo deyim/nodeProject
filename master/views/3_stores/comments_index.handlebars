@@ -1,0 +1,108 @@
+<div class="cont">
+    <div class="titlearea">
+        <div class="title">댓글관리</div>
+        <div class="nav">스토어관리 > 댓글관리</div>
+    </div>
+    
+    <div class="search_area">
+        <form method="get">
+        <table class="serach_box" cellpadding='0' cellspacing='0'>
+            <tbody>
+                <tr>
+                    <th>댓글작성일</th>
+                      {{>date_search firstday=firstday startdate=q.startdate enddate=q.enddate}}
+                    <td rowspan="3"><div class="serach_button" onclick="document.forms[0].submit()">검색하기</div></td>
+                </tr>
+                
+                <tr>
+                    <th>아이디</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" class="inputstyle" name="username" value="{{q.username}}"></input>
+                        </div>
+                    </td>
+                    
+                    <th>닉네임</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <input type="text" class="inputstyle" name="nickname" value="{{q.nickname}}"></input>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th>카테고리</th>
+                    <td>
+                        <div class="mem_inputbox">
+                            <select class="inputstyle" name="type">
+                                <option>전체</option>
+                                <option value="A">커뮤니티</option>
+                                <option value="B">전체공지</option>
+                                <option value="C">여행상품</option>
+                            </select>
+                        </div>
+                    </td>
+                    <th>검색어</th>
+                    <td >
+                        <div class="mem_inputbox">
+                            <input type="text" class="inputstyle" name="content" value="{{q.content}}"></input>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </form>
+    </div>
+    
+    
+    <div class="list_all">
+        <div class="list_info">
+            <div class="count">총 댓글수 : {{commentCount}}건</div>
+            <ul class="message_button">
+                <li class="lg_button" onclick="document.forms[1].submit()">선택댓글 삭제</li>
+            </ul>
+        </div>
+        
+        <table cellpadding="0" cellspacing="0" class="list_table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox"></input></th>
+                    <th>번호</th>
+                    <th>아이디</th>
+                    <th>닉네임</th>
+                    <th>댓글</th>
+                    <th>댓글에 달린글</th>
+                    <th>삭제</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {{#each comments}}    
+                <tr>
+                    <th><input type="checkbox" name="checked" value={{this.id}} ></th>
+                    <th>10</th>
+                    <th>{{this.author.username}}</th>
+                    <th>{{this.author.nickname}}</th>
+                    <td>
+                        <div class="stext_info"><span class="blue_text">{{makeDate this.createdAt}}</span> 오후에 등록됨</div>
+                        <div class="btext_cont">
+                            {{this.content}}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btext_cont">
+                            
+                        </div>
+                        <div class="stext_info"></div>
+                    </td>
+                    
+                    <th><a href="/comments/{{this.id}}/delete"><img src="/images/sub/delete_icon.jpg"></a></th>
+                </tr>              
+                {{/each}}
+            </tbody>
+        </table>
+        
+        {{>pages}}
+    </div>
+    
+</div>xw

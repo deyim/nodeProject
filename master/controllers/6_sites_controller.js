@@ -123,7 +123,7 @@ module.exports = {
                 ]
             })
             .then(notices=>{                 
-                objData = {notices:notices.rows, noticesCount: notices.count, noticecodes};
+                objData = {notices:notices.rows, noticesCount: notices.count, noticecodes, q};
                 res.render('6_sites/notices_index', objData);     
             });
         }
@@ -147,7 +147,7 @@ module.exports = {
                 }
             })
             .then(notices=>{
-                objData = {notices:notices.rows, noticesCount: notices.count, noticecodes};
+                objData = {notices:notices.rows, noticesCount: notices.count, noticecodes, q};
                 res.render('6_sites/notices_index', objData); 
             });
         }
@@ -233,7 +233,7 @@ module.exports = {
             })
             .then(faqs=>{
                 console.log(faqs);
-                objData = {faqs:faqs.rows, faqsCount: faqs.count, faqcodes};
+                objData = {faqs:faqs.rows, faqsCount: faqs.count, faqcodes, q};
                 res.render('6_sites/faqs_index', objData);   
             });
         }
@@ -257,7 +257,7 @@ module.exports = {
                 }
             })
             .then(faqs=>{
-                objData = {faqs:faqs.rows, faqsCount: faqs.count, faqcodes};
+                objData = {faqs:faqs.rows, faqsCount: faqs.count, faqcodes, q};
                 res.render('6_sites/faqs_index', objData);   
             });
         }
