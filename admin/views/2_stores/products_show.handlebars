@@ -1,297 +1,408 @@
 <div class="cont">
-			<div class="titlearea">
-				<div class="title">상품정보</div>
-				<div class="nav">스토어관리 > 상품조회 > 상품상세</div>
-			</div>
-			
-			<div class="product_write">
-				<table cellpadding="0" cellspacing="0" class="de_table">
-					<tbody>
-						<tr>
-							<th>카테고리*</th>
-							<td colspan="3">
-								
-								<div class="category_box">
-									<select class="inputstyle" name="category">
-                                            <option value="">선택안함</option> 
-                                            {{#each categories}}
-                                                <option value={{this.id}}>{{this.name}}</option> 
-                                            {{/each}}
-                                    </select>
-								</div>
-							</td>
-						</tr>
+	<div class="titlearea">
+		<div class="title">상품정보</div>
+		<div class="nav">스토어관리 > 상품조회 > 상품상세</div>
+	</div>
+
+	<div class="product_write">
+		<table cellpadding="0" cellspacing="0" class="de_table">
+			<tbody>
+				<tr>
+					<th>카테고리*</th>
+					<td colspan="3">
 						
-						<tr>
-							<th>국가 / 도시선택 *</th>
-							<td>
-								<div class="nation_city">
-									<h4>1.국가선택</h5>
-									<ul class="box">
-										{{#each nations}}
-											<li>{{this.nation}}</li>
-										{{/each}}
-									</ul>
-								</div>
+						<div class="category_box">
+							<input class="inputstyle" value="여행상품">
 								
-								<div class="nation_city">
-									<h4>2.도시선택</h5>
-									<ul class="box">
-										{{#each cities}}
-											<li>{{this.city}}</li>
-										{{/each}}
-									</ul>
-								</div>
-							</td>
+							</input>
+						</div>
+						
+						<div class="category_box">
+							<select class="inputstyle" name="category">
+									<option value="">선택안함</option> 
+									{{#each categories}}
+										<option value={{this.id}} {{optionSelected ../product.category.id this.id}}>{{this.name}}</option> 
+									{{/each}}
+							</select>
+						</div>
+						
+					</td>
+				</tr>
+				
+				<tr>
+					<th rowspan="2">* 국가 / 도시선택</th>
+					<td colspan="3">
+						<div class="input_25box">
+							<select class="inputstyle">
+								{{#each nations}}
+								<option>{{this.nation}}</option>
+								{{/each}}
+							</select>
+						</div>
+						
+						<div class="input_25box">
+							<select class="inputstyle">
+								{{#each cities}}
+								<option>{{this.city}}</option>
+								{{/each}}
+							</select>
+						</div>
+						
+						<div class="inline">
+							<div class="plus_button">도시선택</div>
+							<div class="plus_button">행추가</div>
+						</div>
+						
+						<div class="plus_boxarea">
+							<div>나폴리<span>X</span></div>
+							<div>밀라노<span>X</span></div>
+							<div>로마<span>X</span></div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>상품코드</th>
+					<td>{{product.productcode.code}}</td>
+					<th>상품등록일자</th>
+					<td>{{makeDate product.createdAt}}</td>
+				</tr>
+				
+				
+				<tr>
+					<th>상품명 *</th>
+					<td colspan="3">
+						<div class="input_100box"><input type="text" class="inputstyle" value="{{product.title}}"></input></div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>홍보키워드</th>
+					<td colspan="3">
+						{{#each tags}}
+							<div class="input_12box"><input type="text" class="inputstyle" value=[{this.tag}}></input></div>
+						{{/each}}
+					</td>
+				</tr>
+				
+				<tr>
+					<th>판매상태</th>
+					<td colspan="3">
+						<div class="inline"><input type="checkbox"></input> 판매중</div>
+						<div class="inline"><input type="checkbox"></input> 판매중지</div>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<th>판매기간설정</th>
+					<td colspan="3">
+						<div class="calendar_box">{{product.startdate}}<span><img src="/images/sub/calendar.jpg"></span></div>
+						<div class="inline">-</div>
+						<div class="calendar_box">{{product.enddate}}<span><img src="/images/sub/calendar.jpg"></span></div>
+						<div class="priod_box">
+							<select class="inputstyle">
+								<option>90일</option>
+								<option>120일</option>
+								<option>150일</option>
+							</select>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>예약불가자일자 설정</th>
+					<td colspan="3">
+						<div class="calendar_box"><span><img src="/images/sub/calendar.jpg"></span></div>
+						<div class="alret_date">{{#each unavailableDates}}{{this.date}}{{/each}}</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>상품특성</th>
+					<td colspan="3">
+						<div class="inline"><input type="checkbox"></input> 기간일자 상품</div>
+						<div class="inline"><input type="checkbox"></input> 단일일자 상품</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>옵션유형</th>
+					<td colspan="3">
+						<div class="listdg_button">
+							<div class="inline"><input type="checkbox"></input> 단일 옵션상품</div>
+							<div class="inline"><input type="checkbox"></input> 인원 옵션상품</div>
+						
+						
+							<div class="dg_button">옵션추가</div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>옵션/가격 *</th>
+					<td colspan="3">
+						<div class="listdg_button">
+							<div class="inline">옵션명</div>
+							<div class="input_80box"><input type="text" class="inputstyle"></input></div>
 							
-							<th>선택정보</th>
-							<td>
-								{{#each myNations}}
-									{{this.nation}}
-								{{/each}}
-								{{#each myCities}}
-									{{this.city}}
-								{{/each}}
-							</td>
-						</tr>
-						
-						<tr>
-							<th>상품코드</th>
-							<td>{{productcode.code}}</td>
-							<th>상품등록일자</th>
-							<td>{{product.createdAt}}</td>
-						</tr>
+							<div class="inline">가격</div>
+							<div class="input_12box"><input type="text" class="inputstyle"></input></div>
 						
 						
-						<tr>
-							<th>상품명 *</th>
-							<td colspan="3">
-								<div class="input_100box"><input type="text" class="inputstyle" value={{product.title}}></input></div>
-							</td>
-						</tr>
+							<div class="dg_button">옵션삭제</div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>대표이미지 *</th>
+					<td colspan="3">
+						<div class="compulsory_img">
+							<div class="compulory_text">대표이미지</div>
+							<div class="image"><img src="/images/sub/ex_img.jpg"></div>
+							<div class="buttonarea">
+								<div class="change">변경</div>
+								<div class="delete">삭제</div>
+							</div>
+						</div>
 						
-						<tr>
-							<th>홍보키워드</th>
-							<td colspan="3">
-								{{#each tags}}
-									<div class="input_12box"><input type="text" class="inputstyle" value=[{this.tag}}></input></div>
-								{{/each}}
-							</td>
-						</tr>
-						
-						<tr>
-							<th>판매상태</th>
-							<td colspan="3">
-								<div class="inline"><input type="checkbox"></input> 판매중</div>
-								<div class="inline"><input type="checkbox"></input> 판매중지</div>
-							</td>
-						</tr>
-						
-						
-						<tr>
-							<th>판매기간설정</th>
-							<td colspan="3">
-								<div class="calendar_box">{{product.startdate}}<span><img src="/images/sub/calendar.jpg"></span></div>
-								<div class="inline">-</div>
-								<div class="calendar_box">{{product.enddate}}<span><img src="/images/sub/calendar.jpg"></span></div>
-								<div class="priod_box">
-									<select class="inputstyle">
-										<option>90일</option>
-										<option>120일</option>
-										<option>150일</option>
-									</select>
-								</div>
-							</td>
-						</tr>
-						
-						<tr>
-							<th>예약불가자일자 설정</th>
-							<td colspan="3">
-								<div class="calendar_box"><span><img src="/images/sub/calendar.jpg"></span></div>
-								<div class="alret_date">{{#each unavailableDates}}{{this.date}}{{/each}}</div>
-							</td>
-						</tr>
-						
-						<tr>
-							<th>상품특성</th>
-							<td colspan="3">
-								<div class="inline"><input type="checkbox"></input> 기간일자 상품</div>
-								<div class="inline"><input type="checkbox"></input> 단일일자 상품</div>
-							</td>
-						</tr>
-						
-						<tr>
-							<th>옵션유형</th>
-							<td colspan="3">
-								<div class="listdg_button">
-									<div class="inline"><input type="checkbox"></input> 단일 옵션상품</div>
-									<div class="inline"><input type="checkbox"></input> 인원 옵션상품</div>
+						<div class="compulsory_img">
+							<div class="compulory_text">추가이미지</div>
+							<div class="image">
+								<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
+							</div>
+							<div class="buttonarea">
+								<div class="change">찾아보기</div>
 								
+							</div>
+						</div>
+						
+						<div class="compulsory_img">
+							<div class="compulory_text">추가이미지</div>
+							<div class="image">
+								<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
+							</div>
+							<div class="buttonarea">
+								<div class="change">찾아보기</div>
 								
-									<div class="dg_button">옵션추가</div>
-								</div>
-							</td>
-						</tr>
+							</div>
+						</div>
 						
-						<tr>
-							<th>옵션/가격 *</th>
-							<td colspan="3">
-								<div class="listdg_button">
-									<div class="inline">옵션명</div>
-									<div class="input_80box"><input type="text" class="inputstyle"></input></div>
-									
-									<div class="inline">가격</div>
-									<div class="input_12box"><input type="text" class="inputstyle"></input></div>
+						<div class="compulsory_img">
+							<div class="compulory_text">추가이미지</div>
+							<div class="image">
+								<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
+							</div>
+							<div class="buttonarea">
+								<div class="change">찾아보기</div>
 								
-								
-									<div class="dg_button">옵션삭제</div>
-								</div>
-							</td>
-						</tr>
-						
-						<tr>
-							<th>추가옵션/가격 *</th>
-							<td colspan="3">
-								<div class="listdg_button">
-									<div class="inline">가격</div>
-									
-									
-									<div class="inline">성인</div>
-									<div class="input_8box">
-										<select class="inputstyle">
-											<option>1명</option>
-											<option>2명</option>
-											<option>3명</option>
-											<option>4명</option>
-											<option>5명</option>
-										</select>
-									</div>
-										<div class="inline">-</div>
-										
-									<div class="input_8box">	
-										<select class="inputstyle">
-											<option>1명</option>
-											<option>2명</option>
-											<option>3명</option>
-											<option>4명</option>
-											<option>5명</option>
-										</select>
-									</div>
-									
-									<div class="input_12box">
-										<input type="text" class="inputstyle"></input>
-									</div>
-									<div class="inline">원</div>
-									
-									
-									<div class="inline">아동</div>
-									<div class="input_8box">
-										<select class="inputstyle">
-											<option>1명</option>
-											<option>2명</option>
-											<option>3명</option>
-											<option>4명</option>
-											<option>5명</option>
-										</select>
-									</div>
-										<div class="inline">-</div>
-										
-									<div class="input_8box">	
-										<select class="inputstyle">
-											<option>1명</option>
-											<option>2명</option>
-											<option>3명</option>
-											<option>4명</option>
-											<option>5명</option>
-										</select>
-									</div>
-									
-									<div class="input_12box">
-										<input type="text" class="inputstyle"></input>
-									</div>
-									<div class="inline">원</div>
-									
-									
-									
-									<div class="plus_button">
-										<img src="/images/sub/plus_option.png">
-									</div>
-								</div>
-							</td>
-						</tr>
-						
-						
-						
-						<tr>
-							<th>대표이미지 *</th>
-							<td colspan="3">
-								<div class="compulsory_img">
-									<div class="compulory_text">대표이미지</div>
-									<div class="image"><img src="/images/sub/ex_img.jpg"></div>
-									<div class="buttonarea">
-										<div class="change">변경</div>
-										<div class="delete">삭제</div>
-									</div>
-								</div>
-								
-								<div class="compulsory_img">
-									<div class="compulory_text">추가이미지</div>
-									<div class="image">
-										<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
-									</div>
-									<div class="buttonarea">
-										<div class="change">찾아보기</div>
-										
-									</div>
-								</div>
-								
-								<div class="compulsory_img">
-									<div class="compulory_text">추가이미지</div>
-									<div class="image">
-										<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
-									</div>
-									<div class="buttonarea">
-										<div class="change">찾아보기</div>
-										
-									</div>
-								</div>
-								
-								<div class="compulsory_img">
-									<div class="compulory_text">추가이미지</div>
-									<div class="image">
-										<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
-									</div>
-									<div class="buttonarea">
-										<div class="change">찾아보기</div>
-										
-									</div>
-								</div>
-							</td>
-						</tr>
-						
-						<tr>
-							<th>목록이미지 *</th>
-							<td colspan="3">
-								<div class="listdg_button">
-									<div class="dg_button">미리보기</div>
-								</div>
-								<div class="mar_t10"><textarea rows="15" class="textareastyle"></textarea></div>
-							</td>
-						</tr>
-						
-						<tr>
-							<th>취소/환불안내 *</th>
-							<td colspan="3">
-								<textarea rows="5" class="textareastyle"></textarea>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>목록이미지 *</th>
+					<td colspan="3">
+						<div class="listdg_button">
+							<div class="dg_button">미리보기</div>
+						</div>
+						<div class="mar_t10"><textarea rows="15" class="textareastyle"></textarea></div>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>취소/환불안내 *</th>
+					<td colspan="3">
+						<textarea rows="5" class="textareastyle"></textarea>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<th rowspan="3">* 업로드파일<br>(5개까지 업로드 가능)</th>
+					<td colspan="3">
+						<input type="file"></input>
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan="3">
+						<div class="listdg_button">
+							<div class="inline">
+								<div class="file_name">sosohang.jpg</div>
+								<div class="inline_dg_button">삭제</div>
+							</div>
+							<div class="inline_down_button">다운로드</div>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan="3">
+						<div class="listdg_button">
+							<div class="inline">
+								<div class="file_name">사업자등록증.jpg</div>
+								<div class="inline_dg_button">삭제</div>
+							</div>
+							<div class="inline_down_button">다운로드</div>
+						</div>
+					</td>
+				</tr>
+				
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="bot_button">
+		<div class="bl_button">등록완료</div>
+		<div class="wt_button">초기화</div>
+	</div>
+	
+</div>
+
+<script>
+
+
+	$(document).ready(function(){
+		$("#codebutton").click(function(){
+			$.ajax({
+				url: "/stores/products/getproductcode", 
+				success: function(result){
+					$("#productcode").text(result.code);
+					$("#productcode_input").val(result.code);
+			}});
+		});
+	});
+
+	$(document).ready(function(){
+		$(".nation_option").click(function(){
+			$.ajax({
+				url: "/stores/products/updatenation", 
+				data: {
+					nation: $(this).val()
+				},
+				success: function(result){
+					console.log("working");
+					$("#nation").val(result.nation.nation);
+					var $s = $('#city_select');
+					$('.city_option').remove();
+					$.each(result.cities, function (i, city) {
+						console.log(city);
+						$('#city_select').append($('<option>', { 
+							class: "city_option",
+							value: city.id,
+							text : city.city 
+						}));
+					});
+					
+					//var optionTop = $s.find("option:contains('"+result.nation+"')").offset().top;
+					//var selectTop = $s.offset().top;
+					//$s.scrollTop($s.scrollTop()+optionTop-selectTop);
+			}});
+		});
+	});
+
+	 $(document).ready(function(){
+		 $(document).on('click', '.city_option', function(){
+			$.ajax({
+				url: "/stores/products/updatecity", 
+				data: {
+					city: $(this).val()
+				},
+				success: function(result){
+					originalValue = $("#city").val();
+					if(originalValue===''){
+						originalValue = result.city;
+					}else{
+						originalValue = originalValue + '; ' + result.city;
+					}										
+					$("#city").val(originalValue);
+			}});
+		});
+	}); 
+
+	$(document).ready(function(){
+		$("#unavailable").click(function(){
+			originalValue = $("#unavailables").val();
+			newValue = $("#tmp").val();
+			if(originalValue===''){
+				originalValue = newValue;
+			}else{
+				originalValue = originalValue + ',' + newValue;
+			}										
+			$("#unavailables").val(originalValue);
+		});
+	}); 
+
+	$(document).ready(function(){
+		$('#option_content').hide();
+	});
+
+	$(document).ready(function(){
+		$(document).on('click', '#add_option_first', function(){
+			$('#option_content').find($('#price_content')).before("<div id='added_option_name'></div>");
+			$('#option_content').find($('#added_option_name')).text($('#option_name').val());
+			$('#option_content').show();
+			$('#option_name').val("");
+			$('#add_option_first').attr("id","add_option");
+		});
+	}); 
+
+	$(document).ready(function(){
+		$(document).on('click', '#add_option', function(){
+			var content = $('#option_content').html();
+			var newtr = $("<tr id='option_content'>");		
+			newtr.html(content);
 			
-			<div class="bot_button">
-				<div class="bl_button">등록완료</div>
-				<div class="wt_button">초기화</div>
-			</div>
 			
-		</div>
+			$('#option_content').find($('#added_option_name')).text($('#option_name').val());
+			$('#option_content').find($('.prices')).remove();
+			$('#option_content').after(newtr);
+			$('#option_name').val("");
+		});
+	}); 
+
+	
+
+	$(document).ready(function(){
+		$(document).on('click', '.add_price', function(){
+			var newdiv = $("<div class='prices'></div>");
+			newdiv.text($('#adult_or_child').val()+' :    '+$('#start').val()+' 명    ~    '+$('#end').val()+' 명    '+$('#price').val()+' 원')
+			console.log(newdiv.text());
+        	$('#price_content').after(newdiv);
+			$('#start').val("");
+			$('#end').val("");
+			$('#price').val("");
+		});
+	}); 
+
+	$(document).ready(function(){
+		$(document).on('click', '.remove_price', function(){
+			console.log($(this).parent());
+			$(this).parent().remove();
+		});
+	}); 
+
+
+	{{!-- $(document).ready(function(){
+		$(document).on('click', '#change_date', function(){
+			var mydate = new Date($('#src_date').val());
+			console.log(mydate);
+			mydate.setDate(mydate.getDate() + $(this).val());
+			console.log(mydate);
+
+			var mm = mydate.getMonth() + 1; // getMonth() is zero-based
+    		var dd = mydate.getDate();
+  
+            var thisDate =  [mydate.getFullYear(),
+            (mm>9 ? '' : '0') + mm,
+            (dd>9 ? '' : '0') + dd
+           ].join('-');
+			
+			$('#target_date').val(thisDate);
+		});
+	});  --}}
+
+</script>

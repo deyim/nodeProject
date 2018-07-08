@@ -64,12 +64,12 @@
 				<div id="mydate"></div>
 			</div>
 			
-			<div class="bot_button">
-				
-				<div class="wt_button"><a href="/stores/posts/{{post.id}}/delete">삭제</a></div>
-				<div class="wt_button"><input type="submit" value="수정"></div>
-				<div class="wt_button"><a href="/stores/posts">목록</a></div>
-			</div>
+			{{>modify_delete id=post.id url='/stores/posts' }}
+			{{!-- <div class="bot_button">				
+				<div class="wt_button" onclick="document.locatione.href='/stores/posts'">목록</div>
+				<div class="wt_button" onclick="document.location.href='/stores/posts/{{post.id}}/delete'">삭제</div>
+				<div class="wt_button" onclick="document.forms[1].submit()">수정</div>
+			</div> --}}
 			</form>
 		</div>
 

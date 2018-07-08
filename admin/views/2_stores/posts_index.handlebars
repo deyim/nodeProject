@@ -11,9 +11,8 @@
 			<tbody>
 				<tr>
 					<th>등록일</th>
-					<td>
-						{{>period}}
-					</td>
+					{{>date_search firstday=firstday startdate=q.startdate enddate=q.enddate}}
+                    <td rowspan="2"><div class="serach_button" onclick="document.forms[0].submit()">검색하기</div></td>
 				</tr>
 				
 				<tr>
@@ -25,7 +24,7 @@
 			</tbody>
 		</table>
 		
-		<div class="serach_button"><input type="submit" value="검색하기"></div>
+	
 	</div>
 	</form>
 	
@@ -62,8 +61,8 @@
 						<th>1</th>
 						<th><a href="/stores/posts/{{this.id}}">{{this.title}}</a></th>
 						<th><a href="/stores/posts/{{this.id}}">{{this.content}}</a></th>
-						<th>{{this.user.username}}</th>
-						<th>{{this.createdAt}}</th>
+						<th>{{this.author.username}}</th>
+						<th>{{makeDate this.createdAt}}</th>
 					</tr>
 				{{/each}}				
 			</tbody>

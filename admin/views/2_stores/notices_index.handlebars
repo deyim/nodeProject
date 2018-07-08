@@ -1,69 +1,77 @@
 <div class="cont">
-			<div class="titlearea">
-				<div class="title">전체공지</div>
-				<div class="nav">스토어관리 > 전체공지</div>
-			</div>
-			
-			<div class="search_area">
-				<form method="get">
-					<table class="serach_box" cellpadding='0' cellspacing='0'>
-						<tbody>
-							<tr>
-								<th>등록일</th>
-								<td colspan="3">
-									{{>period}}
-								</td>
-							</tr>
-							
-							<tr>
-								<th>구분</th>
-								<td>
-									{{>querySelect}}
-								</td>
-							</tr>			
-							
-						</tbody>
-					</table>
-					
-					<div class="serach_button"> <input type="submit" value="검색하기"></div>
-				</form>
-			</div>
-			
-			
-			<div class="list_all">
-				<div class="list_info">
-					<div class="count">총 댓글수 : {{noticesCount}}건</div>
-					<ul class="message_button">
-						<li class="lg_button"><a href="/stores/notices/add">전체공지 추가하기</a></li>
-						<li class="wh_button"><input type="submit" value="선택 삭제"></li>
-					</ul>
-				</div>
-				
-				<table cellpadding="0" cellspacing="0" class="list_table">
-					<thead>
-						<tr>
-							<th><input type="checkbox"></input></th>
-							<th>번호</th>
-							<th>제목</th>
-							<th>내용</th>
-							<th>등록날짜</th>
-						</tr>
-					</thead>
-					
-					<tbody>
-						{{#each notices}}
-						<tr>
-							<th> <input type="checkbox" name="checked" value={{this.id}} ></th>
-							<th>10</th>
-							<th><a href="/stores/notices/{{this.id}}">{{this.title}}</a></th>
-							<th><a href="/stores/notices/{{this.id}}">{{this.content}}</a></th>
-							<th>{{this.createdAt}}</th>
-						</tr>			
-						{{/each}}
-					</tbody>
-				</table>
-				
-				{{>pages}}
-			</div>
-			
+	<div class="titlearea">
+		<div class="title">전체공지</div>
+		<div class="nav">스토어관리 > 전체공지</div>
+	</div>
+	
+	<div class="search_area">
+		<form method="get">
+        <table class="serach_box" cellpadding='0' cellspacing='0'>
+            <tbody>
+                <tr>
+                    <th>등록일</th>
+                     {{>date_search firstday=firstday startdate=q.startdate enddate=q.enddate}}
+                    <td rowspan="2"><div class="serach_button" onclick="document.forms[0].submit()">검색하기</div></td>
+                </tr>
+                
+                <tr>
+                    <th>구분</th>
+                    <td>
+                       <div class="priod_box">
+                            <select class="inputstyle" id="type_selector">
+                                <option value="">선택안함</option>
+                                <option value="title" {{ifselected q.title}}>제목</option>
+                                <option value="content" {{ifselected q.content}}>내용</option>
+                            </select>
+                        </div>
+                        
+                        
+                        <div class="input_80box">
+                            <input type="text" class="inputstyle" name="" id="type" value="{{q.title}}{{q.content}}"></input>
+                        </div>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+		</form>
+    </div>
+	
+	
+	<div class="list_all">
+		<div class="list_info">
+			<div class="count">총 댓글수 : {{noticesCount}}건</div>
+			<ul class="message_button">
+				<li class="lg_button"><a href="/stores/notices/add">전체공지 추가하기</a></li>
+				<li class="wh_button"><input type="submit" value="선택 삭제"></li>
+			</ul>
 		</div>
+		
+		<table cellpadding="0" cellspacing="0" class="list_table">
+			<thead>
+				<tr>
+					<th><input type="checkbox"></input></th>
+					<th>번호</th>
+					<th>제목</th>
+					<th>내용</th>
+					<th>등록날짜</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				{{#each notices}}
+				<tr>
+					<th> <input type="checkbox" name="checked" value={{this.id}} ></th>
+					<th>10</th>
+					<th><a href="/stores/notices/{{this.id}}">{{this.title}}</a></th>
+					<th><a href="/stores/notices/{{this.id}}">{{this.content}}</a></th>
+					<th>{{this.createdAt}}</th>
+				</tr>			
+				{{/each}}
+			</tbody>
+		</table>
+		
+		{{>pages}}
+	</div>
+	
+</div>

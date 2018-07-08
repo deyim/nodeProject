@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 // const dateConverter = require('../../lib/date_functions');
 const Op = db.Sequelize.Op;
 const perPage = 5;
+const dateFunctions = require('../../lib/date_functions');
 
 Date.prototype.yyyymmdd = function() {
     var mm = this.getMonth() + 1; // getMonth() is zero-based
@@ -18,50 +19,60 @@ module.exports = {
     findProduct: (req,res,next)=>{
         db.Product.find({
             where: {
-                id: req.params.product_id,
-            }
-        })
-        .then(product=>{
-            if(!product){
-                req.flash('error', '없는 상품입니다.');
-                res.redirect('/stores/products');
-            }
+                id: req.params.product_id
+            },
+            include: [
+                {
+                    model: db.Productcode,
+                    as: 'productcode'
+                },
+                {
+                    model: db.Store,
+                    as: 'store'
+                },
+                {
+                    model: db.Provider,
+                    as: 'provider',
+                    include: [
+                        {
+                            model: db.User,
+                            as: 'user'
+                        }
+                    ]
+                },
+                {
+                    model: db.Category,
+                    as: 'category'
+                },
+                {
+                    model: db.Tag,
+                    as: 'tags'
+                },
+                {
+                    model: db.Nation,
+                    as: 'nations'
+                },
+                {
+                    model: db.City,
+                    as: 'cities'
+                }
+            ]
+        }).then(product=>{
             req.product = product;
-
-           //find unavailable dates!!
-
-            product.getProductcode()
-            .then(productcode=>{
-                req.productcode = productcode;
-            });
-
-            product.getCategory()
-            .then(category=>{
-                req.category = category;
-            });
-            
-            product.getTags()
-            .then(tags=>{
-                req.tags = tags;
-            });
-
-            product.getNations()
-            .then(nations=>{                
-                req.nations = nations;
-            });
-
-            product.getCities()
-            .then(cities=>{
-                req.cities = cities;
-                next();
-            });
+            next();
         });
     },
 
     productsIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
-        delete q.page;    
+        delete q.page;  
+        let categories;
+        db.Category.findAll()
+        .then(categories_=>{
+            categories = categories_;
+        });
         if(Object.keys(req.query).length === 0){
             db.Product.findAndCountAll({
                 limit: perPage,
@@ -73,14 +84,22 @@ module.exports = {
                         where: {
                             id: res.locals.store.id
                         }
-                    }
+                    },
+                    {
+                        model: db.Category,
+                        as: 'category'
+                    },
+                    {
+                        model: db.Productcode,
+                        as: 'productcode'
+                    },
                 ]
 
             })
             .then(products=>{
                 db.Category.findAll()
                 .then(categories=>{
-                    objData = {products:products.rows, productsCount:products.count, categories:categories}
+                    objData = {products:products.rows, productsCount:products.count, firstday, categories, q}
                     res.render('2_stores/products_index', objData);
                 })               
             });   
@@ -130,11 +149,8 @@ module.exports = {
                 ]
             })
             .then(products=>{
-                db.Category.findAll()
-                .then(categories=>{
-                    objData = {products:products.rows, productsCount:products.count, categories:categories}
-                    res.render('2_stores/products_index', objData);
-                })
+                objData = {products:products.rows, productsCount:products.count, firstday, categories, q}
+                res.render('2_stores/products_index', objData);
             })
         }
     },
@@ -174,12 +190,7 @@ module.exports = {
 
     productsShow: (req,res)=>{
         let objData = {
-            product:req.product, 
-            productcode:req.productcode, 
-            myNations:req.nations, 
-            myCities:req.cities, 
-            tags:req.tags,
-            category:req.category
+            product: req.product
         };
         
         db.Category.findAll()
@@ -265,7 +276,7 @@ module.exports = {
     },
 
     productsUpdateNation: (req,res)=>{
-        // console.log('\n\n\n****',req.query);
+        console.log('\n\n\n****',req.query);
         db.Nation.findOne({
             where: {
                 id: req.query.nation
@@ -342,10 +353,11 @@ module.exports = {
     },
 
     postsIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;
-        console.log('\n\n\n****', q);
+
         if(Object.keys(req.query).length === 0){
             db.Post.findAndCountAll({
                 limit: perPage,
@@ -360,11 +372,16 @@ module.exports = {
                         where: {
                             id: res.locals.store.id
                         }
+                    },
+                    {
+                        model: db.User,
+                        as: 'author',
+                        required: true
                     }
                 ]
             })
             .then(posts=>{
-                objData = {posts:posts.rows, postsCount:posts.count}
+                objData = {posts:posts.rows, postsCount:posts.count, firstday, q}
                 res.render('2_stores/posts_index', objData);
             });   
         }      
@@ -396,12 +413,16 @@ module.exports = {
                         where:{
                             id: res.locals.store.id,
                         }                                
+                    },
+                    {
+                        model: db.User,
+                        as: 'author',
+                        required: true
                     }
                 ]
             })
             .then(posts=>{
-                console.log(posts, posts.rows[0]);
-                objData = {posts:posts.rows, postsCount:posts.count}
+                objData = {posts:posts.rows, postsCount:posts.count, firstday, q}
                 res.render('2_stores/posts_index', objData);
             })
         }
@@ -480,6 +501,7 @@ module.exports = {
     },
 
     messagesReceivedIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page; 
@@ -504,7 +526,7 @@ module.exports = {
                 ]
             })
             .then(messages=>{
-                objData = {messages:messages.rows, messagesCount:messages.count}
+                objData = {messages:messages.rows, messagesCount:messages.count, firstday, q}
                 res.render('2_stores/messages_received_index', objData);
             });   
         }      
@@ -570,7 +592,7 @@ module.exports = {
             })
             .then(messages=>{
                 console.log(messages);
-                objData = {messages:messages.rows, messagesCount:messages.count}
+                objData = {messages:messages.rows, messagesCount:messages.count, firstday, q}
                 res.render('2_stores/messages_received_index', objData);
             })
         }
@@ -744,17 +766,18 @@ module.exports = {
     },
     
     commentsIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page; 
         if(Object.keys(req.query).length === 0){
-            db.Commenta.findAndCountAll({
+            db.Comment.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1)
             })
             .then(comments=>{
-                objData = {comments:comments.rows, commentsCount:comments.count};
-                res.render('2_stores/commentas_index', objData);
+                objData = {comments:comments.rows, commentsCount:comments.count, firstday, q};
+                res.render('2_stores/comments_index', objData);
             });   
         }      
         else{
@@ -803,8 +826,8 @@ module.exports = {
                 ]
             })
             .then(comments=>{
-                objData = {comments:comments.rows, comments:comments.count}
-                res.render('2_stores/commentas_index', objData);
+                objData = {comments:comments.rows, comments:comments.count, firstday, q}
+                res.render('2_stores/comments_index', objData);
             })
         }
     },
@@ -859,6 +882,7 @@ module.exports = {
     },
 
     noticesIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page; 
@@ -880,7 +904,7 @@ module.exports = {
                 ]
             })
             .then(notices=>{
-                objData = {notices:notices.rows, noticesCount:notices.count};
+                objData = {notices:notices.rows, noticesCount:notices.count, firstday, q};
                 res.render('2_stores/notices_index', objData);
             });   
         }      
@@ -914,7 +938,7 @@ module.exports = {
                 ]
             })
             .then(notices=>{
-                objData = {notices:notices.rows, noticesCount:notices.count};
+                objData = {notices:notices.rows, noticesCount:notices.count, firstday, q};
                 res.render('2_stores/notices_index', objData);
             })
         }

@@ -13,6 +13,7 @@
 						
 						<div class="category_box">
 							<select class="inputstyle" name="category">
+									<option value="">카테고리 선택</option>
 									{{#each categories}}
 										<option value={{this.id}}>{{this.name}}</option> 
 									{{/each}}
@@ -23,42 +24,28 @@
 				
 				<tr>
 					<th>국가 / 도시선택 *</th>
-					<td>
-						<div class="nation_city">
-							<h4>1.국가선택</h5>
-							<select multiple size="4" class="inputstyle" name="nation" id="nation_select">
+					<td colspan="3">
+						<div class="input_25box">
+							<select class="inputstyle" name="nation" id="nation_select">
+								<option value="">국가 선택</option>
 								{{#each nations}}
-									<option class="nation_option" value={{this.id}}>{{this.nation}}</option> 
+									<option value={{this.id}}>{{this.nation}}</option>
 								{{/each}}
 							</select>
-							{{!-- <ul class="box">
-								{{#each nations}}
-									<li>{{this.nation}}</li>
-								{{/each}}
-							</ul> --}}
 						</div>
 						
-						<div class="nation_city">
-							<h4>2.도시선택</h5>
-							<select class="inputstyle" name="city" id="city_select">
-								{{!-- {{#each cities}}
-									<option class="city_option" value={{this.id}}>{{this.city}}</option> 
-								{{/each}} --}}
+						<div class="input_25box" id="city_select">
+							<select class="inputstyle" name="city" id="city_options">
 							</select>
-							{{!-- <ul class="box">
-								{{#each cities}}
-									<li>{{this.city}}</li>
-								{{/each}}
-							</ul> --}}
 						</div>
-					</td>
-					
-					<th>선택정보</th>
-					<td>
-						<div id="nation_city">
-								<input class="inputstyle" id="nation" type="text" name="nation">
-								<input class="inputstyle" id="city" type="text" name="city">
-						</div>					
+
+						<div class="inline">
+								<div class="plus_button" id="city_add">도시선택</div>
+								<div class="plus_button" id="nation_add">행추가</div>
+							</div>
+
+						<div class="plus_boxarea" id="cities">
+						</div>
 					</td>
 				</tr>
 				
@@ -69,7 +56,7 @@
 							<div id="productcode"></div>
 							<input class="inputstyle" id="productcode_input" type="hidden" name="productcode">
 						</div>						
-						<button id="codebutton">코드등록</button>
+						<button class="inline" id="codebutton">코드등록</button>
 						{{!-- 옆으로 붙여라 나중에 --}}
 					</td>
 					<th>상품등록일자</th>
@@ -96,7 +83,7 @@
 				</tr>
 				
 				<tr>
-					<th>긱상태</th>
+					<th>판매상태</th>
 					<td colspan="3">
 						<div class="inline"><input type="checkbox" name="onSaleChk" checked></input> 판매중</div>
 					</td>
@@ -288,51 +275,39 @@
 	});
 
 	$(document).ready(function(){
-		$(".nation_option").click(function(){
+		$(document).on('change', '#nation_select', function(){
 			$.ajax({
 				url: "/stores/products/updatenation", 
 				data: {
 					nation: $(this).val()
 				},
 				success: function(result){
-					console.log("working");
 					$("#nation").val(result.nation.nation);
-					var $s = $('#city_select');
 					$('.city_option').remove();
 					$.each(result.cities, function (i, city) {
-						console.log(city);
-						$('#city_select').append($('<option>', { 
-							class: "city_option",
+						$('#city_options').append($('<option>', { 
 							value: city.id,
 							text : city.city 
 						}));
 					});
-					
-					//var optionTop = $s.find("option:contains('"+result.nation+"')").offset().top;
-					//var selectTop = $s.offset().top;
-					//$s.scrollTop($s.scrollTop()+optionTop-selectTop);
 			}});
 		});
 	});
 
-	 $(document).ready(function(){
-		 $(document).on('click', '.city_option', function(){
-			$.ajax({
-				url: "/stores/products/updatecity", 
-				data: {
-					city: $(this).val()
-				},
-				success: function(result){
-					originalValue = $("#city").val();
-					if(originalValue===''){
-						originalValue = result.city;
-					}else{
-						originalValue = originalValue + '; ' + result.city;
-					}										
-					$("#city").val(originalValue);
-			}});
+	$(document).ready(function(){
+		 $(document).on('click', '#city_add', function(){
+			let elt = document.getElementById('city_options');   
+    		let city = elt.options[elt.selectedIndex].text;
+			$('#cities').append("<div>"+city+"<span>X<span></div>");
 		});
 	}); 
+
+	$(document).ready(function(){
+		 $(document).on('click', '#nation_add', function(){
+			
+		});
+	}); 
+
 
 	$(document).ready(function(){
 		$("#unavailable").click(function(){
@@ -374,8 +349,6 @@
 			$('#option_name').val("");
 		});
 	}); 
-
-	
 
 	$(document).ready(function(){
 		$(document).on('click', '.add_price', function(){
