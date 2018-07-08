@@ -1,8 +1,8 @@
 const db = require('../../models/index');
 const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
-const perPage = 2;
-
+const perPage = 5;
+const dateFunctions = require('../../lib/date_functions');
 
 var makeObj = (order)=>{
     return new Promise (resolve=>{
@@ -56,12 +56,45 @@ async function ordersToArray(orders){
 };
 
 module.exports = {   
-    
+    orderServiceUsers: (req,res)=>{
+        let order;
+        db.Order.findOne({
+            where: {
+                id: req.params.order_id
+            },
+            include: [
+                {
+                    model: db.Product,
+                    as: 'product'
+                }
+            ]
+        })
+        .then(order_=>{order=order_; })
+        .then(()=>{
+            db.ServiceUser.findAll({
+                include: [
+                    {
+                        model: db.Order,
+                        as: 'order',
+                        where: {
+                            id: req.params.order_id
+                        }
+                    }
+                ]
+            }).then(users=>{
+                res.render('3_orders/order_service_users', {users, order});
+            })
+        })
+        
+    },
+
     orderedIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
         let objData = {};
+        console.log(q);
         if(Object.keys(req.query).length === 0){            
             db.Order.findAndCountAll({
                 limit: perPage,
@@ -81,21 +114,34 @@ module.exports = {
                             id: res.locals.store.id
                         }
                     },
+                    {
+                        model: db.Ordercode,
+                        as: 'ordercode'
+                    },
+                    {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product'
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        required: false
+                    },
+                    {
+                        model: db.User,
+                        as: 'buyer'
+                    }
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/ordered_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/ordered_index', objData);
-                },1000);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/ordered_index', objData);
             });       
         }      
         else{
@@ -119,13 +165,15 @@ module.exports = {
                     {
                         model: db.OrderStatus,
                         as: 'orderStatus',
-                        where: { paidChk: false },
+                        where: { 
+                            paidChk: false 
+                        }
                     },
                     {
                         model: db.Product,
                         as: 'product',
                         where:{
-                                title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}
+                                title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'},
                         },
                     },
                     {
@@ -136,6 +184,12 @@ module.exports = {
                         }
                     },
                     {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
                         model: db.Store,
                         as: 'store',
                         where: {
@@ -143,33 +197,33 @@ module.exports = {
                         }
                     },
                     {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        where: {
+                            korPhone: q.korPhone? { [Op.like]: `%${q.korPhone}%` } : {[Op.regexp]: '^'}, 
+                        },
+                        required: false
+                    },
+                    {
                         model: db.User,
                         as: 'buyer',
                         where: {
-                            username: q.ordercode? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}
+                            username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'},
+                            name: q.name? { [Op.like]: `%${q.name}%` } : {[Op.regexp]: '^'},
                         }
                     }
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/ordered_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/ordered_index', objData);
-                },1000);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/ordered_index', objData);
             });   
         }
     },
 
     paidIndex: (req,res)=>{
         // console.log('************\n\n\n\n\n******',req.query);
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
@@ -195,22 +249,34 @@ module.exports = {
                             id: res.locals.store.id
                         }
                     },
+                    {
+                        model: db.Ordercode,
+                        as: 'ordercode'
+                    },
+                    {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product'
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        required: false
+                    },
+                    {
+                        model: db.User,
+                        as: 'buyer'
+                    }
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/paid_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    console.log(objData);
-                    res.render('3_orders/paid_index', objData);
-                },900);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/paid_index', objData);                    
             });   
         }      
         else{
@@ -247,6 +313,12 @@ module.exports = {
                         },
                     },
                     {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
                         model: db.Ordercode,
                         as: 'ordercode',
                         where: {
@@ -266,27 +338,26 @@ module.exports = {
                         where: {
                             username: q.ordercode? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}
                         }
-                    }
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        where: {
+                            korPhone: q.korPhone? { [Op.like]: `%${q.korPhone}%` } : {[Op.regexp]: '^'}, 
+                        },
+                        required: false
+                    },
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/paid_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/paid_index', objData);
-                },1000);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/paid_index', objData);                    
             }); 
         }
     },
 
     placedIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
@@ -303,7 +374,7 @@ module.exports = {
                         where: { 
                             paidChk: true,
                             placeChk: true,
-                            cancelChk: false,
+                            // cancelChk: false,
                         },
                     },
                     {
@@ -312,22 +383,35 @@ module.exports = {
                         where: {
                             id: res.locals.store.id
                         }
+                    },
+                    {
+                        model: db.Ordercode,
+                        as: 'ordercode'
+                    },
+                    {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product'
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        required: false
+                    },
+                    {
+                        model: db.User,
+                        as: 'buyer'
                     }
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/placed_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/placed_index', objData);
-                },1000);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/placed_index', objData);
             }); 
         }      
         else{
@@ -337,6 +421,158 @@ module.exports = {
                 where:{
                     [Op.and]:
                     [
+                        // {startDate: {[Op.lte]: today}},
+                        // {endDate: {[Op.gte]: limit}},
+                        {createdAt: {
+                            [Op.and]:[
+                                {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                ]
+                            }
+                        },  
+                    ]   
+                    ///상품명, 주문번호, 주문자아이디, 판매스토어주소
+                },
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: true,
+                           // cancelChk: false
+                        },
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product',
+                        where:{
+                                title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}
+                        },
+                    },
+                    {
+                        model: db.Ordercode,
+                        as: 'ordercode',
+                        where: {
+                            code: q.ordercode? { [Op.like]: `%${q.ordercode}%` } : {[Op.regexp]: '^'}
+                        }
+                    },
+                    {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            url: q.url? { [Op.like]: `%${q.url}%` } : {[Op.regexp]: '^'},
+                            id: res.locals.store.id
+                        }
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        where: {
+                            korPhone: q.korPhone? { [Op.like]: `%${q.korPhone}%` } : {[Op.regexp]: '^'}, 
+                        },
+                        required: false
+                    },
+                    {
+                        model: db.User,
+                        as: 'buyer',
+                        where: {
+                            username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'},
+                            name: q.name? { [Op.like]: `%${q.name}%` } : {[Op.regexp]: '^'},
+                        }
+                    }
+                ]
+            })
+            .then(orders=>{
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/placed_index', objData);
+            }); 
+        }
+    },
+
+    usedIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
+        let q = req.query;
+        let page = q.page||1;
+        delete q.page;  
+        let objData = {};
+        var limit = new Date();
+        let today = new Date();
+        limit.setDate(limit.getDate()+3);
+        if(Object.keys(req.query).length === 0){
+            db.Order.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where: {
+                    startDate: {[Op.lte]: today},
+                    endDate: {[Op.gte]: limit},
+                },
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            paidChk: true,
+                            placeChk: true,
+                            cancelChk: false,                        
+                        },
+                    },
+                    {
+                        model: db.Store,
+                        as: 'store',
+                        where: {
+                            id: res.locals.store.id
+                        }
+                    },
+                    {
+                        model: db.Ordercode,
+                        as: 'ordercode'
+                    },
+                    {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product'
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        required: false
+                    },
+                    {
+                        model: db.User,
+                        as: 'buyer'
+                    }
+                ]
+            })
+            .then(orders=>{
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/used_index', objData);
+            }); 
+        }      
+        else{
+            db.Order.findAndCountAll({
+                limit: perPage,
+                offset: perPage*(page-1),
+                where: {
+                    startDate: {[Op.lte]: today},
+                    endDate: {[Op.gte]: limit},
+                },
+                where:{
+                    [Op.and]:
+                    [
+                        {startDate: {[Op.lte]: today}},
+                        {endDate: {[Op.gte]: limit}},
                         {createdAt: {
                             [Op.and]:[
                                 {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
@@ -368,139 +604,29 @@ module.exports = {
                         model: db.Ordercode,
                         as: 'ordercode',
                         where: {
-                            code: { [Op.like]: `%${q.ordercode}%` }
-                        }
-                    },
-                    {
-                        model: db.Store,
-                        as: 'store',
-                        where: {
-                            url: { [Op.like]: `%${q.url}%` }
-                        }
-                    },
-                    {
-                        model: db.User,
-                        as: 'buyer',
-                        where: {
-                            username: { [Op.like]: `%${q.username}%` }
-                        }
-                    }
-                ]
-            })
-            .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/placed_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/placed_index', objData);
-                },1000);                
-            }); 
-        }
-    },
-
-    usedIndex: (req,res)=>{
-        let q = req.query;
-        let page = q.page||1;
-        delete q.page;  
-        let objData = {};
-        var limit = new Date();
-        limit.setDate(limit.getDate()+3);
-        if(Object.keys(req.query).length === 0){
-            db.Order.findAndCountAll({
-                limit: perPage,
-                offset: perPage*(page-1),
-                where: {
-                    endDate: {[Op.gte]: limit},
-                },
-                include: [
-                    {
-                        model: db.OrderStatus,
-                        as: 'orderStatus',
-                        where: { 
-                            paidChk: true,
-                            placeChk: true,
-                            
-                        },
-                    },
-                    {
-                        model: db.Store,
-                        as: 'store',
-                        where: {
-                            id: res.locals.store.id
-                        }
-                    },
-                ]
-            })
-            .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/used_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/used_index', objData);
-                },1000);                
-            }); 
-        }      
-        else{
-            db.Order.findAndCountAll({
-                limit: perPage,
-                offset: perPage*(page-1),
-                where: {
-                    endDate: {[Op.lte]: limit},
-                },
-                where:{
-                    [Op.and]:
-                    [
-                        {createdAt: {
-                            [Op.and]:[
-                                {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
-                                {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
-                                ]
-                            }
-                        },  
-                    ]   
-                    ///상품명, 주문번호, 주문자아이디, 판매스토어주소
-                },
-                include: [
-                    {
-                        model: db.OrderStatus,
-                        as: 'orderStatus',
-                        where: { 
-                            paidChk: true,
-                            placeChk: true,
-                        },
-                    },
-                    {
-                        model: db.Product,
-                        as: 'product',
-                        where:{
-                                title: q.title? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}
-                        },
-                    },
-                    {
-                        model: db.Ordercode,
-                        as: 'ordercode',
-                        where: {
                             code: q.ordercode? { [Op.like]: `%${q.ordercode}%` } : {[Op.regexp]: '^'}
                         }
                     },
                     {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
                         model: db.Store,
                         as: 'store',
                         where: {
                             id: res.locals.store.id
                         }
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        where: {
+                            korPhone: q.korPhone? { [Op.like]: `%${q.korPhone}%` } : {[Op.regexp]: '^'}, 
+                        },
+                        required: false
                     },
                     {
                         model: db.User,
@@ -512,32 +638,22 @@ module.exports = {
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/used_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/used_index', objData);
-                },1000);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/used_index', objData);
             }); 
         }
     },
 
     finalIndex: (req,res)=>{
         // console.log('************\n\n\n\n\n******',req.query);
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
         let objData = {};
         var limit = new Date();
         limit.setDate(limit.getDate()+3);
-        if(Object.keys(req.query).length === 0){
-            
+        if(Object.keys(req.query).length === 0){            
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
@@ -551,6 +667,7 @@ module.exports = {
                         where: { 
                             paidChk: true,
                             placeChk: true,
+                            finalChk: true
                         },
                     },
                     {
@@ -559,22 +676,35 @@ module.exports = {
                         where: {
                             id: res.locals.store.id
                         }
+                    },
+                    {
+                        model: db.Ordercode,
+                        as: 'ordercode'
+                    },
+                    {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product'
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        required: false
+                    },
+                    {
+                        model: db.User,
+                        as: 'buyer'
                     }
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/final_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/final_index', objData);
-                },1000);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/final_index', objData);
             }); 
         }      
         else{
@@ -583,8 +713,6 @@ module.exports = {
                 offset: perPage*(page-1),
                 where: {
                     endDate: {[Op.lte]: limit},
-                },
-                where:{
                     [Op.and]:
                     [
                         {createdAt: {
@@ -604,6 +732,7 @@ module.exports = {
                         where: { 
                             paidChk: true,
                             placeChk: true,
+                            finalChk: true
                          },
                     },
                     {
@@ -621,39 +750,46 @@ module.exports = {
                         }
                     },
                     {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
                         model: db.Store,
                         as: 'store',
                         where: {
-                            id: res.locals.store.id
+                            id: res.locals.store.id,
+                            url: q.url? { [Op.like]: `%${q.url}%` } : {[Op.regexp]: '^'},
                         }
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        where: {
+                            korPhone: q.korPhone? { [Op.like]: `%${q.korPhone}%` } : {[Op.regexp]: '^'}, 
+                        },
+                        required: false
                     },
                     {
                         model: db.User,
                         as: 'buyer',
                         where: {
-                            username: q.ordercode? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}
+                            username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'},
+                            name: q.name? { [Op.like]: `%${q.name}%` } : {[Op.regexp]: '^'},
                         }
                     }
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/final_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/final_index', objData);
-                },1000);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/final_index', objData);
             }); 
         }
     },
 
     cancelIndex: (req,res)=>{
+        let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
@@ -676,22 +812,35 @@ module.exports = {
                         where: {
                             id: res.locals.store.id
                         }
+                    },
+                    {
+                        model: db.Ordercode,
+                        as: 'ordercode'
+                    },
+                    {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product'
+                    },
+                    {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        required: false
+                    },
+                    {
+                        model: db.User,
+                        as: 'buyer'
                     }
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/cancel_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/cancel_index', objData);
-                },1000);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/cancel_index', objData);
             });  
         }      
         else{
@@ -706,7 +855,6 @@ module.exports = {
                                 ]
                             }
                         },  
-                        {cancelChk: true}
                     ]   
                     ///상품명, 주문번호, 주문자아이디, 판매스토어주소
                 },
@@ -733,6 +881,12 @@ module.exports = {
                         }
                     },
                     {
+                        model: db.Payinfo,
+                        as: 'payinfo',
+                        foreignKey: 'orderId',
+                        required: false
+                    },
+                    {
                         model: db.Store,
                         as: 'store',
                         where: {
@@ -740,27 +894,26 @@ module.exports = {
                         }
                     },
                     {
+                        model: db.ServiceUser,
+                        as: 'serviceUsers',
+                        where: {
+                            korPhone: q.korPhone? { [Op.like]: `%${q.korPhone}%` } : {[Op.regexp]: '^'}, 
+                        },
+                        required: false
+                    },
+                    {
                         model: db.User,
                         as: 'buyer',
                         where: {
-                            username: q.ordercode? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}
+                            username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'},
+                            name: q.name? { [Op.like]: `%${q.name}%` } : {[Op.regexp]: '^'},
                         }
                     }
                 ]
             })
             .then(orders=>{
-                if(orders.count ==0){
-                    res.render('3_orders/cancel_index',{ordersCount:0});
-                }
-                ordersToArray(orders)
-                .then(obj=>{
-                    objData = obj;
-                })  
-            })
-            .then(()=>{
-                setTimeout(()=>{
-                    res.render('3_orders/cancel_index', objData);
-                },1000);                
+                objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                res.render('3_orders/cancel_index', objData);
             });  
         }
     },

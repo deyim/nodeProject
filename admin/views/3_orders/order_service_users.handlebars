@@ -1,0 +1,40 @@
+<div class="cont">
+    <div class="titlearea">
+        <div class="title">{{order.product.title}} 서비스이용자</div>
+        <div class="nav">주문/클레임관리 > 서비스이용자</div>
+    </div>
+    
+    <div class="list_all">
+        <div class="list_cont">
+            <table class="list_table" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        {{!-- <th>번호</th> --}}
+                        <th>이름(한글)</th>
+                        <th>이름(영어)</th>
+                        <th>생년월일</th>
+                        <th>한국 전화번호</th>
+                        <th>현지 전화번호</th>
+                        <th>카카오톡 아이디</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {{#each users}}
+                    <tr>
+                        <th>55</th>
+                        <th>{{this.korName}}</th>
+                        <th>{{this.engName}}</th>
+                        <th>{{makeDate this.birthday}}</th>
+                        <th>{{this.korPhone}}</th>
+                        <th>{{this.tourPhone}}</th>
+                        <th>{{this.kakaoId}}</th>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>   
+    </div> 
+</div>
+
+       

@@ -135,7 +135,7 @@ module.exports = {
                 ]
             })
             .then(orders=>{
-                console.log(orders);
+                ///console.log(orders);
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/ordered_index', objData);
             })   
@@ -535,9 +535,6 @@ module.exports = {
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                where: {
-                    endDate: {[Op.lte]: limit},
-                },
                 include: [{
                     model: db.OrderStatus,
                     as: 'orderStatus',
@@ -592,6 +589,8 @@ module.exports = {
                 where:{
                     [Op.and]:
                     [
+                        {startDate: {[Op.lte]: today}},
+                        {endDate: {[Op.gte]: limit}},
                         {createdAt: {
                             [Op.and]:[
                                 {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
@@ -603,7 +602,6 @@ module.exports = {
                 },
             })
             .then(orders=>{
-                console.log(orders);
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/used_index', objData);
             }) 

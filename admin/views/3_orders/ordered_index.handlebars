@@ -1,83 +1,114 @@
+
 <div class="cont">
-	<div class="titlearea">
-		<div class="title">주문/클레임관리</div>
-		<div class="nav">주문/클레임관리 > 임금확인중</div>
-	</div>
-	
-	{{>order_query}}
-	
-	
-	<div class="list_all">
-		<div class="list_info">
-			<div class="count">총 주문내역 : {{ordersCount}}건</div>
-			
-		</div>
-		
-		<table cellpadding="0" cellspacing="0" class="list_table">
-			<colgroup>
-				<col style="width:3%;">
-				<col style="width:72%;">
-				<col style="width:12%;">
-				<col style="width:13%;">
-				
-			</colgroup>
-		
-			<thead>
-				<tr>
-					<th><input type="checkbox"></input></th>
-					<th>주문내역</th>
-					<th>주문자 이름 / 아이디</th>
-					<th>상태</th>
-					
-				</tr>
-			</thead>
-			
-			<tbody>
-				{{#each orders}}
-				<tr>
-					
-					{{>order_list}}
-					<th>
-						<div>
-							[취소요청]<br>2018-09-02
-						</div>
-						<div class="order_cancel">취소사유</div>
-					</th>
-					
-				</tr>
-				{{>service_users}}
-				{{/each}}
-			</tbody>
-		</table>
-		
-		{{>pages}}
-	</div>
-	
-	
+    <div class="titlearea">
+        <div class="title">입금확인중</div>
+        <div class="nav">주문/클레임관리 > 입금확인중</div>
+    </div>
+    
+    {{>order_query}}
+    
+    <div class="list_all">
+        <div class="list_info">
+            <div class="count">총 주문내역 : {{ordersCount}}건</div>
+            <ul class="message_button">
+                <li class="wh_button">엑셀다운로드</li>
+            </ul>
+        </div>
+        
+        <table cellpadding="0" cellspacing="0" class="list_table">
+        
+            <colgroup>
+                <col style="width:3%;">
+                <col style="width:72%;">
+                <col style="width:12%;">
+                <col style="width:13%;">
+                
+            </colgroup>
+        
+        
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onclick="chooseAll()"></input></th>
+                    <th>주문내역</th>
+                    <th>주문자 이름 / 아이디</th>
+                    <th>상태</th>
+                    
+                </tr>
+            </thead>
+            {{!-- {{orders}} --}}
+            <tbody>
+                
+                {{#each orders}}
+                <tr>
+                    <th><input type="checkbox"></input></th>
+                    <td>
+                        <div class="order_info_box">
+                            <div class="order_info">
+                                주문번호 : {{this.ordercode.code}} ｜ 주문일자 : {{makeDate this.createdAt}}<br>
+                                결제수단 : {{this.payinfo.measure}} 입금인 : {{this.payInfo.name}}
+                            </div>
+                                
+                            <div class="all_price">총 결제금액 {{this.price}}</div>
+                        </div>
+                        
+                        <div class="order_pro_info">
+                            <div class="thum"><img src=""></div>
+                            <div class="textarea">
+                                <div class="pro_title">{{this.product.title}}</div>
+                                <ul class="option_list">
+                                    <li>예약일자 : {{this.startdate}}</li>
+                                    <li>선택옵션 : {{this.option}}</li>
+                                </ul>
+                                <div class="info_view"><a href="/orders/users/{{this.id}}">서비스이용자 정보보기</a></div>
+                            </div>
+                        </div>
+                    </td>
+                    
+                    <th>
+                        {{this.buyer.name}}<br>
+                        {{this.buyer.username}}
+                    </th>
+                    
+                    <th>{{this.store.url}}</th>
+                    
+                    {{!-- <th>{{#each serviceUsers}}{{this.korName}}{{/each}}</th> --}}
+                   {{!-- {{this.store.url}}
+                   <th>
+                   <div class="order_info_show" style="display:none;">
+                        {{this.store.url}}
+                        <div class="layer_area">
+                            <div class="showbox">
+                                <div class="showbox_cetearea">
+                                    <div class="title">서비스이용자정보</div>
+                                    <div class="close"><img src="/images/sub/showbox_close.png"></div>
+                                </div>
+                                {{this.serviceUsers}}
+                                <div class="showbox_contents">                             
+                                    <div class="grey_contents">
+                                        {{serviceUsers}}
+                                        {{#each serviceUsers}}
+                                            서비스 이용자<br>
+                                            이름(한글) : {{this.korName}}<br>
+                                            이름(영문) : {{this.engName}}<br>
+                                            생년월일 : {{makeDate this.birthday}}<br>
+                                            한국 전화번호 : {{this.korPhone}}<br>
+                                            현지 전화번호 : {{this.tourPhone}}<br>
+                                            카카오톡 아이디 : {{this.kakaoId}}<br><br>
+                                        {{/each}}
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   </th>
+                     --}}
+                    {{!-- {{>service_users serviceUsers=this.serviceUsers}} --}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        
+        {{>pages}}
+    </div>
+    
 </div>
-
-
-
-<script>
-    (function($){
-        $(window).on("load",function(){
-        $(".menuarea").mCustomScrollbar();
-        });
-    })(jQuery);
-	</script>
-	
-	<script type="text/javascript">
-		$(function(){
-			$(".info_view").click(function(){
-				$(".order_info_show").show();
-			});
-		});
-		
-		
-		$(function(){
-			$(".close").click(function(){
-				$(".order_info_show").hide();
-			});
-		});
-		
-	</script>
