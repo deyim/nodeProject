@@ -5,7 +5,7 @@
     </div>
     
     
-     <div class="search_area">
+    <div class="search_area">
         
         <div class="search_title">
             <div class="title">매출현황</div>
@@ -17,13 +17,13 @@
                 <tbody>
                     <tr>
                         <th>총 결제금액</th>
-                        <td class="plus_price">{{searchedSales}}원</td>
+                        <td class="plus_price">{{sales}}원</td>
                         <td>사이트내에서 결제된 금액입니다</td>
                     </tr>
                     
                     <tr>
                         <th>총 주문건수</th>
-                        <td class="plus_price">{{ordersCount}}원</td>
+                        <td class="plus_price">{{count}}원</td>
                         <td>사이트내에서 구매된 총 건수입니다.</td>
                     </tr>
                     
@@ -139,8 +139,6 @@
     </div>
     
     
-    
-    
     <div class="list_all">
         <div class="search_title">
             <div class="title">주문상세내역</div>
@@ -175,13 +173,37 @@
             <tbody>
                 {{#each orders}}
                 <tr>
-                    {{>order_list}}
+                    <th><input type="checkbox"></input></th>
+                    <td>
+                        <div class="order_info_box">
+                            <div class="order_info">
+                                주문번호 : {{this.ordercode.code}} ｜ 주문일자 : {{makeDate this.createdAt}}<br>
+                                결제수단 : {{this.payinfo.measure}} 입금인 : {{this.payInfo.name}}
+                            </div>
+                                
+                            <div class="all_price">총 결제금액 {{this.price}}</div>
+                        </div>
+                        
+                        <div class="order_pro_info">
+                            <div class="thum"><img src=""></div>
+                            <div class="textarea">
+                                <div class="pro_title">{{this.product.title}}</div>
+                                <ul class="option_list">
+                                    <li>예약일자 : {{this.startdate}}</li>
+                                    <li>선택옵션 : {{this.option}}</li>
+                                </ul>
+                                <div class="info_view"><a href="/orders/users/{{this.id}}">서비스이용자 정보보기</a></div>
+                            </div>
+                        </div>
+                    </td>
+                    
                     <th>
-                        [발주확인]
+                        {{this.buyer.name}}<br>
+                        {{this.buyer.username}}
                     </th>
                     
-                </tr>
-                {{>service_users}}
+                    <th>{{this.store.url}}</th>
+
                 {{/each}}
             </tbody>
         </table>
@@ -191,18 +213,3 @@
     
 </div>
 
-<script type="text/javascript">
-    $(function(){
-        $(".info_view").click(function(){
-            $(".order_info_show").show();
-        });
-    });
-    
-    
-    $(function(){
-        $(".close").click(function(){
-            $(".order_info_show").hide();
-        });
-    });
-    
-</script>

@@ -160,14 +160,15 @@
 					<td colspan="3">
 						<div class="compulsory_img">
 							<div class="compulory_text">대표이미지</div>
-							<div class="image"><img src="/images/sub/ex_img.jpg"></div>
+							<div class="image"><img src="{{product.imagePath}}" id="product_image"></div>
 							<div class="buttonarea">
+								<input type='file' id="imgInp">
 								<div class="change">변경</div>
 								<div class="delete">삭제</div>
 							</div>
 						</div>
 						
-						<div class="compulsory_img">
+						{{!-- <div class="compulsory_img">
 							<div class="compulory_text">추가이미지</div>
 							<div class="image">
 								<div class="plus_imgicon"><img src="/images/sub/plus_img.png"></div>
@@ -198,7 +199,7 @@
 								<div class="change">찾아보기</div>
 								
 							</div>
-						</div>
+						</div> --}}
 					</td>
 				</tr>
 				
@@ -406,5 +407,26 @@
 			$('#target_date').val(thisDate);
 		});
 	});  --}}
+
+
+//이미지 미리보기
+	$(function() {
+		$("#imgInp").on('change', function(){
+			readURL(this);
+		});
+	});
+
+	function readURL(input) {
+		if (input.files && input.files[0]) {
+		var reader = new FileReader();
+
+		reader.onload = function (e) {
+				$('#product_image').attr('src', e.target.result);
+			}
+
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+
 
 </script>

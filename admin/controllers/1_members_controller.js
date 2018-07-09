@@ -162,7 +162,7 @@ module.exports = {
                     where: {
                         id: res.locals.store.id,
                     },
-                    throuth: {
+                    through: {
                         createdAt: {
                             [Op.and]:[
                                 {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},

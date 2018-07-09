@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     endDate: DataTypes.DATE,
     countType: DataTypes.STRING,
     count: DataTypes.INTEGER,
+    storeCost: DataTypes.INTEGER,
+    pgCost: DataTypes.INTEGER,
     childCount: DataTypes.INTEGER
   }, {});
   Order.associate = function(models) {
