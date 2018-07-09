@@ -48,7 +48,7 @@
                 <tr>
                     <th>내용 *</th>
                     <td colspan="3">
-                        <div class="mar_t10"><textarea rows="15" class="textareastyle" name="content"></textarea></div>
+                        <div class="mar_t10"><textarea rows="15" class="textareastyle" name="content" id="content"></textarea></div>
                     </td>
                 </tr>
                 
@@ -59,27 +59,12 @@
     </div>
     
     <div class="bot_button inclass">
-        <div class="bl_button" onclick="document.forms[0].submit()">등록</div>
+        {{!-- <div class="bl_button" onclick="document.forms[0].submit()">등록</div> --}}
+        <div class="bl_button" onclick="submitContents(this)">등록</div>
         <a href="/sites/notices"><div class="wt_button inclass"> 목록</div></a>
     </div>
     </form>
     
 </div>
 
-
-<h1>notices_add</h1>
-
-<form action="" method="POST">
-    <select name="noticecodeId">
-        {{#each codes}}
-            <option value={{this.id}}>{{this.code}}</option> 
-        {{/each}}
-    </select>
-    <select name="type">
-        <option value="A">사용자</option>
-        <option value="B">스토어</option>
-    </select><br>
-    제목:<input type="text" name="title">
-    내용:<input type="text" name="content">
-    <input type="submit" value="제출">
-</form>
+{{>editor_script}}

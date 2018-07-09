@@ -5,6 +5,7 @@
     </div>
     
     <div class="product_write">
+        <form method="post">
         <table cellpadding="0" cellspacing="0" class="de_table">
             <tbody>
                 <tr>
@@ -27,7 +28,7 @@
                 <tr>
                     <th>내용 *</th>
                     <td colspan="3">
-                        <div class="mar_t10"><textarea rows="15" class="textareastyle">{{notice.content}}</textarea></div>
+                        <div class="mar_t10"><textarea rows="15" class="textareastyle" name="content" id="content">{{notice.content}}</textarea></div>
                     </td>
                 </tr>
                 
@@ -44,5 +45,7 @@
     </div>
     
     {{>modify_delete id=notice.id url='/stores/notices' }}
+    </form>
     
 </div>
+{{>editor_script}}

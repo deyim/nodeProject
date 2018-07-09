@@ -48,7 +48,7 @@
                 <tr>
                     <th>내용 *</th>
                     <td colspan="3">
-                        <div class="mar_t10"><textarea rows="15" class="textareastyle" name="content"></textarea></div>
+                        <div class="mar_t10"><textarea rows="15" class="textareastyle" name="content" id="content"></textarea></div>
                     </td>
                 </tr>
                 
@@ -59,9 +59,10 @@
     </div>
     
     <div class="bot_button inclass">
-        <div class="bl_button" onclick="document.forms[0].submit()">등록</div>
+        <div class="bl_button" onclick="submitContents(this)">등록</div>
         <a href="/sites/faqs"><div class="wt_button inclass"> 목록</div></a>
     </div>
     </form>
     
 </div>
+{{>editor_script}}

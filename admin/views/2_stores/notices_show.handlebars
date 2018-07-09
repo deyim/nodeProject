@@ -1,65 +1,56 @@
 <div class="cont">
-			<div class="titlearea">
-				<div class="title">전체공지정보</div>
-				<div class="nav">스토어관리 > 전체공지 > 전체공지정보</div>
-			</div>
-			
-			
-			<form method="POST">
-				<div class="product_write">
+	<div class="titlearea">
+		<div class="title">전체공지정보</div>
+		<div class="nav">스토어관리 > 전체공지 > 전체공지정보</div>
+	</div>
 
-						<table cellpadding="0" cellspacing="0" class="de_table">
-							<tbody>
-								<tr>
-									<th>전체공지 등록일자</th>
-									<td>{{notice.createdAt}}</td>
-									
-									<th>스토어주소</th>
-									<td>{{store.url}}</td>
-								</tr>	
-								
-								<tr>
-									<th>제목 *</th>
-									<td colspan="3">
-										<div class="input_100box"><input type="text" class="inputstyle" name="title" value={{notice.title}}></input></div>
-									</td>
-								</tr>
 
-								<tr>
-									<th>내용 *</th>
-									<td colspan="3">
-										<div class="mar_t10"><textarea rows="15" class="textareastyle" name="content">{{notice.content}}</textarea></div>
-									</td>
-								</tr>
-								
-								<tr>
-									<th>첨부파일 *</th>
-									<td colspan="3">
-										<input type="file"></input>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					
-					<div id="mydate"></div>
-					
-				</div>
-				
-				<div class="bot_button">
-					<div class="bl_button"><input type="submit" value="수정"></div>
-					<div class="wt_button"><a href="/stores/notices/">목록</a></div>
-				</div>
-			</form>
+	<form method="POST">
+		<div class="product_write">
+
+				<table cellpadding="0" cellspacing="0" class="de_table">
+					<tbody>
+						<tr>
+							<th>전체공지 등록일자</th>
+							<td>{{notice.createdAt}}</td>
+							
+							<th>스토어주소</th>
+							<td>{{store.url}}</td>
+						</tr>	
+						
+						<tr>
+							<th>제목 *</th>
+							<td colspan="3">
+								<div class="input_100box"><input type="text" class="inputstyle" name="title" value={{notice.title}}></input></div>
+							</td>
+						</tr>
+
+						<tr>
+							<th>내용 *</th>
+							<td colspan="3">
+								<div class="mar_t10"><textarea rows="15" class="textareastyle" name="content" id="content">{{notice.content}}</textarea></div>
+							</td>
+						</tr>
+						
+						<tr>
+							<th>첨부파일 *</th>
+							<td colspan="3">
+								<input type="file"></input>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			
+			<div id="mydate"></div>
 			
 		</div>
+		
+		<div class="bot_button">
+			<div class="bl_button" onclick="submitContents(this)">수정</div>
+			<div class="wt_button"><a href="/stores/notices/">목록</a></div>
+		</div>
+	</form>
 
+</div>
 
-
-
-
-<h1>notice show</h1>
-{{notice.title}}
-{{author.username}}
-{{store.url}}
-
-<a href="/stores/notices/{{notice.id}}/delete">삭제</a>
+{{>editor_script}}

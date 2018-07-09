@@ -5,6 +5,7 @@
     </div>
     
     <div class="product_write">
+        <form method="POST">
         <table cellpadding="0" cellspacing="0" class="de_table">
             <tbody>
                 <tr>
@@ -51,7 +52,7 @@
                 <tr>
                     <th>내용 *</th>
                     <td colspan="3">
-                        <div class="mar_t10"><textarea rows="15" class="textareastyle">{{post.content}}</textarea></div>
+                        <div class="mar_t10"><textarea rows="15" class="textareastyle" name="content" id="content">{{post.content}}</textarea></div>
                     </td>
                 </tr>
                 
@@ -66,6 +67,12 @@
                 </tr>
             </tbody>
         </table>
-        
+        <div class="bot_button inclass">
+            {{!-- <div class="bl_button" onclick="document.forms[0].submit()">등록</div> --}}
+            <div class="bl_button" onclick="submitContents(this)">등록</div>
+            <a href="/stores/posts"><div class="wt_button inclass"> 목록</div></a>
+        </div>
+        </form>
     </div>
 </div>
+{{>editor_script}}
