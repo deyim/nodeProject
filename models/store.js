@@ -57,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     Store.hasOne(models.Categoryfill, {as: 'category'});
     Store.hasOne(models.Market, {as: 'market'});
     Store.hasMany(models.Board, {as: 'boards'});
+    Store.hasMany(models.StoreFile, {as: 'storeFiles', foreignKey: 'storeId'});
     Store.hasMany(models.Product, {as: 'products', foreignKey: 'storeId'});
     Store.belongsTo(models.Provider, {as: 'provider', foreignKey: 'providerId'});
     Store.hasOne(models.Approval, {as: 'approval', foreignKey: 'storeId'});

@@ -8,8 +8,13 @@
         <form method="POST">
         <div class="search_title">
             <div class="title">스토어정보</div>
+            {{!-- <div class="bot_button">  --}}
+               
+            {{!-- </div> --}}
         </div>
-    
+        {{!-- <div class="bot_button">  --}}
+            <div class="dg_button" onclick="document.location.href='/members/providers/{{store.provider.id}}'">스토어회원 수정하러 가기</a></div>
+        {{!-- </div> --}}
         <table cellpadding="0" cellspacing="0" class="de_table" style="margin-top:20px;">
             <tbody>
                 <tr>
@@ -33,7 +38,7 @@
                     <th>스토어로고이미지</th>
                     <td>
                         <div class="compulsory_img">
-                            <div class="image">`</div>
+                            <div class="image"><img src="{{store.storeLogoPath}}" alt="스토어 로고"></div>
                         </div>
                     </td>
                     
@@ -41,12 +46,12 @@
                     <th>스토어 대표이미지</th>
                     <td>
                         <div class="compulsory_img">
-                            <div class="image"><img src="/images/sub/ex_img.jpg"></div>
+                            <div class="image"><img src="{{store.storeImgPath}}" alt="스토어 대표이미지"></div>
                         </div>
                     </td>
                 </tr>
                 {{!-- {{cities}} --}}
-                {{#each nations}}
+                {{#each store.nations}}
                 <tr>
                     <th rowspan="1">* 국가 / 도시선택</th>
                     <td colspan="3">
@@ -54,7 +59,7 @@
                             {{this.nation}}
                         </div>      
 
-                        {{#each ../cities}}   
+                        {{#each ../store.cities}}   
                             {{selectCities this ../this.id}}
                         {{/each}}
                     </td>
@@ -64,17 +69,84 @@
                 <tr>
                     <th>업로드 파일</th>
                     <td></td>
-                </tr>                
+                </tr>    
+                <tr>
+                    <th>*중계 수수료 방식</th>
+                    <td>
+                        <input type="hidden" id="rateType" value="{{store.provider.rateType}}">
+                        <div class="inline" id="monthRate">
+                            <input type="radio" name="rateType" value="A"></input> 월정액
+                        </div>
+                        <div class="inline" id="monthFee">
+                            <input type="radio" name="rateType" value="B"></input> 판매수수료
+                        </div>
+                        
+                        <div class="inline" id="monthBoth">
+                            <input type="radio" name="rateType" value="C"></input> 월정액 + 판매수수료
+                        </div>
+                    </td>	
+                    
+                    
+                    <th>*적용요율(비용)</th>
+                    <td>
+                        <div id="monthFeeInput">
+                            <div class="input_25box">
+                                <input type="text" class="inputstyle" name="monthFee" value="{{store.provider.monthFee}}"></input>
+                            </div>
+                            <div class="inline"> 원</div>
+                        </div>
+                        <div id="monthRateInput">
+                            <div class="input_25box">
+                                <input type="text" class="inputstyle" name="monthRate" value="{{store.provider.monthRate}}"></input>
+                            </div>
+                            <div class="inline"> %</div>
+                        </div>
+                    </td>
+                    
+                </tr>            
                 
             </tbody>
         </table>
-        
-        <div class="bot_button">
-            <div class="dg_button" ><a href="/members/providers/{{provider.id}}">스토어회원 수정하러 가기</a></div>
-        </div>
 
         {{>modify_delete id=store.id url='/members/stores' }}
+
         </form>
     </div>
         
 </div>
+
+<script>
+     $(document).ready(function(){
+        var type = $('#rateType').val();
+        $("input[value="+type+"]").prop("checked",true);
+        if (type == 'B'  ) {
+            $('#monthRateInput').show();
+            $('#monthFeeInput').hide();
+        }
+        else if (type == 'A') {
+            $('#monthRateInput').hide();
+            $('#monthFeeInput').show();
+        }
+        else {
+            $('#monthRateInput').show();
+            $('#monthFeeInput').show();
+        }
+    });
+
+   $(document).ready(function(){   
+       $(document).on('change',$('input:radio:checked'),function () {
+            if ($("input[name='rateType']:checked").val() == 'B'  ) {
+                $('#monthRateInput').show();
+                $('#monthFeeInput').hide();
+            }
+            else if ($("input[name='rateType']:checked").val() == 'A') {
+                $('#monthRateInput').hide();
+                $('#monthFeeInput').show();
+            }
+            else {
+                $('#monthRateInput').show();
+                $('#monthFeeInput').show();
+            }
+       });
+   });
+</script>

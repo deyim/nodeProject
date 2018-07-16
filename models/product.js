@@ -32,8 +32,9 @@ module.exports = (sequelize, DataTypes) => {
     Product.belongsTo(models.Store, {as: 'store', foreignKey: 'storeId'});
     Product.belongsTo(models.Category, {as: 'category', foreignKey: 'categoryId'});
     Product.belongsTo(models.Productcode, {as:'productcode', foreignKey: 'productcodeId'});
-    Product.hasMany(models.Commentb, {as: 'comments'});
-    Product.hasMany(models.Price, {as: 'prices'});
+    Product.hasMany(models.Comment, {as: 'comments', foreignKey: 'productId'});
+    Product.hasMany(models.Price, {as: 'prices', foreignKey: 'productId'});
+    Product.hasMany(models.Option, {as: 'options', foreignKey: 'productId'});
     //city, nation, tag
     Product.belongsToMany(models.Nation, {
       through: 'ProductNations',

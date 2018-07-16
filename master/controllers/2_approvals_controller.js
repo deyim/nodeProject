@@ -6,42 +6,33 @@ const dateFunctions = require('../../lib/date_functions');
 
 module.exports = {
     findStore: (req,res,next)=>{ 
-        db.Store.findById(req.params.store_id)
-        .then(store=>{
-            if(!store){
-                req.flash('error', '없는 스토어입니다.');
-                res.redirect('/members/stores');
-            }
-            req.store = store;
-
-            store.getProvider()
-            .then(provider=>{
-                req.provider = provider;
-            });
-
-            store.getUsers()
-            .then(users=>{
-                console.log(users[0]);
-                req.users = users;
-            });
-
-            store.getNations()
-            .then(nations=>{
-                req.nations = nations;
-            });
-
-            store.getCities()
-            .then(cities=>{
-                req.cities = cities;
-            });
-
-            store.getApproval()
-            .then(approval=>{
-                req.approval = approval;
-                next();
-            });
+        db.Store.findOne({
+            where: {
+                id: req.params.store_id,
+            },
+            include: [
+                {
+                    model:db.Provider,
+                    as: 'provider'
+                },
+                {
+                    model: db.Nation,
+                    as: 'nations'
+                },
+                {
+                    model: db.City,
+                    as: 'cities',
+                },
+                {
+                    model: db.Approval,
+                    as: 'approval'
+                }
+            ]
         })
-        //회원 정보도 다 가져와야돼??
+        .then(store=>{
+            req.store = store;
+            next();
+        })
         
     },
 
@@ -130,8 +121,38 @@ module.exports = {
     },
 
     storesShow: (req,res)=>{
-        objData = {store:req.store, approval:req.approval}
+        objData = {store:req.store}
         res.render('2_approvals/stores_show', objData);
+    },
+
+    storesUpdate: (req,res)=>{
+        let provider;
+        db.Provider.findOne({
+            include :[
+                {
+                    model: db.Store,
+                    as: 'store',
+                    where: {
+                        id:req.params.store_id
+                    }
+                }
+            ]
+        }).then(provider_ => {
+            provider = provider_
+        }).then(()=>{
+            provider.update(
+                {
+                    rateType: req.body.rateType,
+                    monthRate: req.body.monthRate,
+                    monthFee: req.body.monthFee,
+                    // approvalChk: true,
+                    // approvalDate: Date.now()
+                }
+            )
+            .then(()=>{
+                res.redirect(`/approvals/stores/`);
+            })
+        });
     },
 
     //select -> approvalChk to true, approvalDate change(additional column)

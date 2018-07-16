@@ -208,26 +208,34 @@
                 <tr>
                     <th>*중계 수수료 방식</th>
                     <td>
-                        <input type="hidden" id="hiddenRateType" value="">
-                        <div class="inline rateType" id="A">
-                            <input type="radio" checked></input> 월정액
+                        <input type="hidden" id="rateType" value="{{provider.rateType}}">
+                        <div class="inline" id="monthRate">
+                            <input type="radio" name="rateType" value="A"></input> 월정액
                         </div>
-                        <div class="inline rateType" id="B">
-                            <input type="radio"></input> 판매수수료
+                        <div class="inline" id="monthFee">
+                            <input type="radio" name="rateType" value="B"></input> 판매수수료
                         </div>
                         
-                        <div class="inline rateType" id="C">
-                            <input type="radio"></input> 월정액 + 판매수수료
+                        <div class="inline" id="monthBoth">
+                            <input type="radio" name="rateType" value="C"></input> 월정액 + 판매수수료
                         </div>
                     </td>	
                     
                     
                     <th>*적용요율(비용)</th>
                     <td class="rateFee">  
-                        <div class="input_25box">
-                            <input type="text" class="inputstyle" value="{{provider.monthFee}}"></input>
+                        <div id="monthFeeInput">
+                            <div class="input_25box">
+                                <input type="text" class="inputstyle" name="monthFee" value="{{store.provider.monthFee}}"></input>
+                            </div>
+                            <div class="inline"> 원</div>
                         </div>
-                        <div class="inline"> 원</div>                     
+                        <div id="monthRateInput">
+                            <div class="input_25box">
+                                <input type="text" class="inputstyle" name="monthRate" value="{{store.provider.monthRate}}"></input>
+                            </div>
+                            <div class="inline"> %</div>
+                        </div>                   
                     </td>
                     
                 </tr>
@@ -272,30 +280,38 @@
 
 <script>
 
-$(function(){
-    $(".rateType").click(function(){
-        console.log($(".rateType :input"));
-        $(".rateType :input").prop("checked",false);
-        $(this).children('input').prop("checked",true);
-        $("#hiddenRateType").val($(this).attr('id'));
-    })
-});
+    $(document).ready(function(){
+        var type = $('#rateType').val();
+        $("input[value="+type+"]").prop("checked",true);
+        if (type == 'B'  ) {
+            $('#monthRateInput').show();
+            $('#monthFeeInput').hide();
+        }
+        else if (type == 'A') {
+            $('#monthRateInput').hide();
+            $('#monthFeeInput').show();
+        }
+        else {
+            $('#monthRateInput').show();
+            $('#monthFeeInput').show();
+        }
+    });
 
-$(function(){
-    $(document).on('change', ".rateType", function(){
-        let type = $("#hiddenRateType").val();
-        let monthFee = "{{provider.monthFee}}";
-        let monthRate = '{{provider.monthRate}}';
-        if(type === 'A'){
-            $(".rateFee").html(`<div class='input_25box'><input type='text' class='inputstyle' value='${monthFee}'></input></div><div class='inline'> 원</div>`);
-        }
-        else if(type === 'B'){
-            $(".rateFee").html(`<div class='input_25box'><input type='text' class='inputstyle' value='${monthRate}'></input></div><div class='inline'> %</div>`);
-        }
-        else{
-            $(".rateFee").html(`<div class='input_25box'><input type='text' class='inputstyle' value='${monthFee}'></input></div><div class='inline'> 원</div><div class='inline'>+</div><div class='input_25box'><input type='text' class='inputstyle' value='${monthRate}'></input></div><div class='inline'> %</div>`);
-        }
-    })
-});
+    $(document).ready(function(){   
+        $(document).on('change',$('input:radio:checked'),function () {
+            if ($("input[name='rateType']:checked").val() == 'B'  ) {
+                $('#monthRateInput').show();
+                $('#monthFeeInput').hide();
+            }
+            else if ($("input[name='rateType']:checked").val() == 'A') {
+                $('#monthRateInput').hide();
+                $('#monthFeeInput').show();
+            }
+            else {
+                $('#monthRateInput').show();
+                $('#monthFeeInput').show();
+            }
+        });
+    });
 
 </script>

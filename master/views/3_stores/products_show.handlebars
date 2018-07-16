@@ -105,16 +105,27 @@
                 <tr>
                     <th>판매상태</th>
                     <td colspan="3">
-                        <div class="inline"><input type="checkbox" {{ifchecked product.onSaleChk}}></input> 판매중</div>
-                        {{!-- <div class="inline"><input type="checkbox"></input> 판매중지</div> --}}
+                        <input type="hidden" id="onSaleChk" value="{{product.onSaleChk}}">
+                        <div class="inline">
+                           판매중 <input type="radio" name="onSaleChk" value="true"></input> 
+                        </div>
+                        <div class="inline">
+                           판매중지 <input type="radio" name="onSaleChk" value="false"></input> 
+                        </div>
+                      
                     </td>
                 </tr>
                 
                 <tr>
                     <th>전시상태</th>
                     <td colspan="3">
-                        <div class="inline"><input type="checkbox" {{ifchecked product.onDisplayChk}}></input> 전시중</div>
-                        {{!-- <div class="inline"><input type="checkbox"></input> 전시중지</div> --}}
+                        <input type="hidden" id="onDisplayChk" value="{{product.onSaleChk}}">
+                        <div class="inline">
+                           판매중 <input type="radio" name="onDisplayChk" value="true"></input> 
+                        </div>
+                        <div class="inline">
+                           판매중지 <input type="radio" name="onDisplayChk" value="false"></input> 
+                        </div>
                     </td>
                 </tr>
                 
@@ -136,189 +147,76 @@
                     </td>
                 </tr>
                 
+                {{#each options}}
                 <tr>
-                    <th rowspan="3">옵션/가격 *</th>
+                    <th rowspan="{{pricesExpand this.prices}}">옵션/가격 *</th>
                     <td colspan="3">
                         <div class="listdg_button">
                             <div class="inline">옵션명</div>
                             
-                            <div class="input_80box">
-                                <input class="inputstyle" type="text"> </input>
+                            <div class="input_50box">
+                                {{this.title}}
                             </div>
                         </div>
                     </td>
                 </tr>
-                
-                <tr>
-                    <td colspan="3">
-                        <div class="listdg_button">
-                            <div class="inline">가격</div>
-                            
-                            
-                            <div class="inline">성인</div>
-                            <div class="input_8box">
-                                <select class="inputstyle">
-                                    <option>1명</option>
-                                    <option>2명</option>
-                                    <option>3명</option>
-                                    <option>4명</option>
-                                    <option>5명</option>
-                                </select>
-                            </div>
-                                <div class="inline">-</div>
+                    {{#each this.prices}}
+                    <tr>
+                        <td colspan="3">
+                            <div class="listdg_button">
+                                <div class="input_25box">{{checkChild this.ifChild}}</div>
                                 
-                            <div class="input_8box">	
-                                <select class="inputstyle">
-                                    <option>1명</option>
-                                    <option>2명</option>
-                                    <option>3명</option>
-                                    <option>4명</option>
-                                    <option>5명</option>
-                                </select>
+                                <div class="inline"></div>
+                                    {{this.start}}명
+                                    <div class="inline">-</div>  
+                                    {{this.end}}명
+                                <div class="inline">가격</div>
+                                    {{this.price}}
+                                <div class="inline">원</div>
                             </div>
-                            
-                            <div class="input_12box">
-                                <input type="text" class="inputstyle"></input>
-                            </div>
-                            <div class="inline">원</div>
-                            
-                            
-                            <div class="inline">아동</div>
-                            <div class="input_8box">
-                                <select class="inputstyle">
-                                    <option>1명</option>
-                                    <option>2명</option>
-                                    <option>3명</option>
-                                    <option>4명</option>
-                                    <option>5명</option>
-                                </select>
-                            </div>
-                                <div class="inline">-</div>
-                                
-                            <div class="input_8box">	
-                                <select class="inputstyle">
-                                    <option>1명</option>
-                                    <option>2명</option>
-                                    <option>3명</option>
-                                    <option>4명</option>
-                                    <option>5명</option>
-                                </select>
-                            </div>
-                            
-                            <div class="input_12box">
-                                <input type="text" class="inputstyle"></input>
-                            </div>
-                            <div class="inline">원</div>
-                            
-                            
-                            
-                            <div class="plus_button">
-                                <img src="/images/sub/plus_option.png">
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td colspan="3">
-                        <div class="listdg_button">
-                            <div class="inline">가격</div>
-                            
-                            
-                            <div class="inline">성인</div>
-                            <div class="input_8box">
-                                <select class="inputstyle">
-                                    <option>1명</option>
-                                    <option>2명</option>
-                                    <option>3명</option>
-                                    <option>4명</option>
-                                    <option>5명</option>
-                                </select>
-                            </div>
-                                <div class="inline">-</div>
-                                
-                            <div class="input_8box">	
-                                <select class="inputstyle">
-                                    <option>1명</option>
-                                    <option>2명</option>
-                                    <option>3명</option>
-                                    <option>4명</option>
-                                    <option>5명</option>
-                                </select>
-                            </div>
-                            
-                            <div class="input_12box">
-                                <input type="text" class="inputstyle"></input>
-                            </div>
-                            <div class="inline">원</div>
-                            
-                            
-                            <div class="inline">아동</div>
-                            <div class="input_8box">
-                                <select class="inputstyle">
-                                    <option>1명</option>
-                                    <option>2명</option>
-                                    <option>3명</option>
-                                    <option>4명</option>
-                                    <option>5명</option>
-                                </select>
-                            </div>
-                                <div class="inline">-</div>
-                                
-                            <div class="input_8box">	
-                                <select class="inputstyle">
-                                    <option>1명</option>
-                                    <option>2명</option>
-                                    <option>3명</option>
-                                    <option>4명</option>
-                                    <option>5명</option>
-                                </select>
-                            </div>
-                            
-                            <div class="input_12box">
-                                <input type="text" class="inputstyle"></input>
-                            </div>
-                            <div class="inline">원</div>
-                            
-                            
-                            
-                            <div class="plus_button">
-                                <img src="/images/sub/plus_option.png">
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                
-                
+                        </td>
+                    </tr>
+                    {{/each}}
+                {{/each}}
                 <tr>
                     <th>상품상세설명 *</th>
                     <td colspan="3">
                         <div class="listdg_button">
                             <div class="dg_button">미리보기</div>
                         </div>
-                        <div class="mar_t10"><textarea rows="15" class="textareastyle"></textarea></div>
+                        <div class="mar_t10"><textarea rows="15" class="textareastyle">{{product.content}}</textarea></div>
                     </td>
                 </tr>
                 
                 <tr>
                     <th>취소/환불안내 *</th>
                     <td colspan="3">
-                        <textarea rows="5" class="textareastyle"></textarea>
+                        <textarea rows="5" class="textareastyle">{{product.policy}}</textarea>
                     </td>
                 </tr>
-                
-                
-                
-                
-                
             </tbody>
         </table>
     </div>
     
     <div class="bot_button">
-        <div class="bl_button">수정</div>
-        <div class="wt_button">삭제</div>
-        <div class="wt_button">목록</div>
+        {{!-- <div class="bl_button">수정</div> --}}
+        <div class="wt_button" onclick="document.location.href='/stores/products/{{product.id}}/delete'">삭제</div>
+        <div class="wt_button" onclick="document.location.href='/stores/products/'">목록</div>
     </div>
     </form>
 </div>
+
+
+<script>
+    $(document).ready(function(){
+        var chk = $('#onSaleChk').val();
+        $("input[name=onSaleChk][value="+chk+"]").prop("checked",true);
+    });
+
+     $(document).ready(function(){
+        var chk = $('#onDisplayChk').val();
+        $("input[name=onDisplayChk][value="+chk+"]").prop("checked",true);
+    });
+
+
+</script>

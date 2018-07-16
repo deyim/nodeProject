@@ -6,11 +6,12 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false
     },
     start: DataTypes.INTEGER,
-    end: DataTypes.INTEGER
+    end: DataTypes.INTEGER,
+    price: DataTypes.INTEGER
   }, {});
   Price.associate = function(models) {
-    Price.belongsTo(models.Option, {as: 'option'});
-    Price.belongsTo(models.Product, {as: 'product'});
+    Price.belongsTo(models.Option, {as: 'option', foreignKey: 'optionId'});
+    Price.belongsTo(models.Product, {as: 'product',  foreignKey: 'productId'});
   };
   return Price;
 };

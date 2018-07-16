@@ -33,7 +33,7 @@
                     <th>스토어로고이미지</th>
                     <td>
                         <div class="compulsory_img">
-                            <div class="image">`</div>
+                            <div class="image"><img src="{{store.storeLogoPath}}" alt="로고이미지"></div>
                         </div>
                     </td>
                     
@@ -41,7 +41,7 @@
                     <th>스토어 대표이미지</th>
                     <td>
                         <div class="compulsory_img">
-                            <div class="image"><img src="/images/sub/ex_img.jpg"></div>
+                            <div class="image"><img src="{{store.storeImgPath}}" alt="대표이미지"></div>
                         </div>
                     </td>
                 </tr>
@@ -62,10 +62,24 @@
                 {{/each}}
 
                 <tr>
-                    <th>업로드 파일</th>
-                    <td></td>
-                </tr>                
-                
+                    <th rowspan="3">* 업로드파일<br>(5개까지 업로드 가능)</th>
+                    <td colspan="3">
+                        <input type="file"></input>
+                    </td>
+                </tr>
+                {{#each store.storeFiles}}
+                <tr>
+                    <td colspan="3">
+                        <div class="listdg_button">
+                            <div class="inline">
+                                <div class="file_name">{{this.filePath}}</div>
+                                <div class="inline_dg_button">삭제</div>
+                            </div>
+                            <div class="inline_down_button">다운로드</div>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
             </tbody>
         </table>
         

@@ -35,7 +35,9 @@ module.exports = ()=>{
     route.get('/stores/:store_id', controller.findStore, controller.storesShow)
         .post('/stores/:store_id/', controller.findStore, controller.storesUpdate);
     //stores - delete
-    route.get('/stores/:id/delete', controller.findStore, controller.storesDelete);
-    
+    route.get('/stores/:store_id/delete', controller.findStore, controller.storesDelete);
+    route.get('/stores/:store_id/file_attach', controller.storeAttachFile);
+    route.get('/stores/:store_id/file_delete/:file_id', controller.storeDeleteFile);
+
     return route; 
 }

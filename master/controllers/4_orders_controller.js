@@ -5,56 +5,56 @@ const perPage = 5;
 const dateFunctions = require('../../lib/date_functions');
 
 
-var makeObj = (order)=>{
-    return new Promise (resolve=>{
-        oneObj = new Object();
+// var makeObj = (order)=>{
+//     return new Promise (resolve=>{
+//         oneObj = new Object();
         
-        oneObj.order = order;
+//         oneObj.order = order;
         
-        order.getProduct()
-        .then(product=>{
-            oneObj.product = product;
-        });
+//         order.getProduct()
+//         .then(product=>{
+//             oneObj.product = product;
+//         });
         
-        order.getOrdercode()
-        .then(code=>{
-            oneObj.ordercode = code; 
-        });
+//         order.getOrdercode()
+//         .then(code=>{
+//             oneObj.ordercode = code; 
+//         });
 
-        order.getServiceUsers()
-        .then(users=>{
-            oneObj.serviceUsers = users;
-        })
+//         order.getServiceUsers()
+//         .then(users=>{
+//             oneObj.serviceUsers = users;
+//         })
 
-        order.getStore()
-        .then(store=>{
-            oneObj.store =store;
-        });
+//         order.getStore()
+//         .then(store=>{
+//             oneObj.store =store;
+//         });
         
-        order.getBuyer()
-        .then(buyer=>{
-            oneObj.buyer =buyer;
+//         order.getBuyer()
+//         .then(buyer=>{
+//             oneObj.buyer =buyer;
 
-        });
+//         });
 
-        setTimeout(()=>{
-            resolve(oneObj);
-        },300)
-    })
+//         setTimeout(()=>{
+//             resolve(oneObj);
+//         },300)
+//     })
     
-}
-async function ordersToArray(orders){
-    var ordersArray = [];
+// }
+// async function ordersToArray(orders){
+//     var ordersArray = [];
 
-    for(var i = 0 ; i < orders.count ; i++){
-        const myObj = await makeObj(orders.rows[i]);
-        ordersArray.push(myObj);
-    }    
+//     for(var i = 0 ; i < orders.count ; i++){
+//         const myObj = await makeObj(orders.rows[i]);
+//         ordersArray.push(myObj);
+//     }    
 
-    var myObj = {orders:ordersArray, ordersCount:orders.count};
-    return myObj;
+//     var myObj = {orders:ordersArray, ordersCount:orders.count};
+//     return myObj;
 
-};
+// };
 
 module.exports = {   
     orderServiceUsers: (req,res)=>{
@@ -135,7 +135,7 @@ module.exports = {
                 ]
             })
             .then(orders=>{
-                ///console.log(orders);
+                console.log(orders);
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
                 res.render('4_orders/ordered_index', objData);
             })   

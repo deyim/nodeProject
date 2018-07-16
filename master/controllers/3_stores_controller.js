@@ -44,7 +44,18 @@ module.exports = {
                 {
                     model: db.City,
                     as: 'cities'
-                }
+                },
+                {
+                    model: db.Option,
+                    as: 'options',
+                    include: [
+                        {
+                            model: db.Price,
+                            as: 'prices'
+                        }
+                    ]
+                },
+
             ]
         }).then(product=>{
             req.product = product;
@@ -180,10 +191,11 @@ module.exports = {
     },
 
     productsShow: (req,res)=>{
+        
         let product = req.product;
         db.Category.findAll()
         .then(categories=>{
-            res.render('3_stores/products_show', {product, categories});
+            res.render('3_stores/products_show', {product, categories, options:req.product.options});
         })
        
     },
@@ -666,7 +678,7 @@ module.exports = {
             };
             type.required = true;
         }
-        else{
+        else if(q.type=='C'){
             type.model = db.Product;
             type.as = 'product';
             type.required = true;
@@ -682,7 +694,22 @@ module.exports = {
                         as: 'author',
                         foreignKey: 'authorId'
                     },
-                ]
+                    {
+                        model: db.Product,
+                        as: 'product',
+                    },
+                    {
+                        model: db.Post,
+                        as: 'post'
+                    },
+                    {
+                        model: db.Comment,
+                        as: 'children',
+                    },
+                ],
+                where: {
+                    commentId: null
+                }
             })
             .then(comments=>{
                 objData = {comments:comments.rows, commentsCount:comments.count, firstday, q};
@@ -693,41 +720,42 @@ module.exports = {
             db.Comment.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                // where:{
-                //     [Op.and]:
-                //     [
-                //         {createdAt: {
-                //                 [Op.and]:[
-                //                     {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
-                //                     {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
-                //                 ]
-                //             }
-                //         },
-                //         {content: q.content? { [Op.like]: `%${q.title}%` } : {[Op.regexp]: '^'}},
-                //     ]                    
-                // },
-                // include: [//provider 의 id, 사업자명, 회원유형
-                //     {
-                //         model: db.User,
-                //         as: 'author',
-                //         where: {
-                //             [Op.and]:
-                //             [
-                //                 {username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}},
-                //                 {nickname: q.nickname? { [Op.like]: `%${q.nickname}%` } : {[Op.regexp]: '^'}},
-                //             ]
-                //         },
-                //     },
-                //     {
-                //         model: db.Product,
-                //         as: 'product',
-                //         required: true
-                //     }
-                //     // type
-                // ]
+                where:{
+                    [Op.and]:
+                    [
+                        {createdAt: {
+                                [Op.and]:[
+                                    {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                    {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                ]
+                            }
+                        },
+                        // {content: q.content? { [Op.like]: `%${q.content}%` } : {[Op.regexp]: '^'}},
+                        {commentId: null}
+                    ]                    
+                },
+                include: [//provider 의 id, 사업자명, 회원유형
+                    {
+                        model: db.User,
+                        as: 'author',
+                        where: {
+                            [Op.and]:
+                            [
+                                {username: q.username? { [Op.like]: `%${q.username}%` } : {[Op.regexp]: '^'}},
+                                {nickname: q.nickname? { [Op.like]: `%${q.nickname}%` } : {[Op.regexp]: '^'}},
+                            ]
+                        },
+                    },
+                    {
+                        model: db.Comment,
+                        as: 'children',
+                    },
+                    type
+                ]
             })
             .then(comments=>{
-                objData = {comments:comments.rows, comments:comments.count, firstday, q}
+                console.log('\n\n\n\n',comments);
+                objData = {comments:comments.rows, commentsCount:comments.count, firstday, q};
                 res.render('3_stores/comments_index', objData);
             })
         }
@@ -755,7 +783,7 @@ module.exports = {
     //stores - delete
     commentsDelete: (req,res)=>{
         req.comment.destroy();
-        res.redirect('/stores/messages');
+        res.redirect('/stores/comments');
     },
     
     findNotice: (req,res,next)=>{
@@ -857,7 +885,7 @@ module.exports = {
         res.render('3_stores/notices_show',objData);
     },
     noticesUpdate: (req,res)=>{
-        req.post.update(req.body)
+        req.notice.update(req.body)
         .then((()=>{
             req.session.alert = '수정되었습니다.'
             res.redirect(`/stores/notices/${req.notice.id}`);

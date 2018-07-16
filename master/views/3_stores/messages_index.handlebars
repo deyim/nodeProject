@@ -83,7 +83,7 @@
                     <th class="message_title">{{this.content}}</th>
                     <th class="message_num">{{length this.sentMessages}}</th>
                     <th>{{makeDate this.createdAt}}</th>
-                </tr>
+                
 
                 	<div class="message_show" style="display:none;">
                         <div class="layer_back_area"></div>
@@ -124,33 +124,35 @@
                                         <div class="info">스토어·2018.09.02</div>
                                     </div>
                                     
-                                    {{!-- <div class="list_cont">
-                                        <table class="showbox_list" cellpadding="0" cellspacing="0">
-                                            <thead>
+                                    <div class="list_cont">
+                                        {{#each this.sentMessages}}
+                                            아이디: {{this.receiver.username}}
+                                            닉네임: {{this.receiver.nickname}}</br>
+                                        {{/each}}
+                                        {{!-- <table class="showbox_list" cellpadding="0" cellspacing="0"> --}}
+                                            {{!-- <thead>
                                                 <tr>
-                                                    <th>번호</th>
                                                     <th>아이디</th>
                                                     <th>닉네임</th>
-                                                    <th>가입일자</th>
                                                 </tr>
-                                            </thead>
+                                            </thead> --}}
                                             
-                                            <tbody>
+                                            {{!-- <tbody>
+                                                {{#each this.sentMessages}}
                                                 <tr>
-                                                    <th>55</th>
-                                                    <th>flywork@naver.com</th>
-                                                    <th>flywork</th>
-                                                    <th>2018.09.02</th>
+                                                    <th>{{this.receiver.username}}</th>
+                                                    <th>{{this.receiver.nickname}}</th>
                                                 </tr>
-                                            </tbody>
+                                                {{/each}}
+                                            </tbody> --}}
                                             
-                                        </table>
-                                    </div> --}}
+                                        {{!-- </table> --}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                </tr>
                 {{/each}}
             </tbody>
         </table>

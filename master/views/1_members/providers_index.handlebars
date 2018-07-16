@@ -84,7 +84,7 @@
             <thead>
                 <tr>
                     <th><input type="checkbox" onclick="chooseAll()"></input></th>
-                    {{!-- <th>번호</th> --}}
+                    <th>번호</th>
                     <th>회원유형</th>
                     <th>아이디</th>
                     <th>닉네임</th>
@@ -98,12 +98,12 @@
                 {{#each providers}}
                 <tr>
                     <th><input name="checked" value={{this.id}} type="checkbox"></input></th>
-                    {{!-- <th>10</th> --}}
+                    <th></th>
                     <th>{{setCompanyType this.companyType}}</th>
                     <th><a href="providers/{{this.id}}">{{this.user.username}}</a></th>
                     <th><a href="providers/{{this.id}}">{{this.user.nickname}}</a></th>
                     <th><a href="providers/{{this.id}}">{{this.companyName}}</a></th>
-                    <th>{<a href="providers/{{this.id}}">{this.CEO}}</a></th>
+                    <th>{<a href="providers/{{this.id}}">{{this.CEO}}</a></th>
                     <th>{{makeDate this.createdAt}}</th>
                 </tr>   
                 {{/each}}             

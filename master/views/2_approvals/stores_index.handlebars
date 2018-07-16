@@ -66,8 +66,8 @@
         <div class="list_info">
             <div class="count">스토어 수 : {{storesCnt}}명</div>
             <ul class="message_button">
-                <li class="lg_button"><input type="submit" name="approve" value="승인"></li>
-                <li class="wh_button"><input type="submit" name="deny" value="반려"></li>
+                <li class="lg_button modify">승인</li>
+                <li class="wh_button delete">반려</li>
             </ul>
         </div>
         
@@ -91,8 +91,8 @@
                 
                 <tr>
                     <th><input name="checked" value={{this.id}} type="checkbox"></input></th>
-                    <th>10</th>
-                    <th><a href="/approvals/stores/{{this.id}}">{{this.provider.companyType}}</a></th>
+                    <th></th>
+                    <th><a href="/approvals/stores/{{this.id}}">{{setCompanyType this.provider.companyType}}</a></th>
                     <th><a href="/approvals/stores/{{this.id}}">{{this.provider.companyName}}</a></th>
                     <th><a href="/approvals/stores/{{this.id}}">{{this.memberCnt}}</a></th>
                     <th><a href="/approvals/stores/{{this.id}}">{{this.provider.user.username}}</a></th>
@@ -104,7 +104,54 @@
                 
             </tbody>
         </table>
-        
+
+        <div class="alert_modify" style="display:none;">
+            <div class="layer_back_area"></div>
+            <div class="layer_area">
+                <div class="showbox">
+                    <div class="showbox_cetearea">
+                        <div class="title">승인</div>
+                        <div class="close"><img src="/images/sub/showbox_close.png"></div>
+                    </div>
+                
+                
+                    <div class="showbox_contents">
+                        정말 승인하시겠습니까?
+                        <div class="bot_button">
+                            <div class="wt_button">
+                                <input type="submit" name="approve" value="승인">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            
+        </div>
+
+        <div class="alert_delete" style="display:none;">
+            <div class="layer_back_area"></div>
+            <div class="layer_area">
+                <div class="showbox">
+                    <div class="showbox_cetearea">
+                        <div class="title">반려</div>
+                        <div class="close"><img src="/images/sub/showbox_close.png"></div>
+                    </div>
+                
+                
+                    <div class="showbox_contents">
+                        정말 반려하시겠습니까?
+                        <div class="bot_button">
+                            <div class="wt_button">
+                                <input type="submit" name="deny" value="반려">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            
+        </div>
+
+        </form>
         {{>pages}}
         
         

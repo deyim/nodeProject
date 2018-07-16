@@ -44,7 +44,11 @@
         <div id="mydate"></div>
     </div>
     
-    {{>modify_delete id=notice.id url='/stores/notices' }}
+    {{!-- {{>modify_delete id=notice.id url='/stores/notices' }} --}}
+    <div class="bot_button inclass">
+     <div class="bl_button" onclick="submitContents(this)">수정</div>
+     <div class="wt_button" onclick="document.location.href='/stores/posts'"> 목록</div>
+    </div>
     </form>
     
 </div>

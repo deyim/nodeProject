@@ -437,6 +437,7 @@
 	padding:8px;
 	font-size:14px;
 	width:120px;
+	cursor: pointer;
 }
 
 .list_all .list_info .message_button .wh_button{

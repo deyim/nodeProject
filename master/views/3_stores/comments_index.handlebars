@@ -91,12 +91,14 @@
                     </td>
                     <td>
                         <div class="btext_cont">
-                            
-                        </div>
-                        <div class="stext_info"></div>
+                            <a href="/stores/posts/{{this.post.id}}">{{this.post.title}}</a>
+                            <a href="/stores/products/{{this.product.id}}">{{this.product.title}}</a>
+                        </div>                                            
+                            <div class="stext_info">댓글에 달린 댓글 {{length this.children}}개</div>
+                        
                     </td>
                     
-                    <th><a href="/comments/{{this.id}}/delete"><img src="/images/sub/delete_icon.jpg"></a></th>
+                    <th><a href="/stores/comments/{{this.id}}/delete"><img src="/images/sub/delete_icon.jpg"></a></th>
                 </tr>              
                 {{/each}}
             </tbody>

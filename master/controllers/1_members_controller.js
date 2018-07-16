@@ -44,29 +44,35 @@ module.exports = {
 
     //middleware, find a user by id
     findUser: (req,res,next)=>{
-        db.User.findById(req.params.user_id)
+        db.User.findOne({
+            where: {
+                id: req.params.user_id
+            },
+            include: [
+                {
+                    model: db.Store,
+                    as: 'stores'
+                },
+                {
+                    model: db.Sentmessage,
+                    as: 'sendings',
+                    foreignKey: 'senderId'
+                },
+                {
+                    model: db.Sentmessage,
+                    as: 'receivings',
+                    foreignKey: 'receiverId'
+                },
+                {
+                    model: db.Post,
+                    as: 'posts',
+                    foreignKey: 'authorId'
+                }
+            ]
+        })
         .then(user=>{
-            if(!user){
-                req.flash('error', '없는 유저입니다.');
-                res.redirect('/members/users');
-            }
             req.user = user;
-
-            user.getStores()
-            .then(stores=>{req.stores = stores;});
-           
-            
-            user.getSendings()
-            .then(sendings=>{req.sendings = sendings.length || 0;});
-
-            user.getReceivings()
-            .then(receivings=>{req.receivings = receivings.length || 0;
-                
-            });
-
-            user.getPosts()
-            .then(posts=>{req.posts = posts.length || 0; next();});
-           
+            next();
         })
     },
 
@@ -119,8 +125,8 @@ module.exports = {
 
     //users - show
     usersShow: (req,res)=>{  
-        objData = {user:req.user, posts:req.posts, sendings:req.sendings, receivings:req.receivings, stores:req.stores};
-        objData.storesCnt = req.stores? req.stores.length : 0;
+        objData = {user:req.user, posts:req.user.posts.length, sendings:req.user.sendings.length, receivings:req.user.receivings.length, stores:req.user.stores};
+        objData.storesCnt = req.user.stores? req.user.stores.length : 0;
         res.render('1_members/users_show', objData);
     },   
 
@@ -329,45 +335,16 @@ module.exports = {
                 {
                     model: db.City,
                     as: 'cities'
+                },
+                {
+                    model: db.StoreFile,
+                    as: 'storeFiles'
                 }
             ]
         }).then(store=>{
             req.store = store;
             next();
-        })
-        
-        // db.Store.findById(req.params.store_id)
-        // .then(store=>{
-        //     if(!store){
-        //         req.flash('error', '없는 스토어입니다.');
-        //         res.redirect('/members/stores');
-        //     }
-        //     req.store = store;
-
-        //     store.getProvider()
-        //     .then(provider=>{
-        //         req.provider = provider;
-        //     });
-
-        //     store.getUsers()
-        //     .then(users=>{
-        //         console.log(users[0]);
-        //         req.users = users;
-        //     });
-
-        //     store.getNations()
-        //     .then(nations=>{
-        //         req.nations = nations;
-        //     });
-
-        //     store.getCities()
-        //     .then(cities=>{
-        //         req.cities = cities;
-        //         next();
-        //     });
-        // })
-        //회원 정보도 다 가져와야돼??
-        
+        })     
     },
     //stores - index
     storesIndex: (req,res)=>{
@@ -467,6 +444,7 @@ module.exports = {
     },
     //stores - update
     storesUpdate: (req,res)=>{
+        console.log('\n\n\n',req.body);
         req.store.update(req.body)
         .then((()=>{
             req.session.alert = '수정되었습니다.'
@@ -489,5 +467,16 @@ module.exports = {
             });
         };
         res.redirect('/members/stores');
+    },
+
+    storeAttachFile: (req,res)=>{
+        // db.StoreFile.create({
+        //     storeId: req.params.store_id,
+        //     filePath: 
+        // })
+    },
+    
+    storeDeleteFile: (req,res)=>{
+
     }
 }

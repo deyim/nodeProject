@@ -1,4 +1,16 @@
 //common
+
+//make numbers for list_table '번호'cell 
+$(document).ready(function(){
+    var rows = $('.list_table > tbody > tr'); 
+    var text = 'textContent' in document ? 'textContent' : 'innerText';
+
+    for (var i = 0, len = rows.length; i < len; i++){
+        rows[i].children[1][text] = i+1;
+    }
+})
+
+//smart editor submit contents
 function submitContents(elClickedObj) {
 	oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
 	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.
