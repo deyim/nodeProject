@@ -18,7 +18,7 @@ module.exports = ()=>{
 
     route.get('/banners/adaffiliation/add', controller.adaffiliationAdd)
         .post('/banners/adaffiliation/add', controller.adaffiliationCreate);
-    route.get('/banners/adaffiliation/:adafiliation_id/delete/', controller.adaffiliationDelete);
+    route.get('/banners/adaffiliation/:adaffiliation_id/delete/', controller.adaffiliationDelete);
 
 
     route.get('/notices', controller.noticesIndex)

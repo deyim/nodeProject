@@ -4,30 +4,33 @@ const Op = db.Sequelize.Op
 const perPage = 5;
 
 module.exports = {
-
     bannersIndex: (req,res)=>{
+        objData = {}
         db.AdStory.findAll()
         .then(adstories=>{
-            req.adstories = adstories;
-        });
-
-        db.AdStore.findAll()
-        .then(adstores=>{
-            req.adstores = adstores;
-        });
-
-        db.AdNewstore.findAll()
-        .then(adnewstores=>{
-            req.adnewstores = adnewstores;
-        });
-
-        db.AdAffiliation.findAll()
-        .then(adaffiliations=>{
-            req.adaffiliations = adaffiliations;
-        });
-
-
-        res.render('6_sites/banners_index');
+            objData.adstories = adstories;
+        })
+        .then(()=>{
+            db.AdStore.findAll()
+            .then(adstores=>{
+                objData.adstores = adstores;
+            });
+        })
+        .then(()=>{
+            db.AdNewstore.findAll()
+            .then(adnewstores=>{
+                objData.adnewstores = adnewstores;
+            });
+        })
+        .then(()=>{
+            db.AdAffiliation.findAll()
+            .then(adaffiliations=>{                
+                objData.adaffiliations = adaffiliations;
+            })
+            .then(()=>{
+                res.render("6_sites/banners_index", objData);
+            })
+        })
         
     },
 
@@ -35,11 +38,22 @@ module.exports = {
     },
 
     adstoryCreate: (req, res)=>{
-        
+        db.AdStory.create(req.body)
+        .then(()=>{
+            res.redirect("/sites/banners");
+        })
     },
 
     adstoryDelete: (req, res)=>{
-
+        db.AdStory.findOne({
+            where: {
+                id: req.params.adstory_id
+            }
+        }).then(adstory=>{
+            adstory.destroy();
+        }).then(()=>{
+            res.redirect("/sites/banners");
+        })
     },
 
     adstoreAdd: (req, res)=>{
@@ -47,11 +61,22 @@ module.exports = {
     },
 
     adstoreCreate: (req, res)=>{
-
+        db.AdStore.create(req.body)
+        .then(()=>{
+            res.redirect("/sites/banners");
+        })
     },
 
     adstoreDelete: (req, res)=>{
-
+        db.AdStore.findOne({
+            where: {
+                id: req.params.adstore_id
+            }
+        }).then(adstore=>{
+            adstore.destroy();
+        }).then(()=>{
+            res.redirect("/sites/banners");
+        })
     },
 
     adnewstoreAdd: (req, res)=>{
@@ -59,11 +84,22 @@ module.exports = {
     },
 
     adnewstoreCreate: (req, res)=>{
-
+        db.AdNewstore.create(req.body)
+        .then(()=>{
+            res.redirect("/sites/banners");
+        })
     },
 
     adnewstoreDelete: (req, res)=>{
-
+        db.AdNewstore.findOne({
+            where: {
+                id: req.params.adnewstore_id
+            }
+        }).then(store=>{
+            store.destroy();
+        }).then(()=>{
+            res.redirect("/sites/banners");
+        })
     },
 
     adaffiliationAdd: (req, res)=>{
@@ -71,11 +107,22 @@ module.exports = {
     },
 
     adaffiliationCreate: (req, res)=>{
-
+        db.AdAffiliation.create(req.body)
+        .then(()=>{
+            res.redirect("/sites/banners");
+        })
     },
 
     adaffiliationDelete: (req, res)=>{
-
+        db.AdAffiliation.findOne({
+            where: {
+                id: req.params.adaffiliation_id
+            }
+        }).then(adstory=>{
+            adstory.destroy();
+        }).then(()=>{
+            res.redirect("/sites/banners");
+        })
     },
       
     findNotice: (req,res,next)=>{

@@ -153,16 +153,17 @@
         
         <table cellpadding="0" cellspacing="0" class="list_table">
             <colgroup>
-                <col style="width:3%;">
-                <col style="width:72%;">
-                <col style="width:12%;">
-                <col style="width:13%;">
-                
+                 <col style="width:3%;">
+                <col style="width:5%;">
+                <col style="width:70%;">
+                <col style="width:11%;">
+                <col style="width:11%;">
             </colgroup>
         
             <thead>
                 <tr>
                     <th><input type="checkbox"></input></th>
+                    <th>번호</th>
                     <th>주문내역</th>
                     <th>주문자 이름 / 아이디</th>
                     <th>상태</th>
@@ -174,6 +175,7 @@
                 {{#each orders}}
                 <tr>
                     <th><input type="checkbox"></input></th>
+                    <th></th>
                     <td>
                         <div class="order_info_box">
                             <div class="order_info">
@@ -185,7 +187,7 @@
                         </div>
                         
                         <div class="order_pro_info">
-                            <div class="thum"><img src=""></div>
+                            <div class="thum"><img src="{{this.product.imagePath}}"></div>
                             <div class="textarea">
                                 <div class="pro_title">{{this.product.title}}</div>
                                 <ul class="option_list">

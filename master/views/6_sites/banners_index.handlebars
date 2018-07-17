@@ -7,73 +7,271 @@
     <div class="banner">
         <div class="banner_info">
             <div class="title">금주의 스토리</div>
+            <ul class="numarea" id="adstory_select">
+                {{{makeList adstories}}}                
+            </ul>
             <ul class="numarea">
-                <li class="on">1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li><img src="/images/sub/plus_option.png"></li>
+                <li onClick="adstory_add();"><img src="/images/sub/plus_option.png"></li>
+                <li onClick="adstory_delete();"><img src="/images/sub/minus_option.png"></li>
             </ul>
         </div>
         
         <div class="main_banner">
-            <img src="/images/sub/banner_img01.jpg">
+            <img src="{{nthPath adstories 0}}">
         </div>
         
         <div class="banner_info" style="margin-top:80px;">
             <div class="title">투데이여행사</div>
+            <ul class="numarea" id="adstore_select">
+                {{{makeList adstores}}}
+                
+            </ul>
             <ul class="numarea">
-                <li class="on">1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li><img src="../images/sub/plus_option.png"></li>
+                <li onClick="adstore_add();"><img src="/images/sub/plus_option.png"></li>
+                <li onClick="adstore_delete();"><img src="/images/sub/minus_option.png"></li>
             </ul>
         </div>
         
         <div class="list_03banner">
-            <li><img src="/images/sub/banner_img02.png"></li>
-            <li><img src="/images/sub/banner_img03.png"></li>
-            <li><img src="/images/sub/banner_img01.jpg"></li>
+            {{#each adstores}}
+               <li><img src="{{this.imgPath}}"></li> 
+            {{/each}}
         </div>
         
         
         
         <div class="banner_info" style="margin-top:80px;">
             <div class="title">신규오픈여행사</div>
+            <ul class="numarea" id="adnewstore_select">
+                {{{makeList adnewstores}}}                
+            </ul>
             <ul class="numarea">
-                <li class="on">1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li><img src="/images/sub/plus_option.png"></li>
+                <li onClick="adnewstore_add();"><img src="/images/sub/plus_option.png"></li>
+                <li onClick="adnewstore_delete();"><img src="/images/sub/minus_option.png"></li>
             </ul>
         </div>
         
         <div class="list_04banner">
-            <li><img src="/images/sub/banner_img02.png"></li>
-            <li><img src="/images/sub/banner_img03.png"></li>
-            <li><img src="/images/sub/banner_img01.jpg"></li>
-            <li><img src="/images/sub/banner_img01.jpg"></li>
+            {{#each adnewstores}}
+                <li><img src="{{this.imgPath}}"></li>
+            {{/each}}
         </div>
         
         <div class="banner_info" style="margin-top:80px;">
             <div class="title">제휴사</div>
+            <ul class="numarea" id="adaffiliation_select">
+                {{{makeList adaffiliations}}}             
+            </ul>
             <ul class="numarea">
-                <li class="on">1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li><img src="/images/sub/plus_option.png"></li>
+                <li onClick="adaffiliation_add();"><img src="/images/sub/plus_option.png"></li>
+                <li onClick="adaffiliation_delete();"><img src="/images/sub/minus_option.png"></li>
             </ul>
         </div>
         
         <div class="list_01banner">
-            <img src="/images/sub/banner_img01.jpg">
+            <img src="{{nthPath adaffiliations 0}}">
         </div>
     </div>
 </div>
+
+<div class="adstory_create" style="display:none;">
+    <div class="layer_back_area"></div>
+    <div class="layer_area">
+        <div class="showbox">
+            <div class="showbox_cetearea">
+                <div class="title">스토리등록</div>
+                <div class="close"><img src="/images/sub/showbox_close.png"></div>
+            </div>
+        
+        
+            <div class="showbox_contents">
+                <form action="/sites/banners/adstory/add" method="POST">
+                    <div>
+                        배너명: 
+                        <div class="input_80box"><input type="text" class="inputstyle" name="title"></input></div><br>
+                        배너이미지: <input type="file" class="inputstyle" name="imgUrl"><br>
+                        배너URL: <div class="input_80box"><input type="text" class="inputstyle" name="imgPath"></div>
+                    </div>
+                    <div class="bot_button">
+                        <div class="wt_button" onclick="document.forms[0].submit();">
+                            등록
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>            
+    
+</div>
+
+<div class="adstore_create" style="display:none;">
+    <div class="layer_back_area"></div>
+    <div class="layer_area">
+        <div class="showbox">
+            <div class="showbox_cetearea">
+                <div class="title">스토리등록</div>
+                <div class="close"><img src="/images/sub/showbox_close.png"></div>
+            </div>
+        
+        
+            <div class="showbox_contents">
+                <form action="/sites/banners/adstore/add" method="POST">
+                    <div>
+                        배너명: 
+                        <div class="input_80box"><input type="text" class="inputstyle" name="title"></input></div><br>
+                        배너이미지: <input type="file" class="inputstyle" name="imgUrl"><br>
+                        배너URL: <div class="input_80box"><input type="text" class="inputstyle" name="imgPath"></div>
+                    </div>
+                    <div class="bot_button">
+                        <div class="wt_button" onclick="document.forms[1].submit();">
+                            등록
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>            
+    
+</div>
+
+<div class="adnewstore_create" style="display:none;">
+    <div class="layer_back_area"></div>
+    <div class="layer_area">
+        <div class="showbox">
+            <div class="showbox_cetearea">
+                <div class="title">스토리등록</div>
+                <div class="close"><img src="/images/sub/showbox_close.png"></div>
+            </div>
+        
+        
+            <div class="showbox_contents">
+                <form action="/sites/banners/adnewstore/add" method="POST">
+                    <div>
+                        배너명: 
+                        <div class="input_80box"><input type="text" class="inputstyle" name="title"></input></div><br>
+                        배너이미지: <input type="file" class="inputstyle" name="imgUrl"><br>
+                        배너URL: <div class="input_80box"><input type="text" class="inputstyle" name="imgPath"></div>
+                    </div>
+                    <div class="bot_button">
+                        <div class="wt_button" onclick="document.forms[2].submit();">
+                            등록
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>            
+    
+</div>
+
+<div class="adaffiliation_create" style="display:none;">
+    <div class="layer_back_area"></div>
+    <div class="layer_area">
+        <div class="showbox">
+            <div class="showbox_cetearea">
+                <div class="title">스토리등록</div>
+                <div class="close"><img src="/images/sub/showbox_close.png"></div>
+            </div>
+        
+        
+            <div class="showbox_contents">
+                <form action="/sites/banners/adaffiliation/add" method="POST">
+                    <div>
+                        배너명: 
+                        <div class="input_80box"><input type="text" class="inputstyle" name="title"></input></div><br>
+                        배너이미지: <input type="file" class="inputstyle" name="imgUrl"><br>
+                        배너URL: <div class="input_80box"><input type="text" class="inputstyle" name="imgPath"></div>
+                    </div>
+                    <div class="bot_button">
+                        <div class="wt_button" onclick="document.forms[3].submit();">
+                            등록
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>            
+    
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('.adstory_create').hide();
+        $('.adstore_create').hide();
+        $('.adnewstore_create').hide();
+        $('.adaffiliation_create').hide();
+    })
+    $('#adstory_select li').on('click',function(){
+        var adstories = {{{json adstories}}};
+        $('#adstory_select .on').removeClass();
+        $(this).addClass("on");
+
+        var i = $(this).text()-1;
+        var imgSrc = adstories[i].imgPath
+        $('.main_banner  img').attr('src', imgSrc);
+    })
+
+    $('#adstore_select li').on('click',function(){
+        $('#adstore_select .on').removeClass();
+        $(this).addClass("on");
+    });
+
+    $('#adnewstore_select li').on('click',function(){
+        $('#adnewstore_select .on').removeClass();
+        $(this).addClass("on");
+    });
+
+    $('#adaffiliation_select li').on('click',function(){
+        var adaffiliations = {{{json adaffiliations}}};
+        $('#adaffiliation_select .on').removeClass();
+        $(this).addClass("on");
+
+        var i = $(this).text()-1;
+        var imgSrc = adaffiliations[i].imgPath
+        $('.list_01banner  img').attr('src', imgSrc);
+    })
+
+    function adstory_add(){
+        $('.adstory_create').show();
+    };
+
+    function adstory_delete(){
+        var toDelete = $('#adstory_select .on').text()-1;
+        window.location.replace(`/sites/banners/adstory/${toDelete}/delete`);
+    };
+
+    function adstore_add(){
+        $('.adstore_create').show();
+    };
+
+    function adstore_delete(){
+        var toDelete = $('#adstory_select .on').text()-1;
+        window.location.replace(`/sites/banners/adstory/${toDelete}/delete`);
+    };
+
+    function adnewstore_add(){
+        $('.adstory_create').show();
+    };
+
+    function adnewstore_delete(){
+        var toDelete = $('#adstory_select .on').text()-1;
+        window.location.replace(`/sites/banners/adstory/${toDelete}/delete`);
+    };
+
+    function adaffiliation_add(){
+        $('.adaffiliation_create').show();
+    };
+
+    function adaffiliation_delete(){
+        var toDelete = $('#adaffiliation_select .on').text()-1;
+        window.location.replace(`/sites/banners/adaffiliation/${toDelete}/delete`);
+    };
+
+    $('.close').on('click',function(){
+        $('.adstory_create').hide();
+        $('.adstore_create').hide();
+        $('.adnewstore_create').hide();
+        $('.adaffiliation_create').hide();
+    })
+    
+</script>
