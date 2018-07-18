@@ -5,37 +5,24 @@ module.exports = ()=>{
 
     // 입금확인중 / 신규주문 / 발주확인 / 서비스 이용중 / 구매확정 / 취소/환불
     route.get('/users/:order_id', controller.orderServiceUsers);
-    //ordered - index
-    route.get('/ordered', controller.orderedIndex);
-    // //ordered - show
-    // route.get('/ordered/:id', controller.orderedShow);
-
-    //paid - index
-    route.get('/paid', controller.paidIndex);
-    //paid - show
-    // route.get('/paid/:id', controller.paidShow);
-
-    //placed - index
-    route.get('/placed', controller.placedIndex);
-    //placed - show
-    // route.get('/placed/:id', controller.placedShow);
-    
-    //used - index
-    route.get('/used', controller.usedIndex);
-    //used - show
-    // route.get('/used/:id', controller.usedShow);
-
-    //final - index
-    route.get('/final', controller.finalIndex);
-    //final - show
-    // route.get('/final/:id', controller.finalShow);
-
-    //cancel - index
-    route.get('/cancel', controller.cancelIndex);
-    //cancel - show
-    // route.get('/cancel/:id', controller.cancelShow);
    
-//complicated..
+    //입금확인중: ordered - index
+    route.get('/ordered', controller.orderedIndex);
+    
+    //신규주문: paid - index
+    route.get('/paid', controller.paidIndex);
+   
+    //발주확인: placed - index
+    route.get('/placed', controller.placedIndex);
+    
+    //서비스 이용중: used - index
+    route.get('/used', controller.usedIndex);
+    
+    //구매화정: final - index
+    route.get('/final', controller.finalIndex);
+    
+    //취소 환불: cancel - index
+    route.get('/cancel', controller.cancelIndex);
 
     return route;
 }

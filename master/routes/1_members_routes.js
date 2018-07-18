@@ -4,6 +4,7 @@ module.exports = ()=>{
     const controller = require('../controllers/1_members_controller');
    
     route.post('/sendMessages', controller.sendMessage);
+    
     //users - index
     route.get('/users', controller.usersIndex)
         .post('/users', controller.deleteMultipleUsers);

@@ -1,11 +1,8 @@
-// const express = require('express');
-// const route = express.Router();
 const db = require('../../models/index');
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
 const perPage = 10;
 const dateFunctions = require('../../lib/date_functions');
-// const queryString = require('query-string');
 
 module.exports = {
      /***********************
@@ -295,7 +292,7 @@ module.exports = {
         req.provider.destroy();
         res.redirect('/members/providers');
     },
-
+    //delete multiple providers
     deleteMultipleProviders: (req,res)=>{       
         providers = req.body.checked.toString().split(',');
         for(var i = 0 ; i < providers.length; i++){
@@ -456,7 +453,7 @@ module.exports = {
         req.store.destroy();
         res.redirect('/members/users');
     },
-
+    //stores - delete multiple stores
     multipleStoresDelete: (req,res)=>{
        
         stores = req.body.checked.toString().split(',');
@@ -470,13 +467,10 @@ module.exports = {
     },
 
     storeAttachFile: (req,res)=>{
-        // db.StoreFile.create({
-        //     storeId: req.params.store_id,
-        //     filePath: 
-        // })
+        //
     },
     
     storeDeleteFile: (req,res)=>{
-
+        //
     }
 }

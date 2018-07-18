@@ -4,6 +4,9 @@ const Op = db.Sequelize.Op
 const perPage = 5;
 
 module.exports = {
+    /***********************
+          sites/banners
+    ***********************/
     bannersIndex: (req,res)=>{
         objData = {}
         db.AdStory.findAll()
@@ -29,21 +32,15 @@ module.exports = {
             })
             .then(()=>{
                 res.render("6_sites/banners_index", objData);
-            })
-        })
-        
+            });
+        });
     },
-
-    adstoryAdd: (req, res)=>{
-    },
-
     adstoryCreate: (req, res)=>{
         db.AdStory.create(req.body)
         .then(()=>{
             res.redirect("/sites/banners");
         })
     },
-
     adstoryDelete: (req, res)=>{
         db.AdStory.findOne({
             where: {
@@ -55,18 +52,12 @@ module.exports = {
             res.redirect("/sites/banners");
         })
     },
-
-    adstoreAdd: (req, res)=>{
-
-    },
-
     adstoreCreate: (req, res)=>{
         db.AdStore.create(req.body)
         .then(()=>{
             res.redirect("/sites/banners");
         })
     },
-
     adstoreDelete: (req, res)=>{
         db.AdStore.findOne({
             where: {
@@ -78,18 +69,12 @@ module.exports = {
             res.redirect("/sites/banners");
         })
     },
-
-    adnewstoreAdd: (req, res)=>{
-
-    },
-
     adnewstoreCreate: (req, res)=>{
         db.AdNewstore.create(req.body)
         .then(()=>{
             res.redirect("/sites/banners");
         })
     },
-
     adnewstoreDelete: (req, res)=>{
         db.AdNewstore.findOne({
             where: {
@@ -101,18 +86,12 @@ module.exports = {
             res.redirect("/sites/banners");
         })
     },
-
-    adaffiliationAdd: (req, res)=>{
-
-    },
-
     adaffiliationCreate: (req, res)=>{
         db.AdAffiliation.create(req.body)
         .then(()=>{
             res.redirect("/sites/banners");
         })
     },
-
     adaffiliationDelete: (req, res)=>{
         db.AdAffiliation.findOne({
             where: {
@@ -124,9 +103,12 @@ module.exports = {
             res.redirect("/sites/banners");
         })
     },
+
+    /***********************
+          sites/notice
+    ***********************/
       
     findNotice: (req,res,next)=>{
-
         db.Noticecode.findAll()
         .then(codes=>{
             req.noticecodes = codes;
@@ -148,7 +130,6 @@ module.exports = {
             next();
         })
     },
-
     noticesIndex: (req,res)=>{
         let q = req.query;
         let page = q.page||1;
@@ -200,7 +181,6 @@ module.exports = {
         }
         
     },
-
     noticeAdd: (req,res)=>{
         db.Noticecode.findAll()
         .then(codes=>{                    
@@ -208,7 +188,6 @@ module.exports = {
             res.render('6_sites/notices_add', objData);
         });    
     },
-
     noticeCreate: (req,res)=>{
         console.log(req.body)
         let notice = req.body;
@@ -221,13 +200,11 @@ module.exports = {
             res.redirect("/sites/notices/");
         })
     },
-
     noticeShow: (req,res)=>{
         notice = req.notice;
         codes = req.noticecodes;
         res.render("6_sites/notices_show", {notice:notice,codes:codes});
     },
-
     noticeUpdate: (req,res)=>{
         req.notice.update(req.body)
         .then(()=>{
@@ -236,12 +213,10 @@ module.exports = {
         // })
         
     },
-
     noticeDelete: (req,res)=>{
         req.notice.destroy();
         res.redirect("/sites/notices");
     },
-
     noticeMultipleDelete: (req,res)=>{
         let notices = req.body.checked.toString().split(',');
         for(var i = 0 ; i < notices.length; i++){
@@ -256,7 +231,28 @@ module.exports = {
     /***********************
           sites/faqs
     ***********************/
+   findFaq: (req,res,next)=>{
+        db.FAQcode.findAll()
+        .then(codes=>{
+            req.faqcodes = codes;
+        });
 
+        db.Faq.findOne({
+            where: {
+                id: req.params.faq_id
+            },
+            include: [
+                {
+                    model: db.FAQcode,
+                    as: 'faqcode'
+                }
+            ]
+        })
+        .then(faq=>{
+            req.faq = faq;
+            next();
+        })
+    },
     faqsIndex: (req,res)=>{
         let q = req.query;
         let page = q.page||1;
@@ -307,33 +303,8 @@ module.exports = {
                 objData = {faqs:faqs.rows, faqsCount: faqs.count, faqcodes, q};
                 res.render('6_sites/faqs_index', objData);   
             });
-        }
-        
-    },
-
-    findFaq: (req,res,next)=>{
-        db.FAQcode.findAll()
-        .then(codes=>{
-            req.faqcodes = codes;
-        });
-
-        db.Faq.findOne({
-            where: {
-                id: req.params.faq_id
-            },
-            include: [
-                {
-                    model: db.FAQcode,
-                    as: 'faqcode'
-                }
-            ]
-        })
-        .then(faq=>{
-            req.faq = faq;
-            next();
-        })
-    },
-
+        }        
+    },    
     faqAdd: (req,res)=>{
         db.FAQcode.findAll()
         .then(codes=>{                    
@@ -341,7 +312,6 @@ module.exports = {
             res.render('6_sites/faqs_add', objData);
         });  
     },
-
     faqCreate: (req,res)=>{
         let faq = req.body;
         faq.createdAt = Date.now();
@@ -352,24 +322,20 @@ module.exports = {
             res.redirect("/sites/faqs");
         })
     },
-
     faqShow: (req,res)=>{
         objData = {faq:req.faq, faqcodes:req.faqcodes};
         res.render("6_sites/faqs_show",objData);
     },
-
     faqUpdate: (req,res)=>{
         req.faq.update(req.body)
         .then(()=>{
             res.redirect("/sites/faqs");
             })
     },
-
     faqDelete: (req,res)=>{
         req.faq.destroy();
         res.redirect("/sites/faqs");
     },
-
     faqsMultipleDelete: (req,res)=>{
         let faqs = req.body.checked.toString().split(',');
         for(var i = 0 ; i < faqs.length; i++){
@@ -416,11 +382,9 @@ module.exports = {
             res.render("6_sites/master_index", {masters});
         });
     },
-
     mastersAdd: (req,res)=>{
         res.render("6_sites/master_add");
     },
-
     mastersCreate: (req,res)=>{
         db.User.find({
             where: {
@@ -441,7 +405,6 @@ module.exports = {
         })
        
     },
-
     mastersShow: (req,res)=>{
         objData = {master: req.master};
         res.render("6_sites/master_show", objData);
@@ -452,12 +415,10 @@ module.exports = {
             res.redirect('/sites/masters');
         });
     },
-    //stores - delete
     mastersDelete: (req,res)=>{
         req.master.destroy();
         res.redirect('/sites/masters');
     },
-
     mastersMultipleDelete: (req,res)=>{
         let masters = req.body.checked.toString().split(',');
         for(var i = 0 ; i < masters.length; i++){

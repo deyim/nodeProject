@@ -23,10 +23,11 @@ module.exports = ()=>{
     route.get('/posts/:post_id/delete', controller.findPost, controller.postsDelete);
 
 
-     //messages - index
+    //messages - index
+    //messages sent from senders
      route.get('/messages', controller.messagesIndex)
         .post('/messages', controller.messagesMultipleDelete);
-        
+    //messages sent from users
     route.get('/messages_users', controller.messagesUsersIndex)
         .post('/messages_users', controller.messagesUsersMultipleDelete);
      //messages - show
@@ -40,8 +41,6 @@ module.exports = ()=>{
         .post('/comments', controller.commentsMultipleDelete);
     //comments - show
     route.get('/comments/:comment_id', controller.findComment, controller.commentsShow);
-    //comments - update
-    
     //comments - delete
     route.get('/comments/:comment_id/delete', controller.findComment, controller.commentsDelete);
 

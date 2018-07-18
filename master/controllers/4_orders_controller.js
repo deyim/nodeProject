@@ -56,7 +56,9 @@ const dateFunctions = require('../../lib/date_functions');
 
 // };
 
-module.exports = {   
+module.exports = {  
+    
+    //show service users of each order
     orderServiceUsers: (req,res)=>{
         let order;
         db.Order.findOne({

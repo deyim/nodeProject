@@ -3,6 +3,7 @@ module.exports = ()=>{
     const route = express.Router();
     const controller = require('../controllers/6_sites_controller');
 
+    //sites - banners
     route.get('/banners', controller.bannersIndex);
     route.get('/banners/adstory/add', controller.adstoryAdd)
         .post('/banners/adstory/add', controller.adstoryCreate);
@@ -20,7 +21,7 @@ module.exports = ()=>{
         .post('/banners/adaffiliation/add', controller.adaffiliationCreate);
     route.get('/banners/adaffiliation/:adaffiliation_id/delete/', controller.adaffiliationDelete);
 
-
+    //sites - notices
     route.get('/notices', controller.noticesIndex)
         .post('/notices', controller.noticeMultipleDelete);
     route.get('/notices/add', controller.noticeAdd)
@@ -29,6 +30,7 @@ module.exports = ()=>{
         .post('/notices/:notice_id', controller.findNotice, controller.noticeUpdate);
     route.get('/notices/:notice_id/delete', controller.findNotice, controller.noticeDelete);
 
+    //sites - faqs
     route.get('/faqs', controller.faqsIndex)
         .post('/faqs', controller.faqsMultipleDelete);
     route.get('/faqs/add', controller.faqAdd)
@@ -44,7 +46,6 @@ module.exports = ()=>{
         .post('/masters/add', controller.mastersCreate);
     route.get('/masters/:master_id', controller.findMaster, controller.mastersShow)
         .post('/masters/:master_id', controller.findMaster, controller.mastersUpdate);
-    //masters - delete
     route.get('/masters/:master_id/delete', controller.findMaster, controller.mastersDelete);
  
     

@@ -8,6 +8,7 @@ const flash = require('connect-flash');
 const db = require('../models/index');
 const handlebarsHelpers = require('../lib/handlebars');
 
+//handlebars template setting
 var hbs = exphbs.create({
     defaultLayout: 'main',
     partialsDir: path.join(__dirname, './views/partials'),
@@ -17,11 +18,10 @@ var hbs = exphbs.create({
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, './views'));
-// app.use(express.static('public'));
-// app.use(express.static(path.join(__dirname, '/views/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
 
+//provider's store always on page
 app.use(function(req,res,next){
     if(req.user){
         req.user.getProvider()
@@ -38,6 +38,7 @@ app.use(function(req,res,next){
     }         
 })
 
+//error message
 app.get('/', (req,res)=>{
     var errorMsg = null;
     if(res.locals.message.error!=undefined){
@@ -47,7 +48,7 @@ app.get('/', (req,res)=>{
     res.render('index', {layout: false, message: errorMsg});
 });
 
-
+//controller and routes
 const dashboardRoutes = require('./routes/dashboard_routes')();
 const authRoutes = require('./routes/auth_routes')(passport);
 const membersRoutes = require('./routes/1_members_routes')();

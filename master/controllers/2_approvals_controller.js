@@ -1,10 +1,14 @@
 const db = require('../../models/index');
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
 const perPage = 10;
 const dateFunctions = require('../../lib/date_functions');
 
 module.exports = {
+    /***********************
+          approval/store
+    ***********************/
+    //find store
     findStore: (req,res,next)=>{ 
         db.Store.findOne({
             where: {
@@ -36,6 +40,7 @@ module.exports = {
         
     },
 
+    //stores - index
     storesIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
@@ -120,11 +125,13 @@ module.exports = {
         }
     },
 
+    //stores - show
     storesShow: (req,res)=>{
         objData = {store:req.store}
         res.render('2_approvals/stores_show', objData);
     },
 
+    //stores - update
     storesUpdate: (req,res)=>{
         let provider;
         db.Provider.findOne({
@@ -167,6 +174,7 @@ module.exports = {
         res.redirect('/approvals/stores');
     },
 
+    //store multiple approval or deletion
     storesApproveOrDelete: (req,res)=>{
         stores = req.body.checked.toString().split(',');
         if(req.body.approve){

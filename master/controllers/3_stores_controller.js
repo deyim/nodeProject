@@ -5,6 +5,11 @@ const perPage = 5;
 const dateFunctions = require('../../lib/date_functions');
 
 module.exports = {
+    /***********************
+          stores/product
+    ***********************/
+
+    //middleware.. find product by id
     findProduct: (req,res,next)=>{
         db.Product.find({
             where: {
@@ -62,7 +67,6 @@ module.exports = {
             next();
         });
     },
-
     productsIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
@@ -144,9 +148,11 @@ module.exports = {
             })
         }
     },
-
+    //change status of onDisplayChk, onSaleChk
     productsStatusChange: (req,res)=>{
         products = req.body.checked.toString().split(',');
+        
+        //differentiated by req.body's name
         if(req.body.offDisplay){
             for(var i = 0 ; i < products.length; i++){
                 db.Product.findById(products[i])
@@ -189,17 +195,13 @@ module.exports = {
         }
         res.redirect('/stores/products');
     },
-
-    productsShow: (req,res)=>{
-        
+    productsShow: (req,res)=>{        
         let product = req.product;
         db.Category.findAll()
         .then(categories=>{
             res.render('3_stores/products_show', {product, categories, options:req.product.options});
-        })
-       
+        });       
     },
-    
     productsUpdate: (req,res)=>{
         req.product.update(req.product)
         .then(()=>{
@@ -207,12 +209,16 @@ module.exports = {
             res.redirect(`/stores/products/${req.product.id}`);
         });
     },
-    //stores - delete
     productsDelete: (req,res)=>{
         req.product.destroy();
         res.redirect('/stores/products');
     },
 
+    /***********************
+          stores/post
+    ***********************/
+    
+    //middleware.. find post by id
     findPost: (req,res,next)=>{
         db.Post.findOne({
             where:{
@@ -233,7 +239,6 @@ module.exports = {
             next();
         });
     },
-
     postsIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
@@ -308,7 +313,7 @@ module.exports = {
             })
         }
     },
-
+    //index->delete posts by checkboxes
     postsMultipleDelete: (req,res)=>{       
         posts = req.body.checked.toString().split(',');
         for(var i = 0 ; i < posts.length; i++){
@@ -319,24 +324,24 @@ module.exports = {
         };
         res.redirect('/stores/posts');
     },
-
     postsShow: (req,res)=>{
         res.render('3_stores/posts_show', {post:req.post,store:req.store});
-    },
-    
+    },    
     postsUpdate: (req,res)=>{
         req.post.update(req.body)
         .then(()=>{
             req.session.alert = '수정되었습니다.'
             res.redirect(`/stores/posts/${req.post.id}`);
         });
-    },
-    
-    //stores - delete
+    },    
     postsDelete: (req,res)=>{
         req.post.destroy();
         res.redirect('/stores/posts');
     },
+
+    /***********************
+          stores/messages
+    ***********************/
 
     findMessage: (req,res,next)=>{
        db.Messages.findOne({
@@ -365,7 +370,7 @@ module.exports = {
            next();
        });       
     },
-
+    //messages sent from stores
     messagesIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
@@ -482,7 +487,6 @@ module.exports = {
             })
         }
     },
-
     messagesMultipleDelete: (req,res)=>{       
         messages = req.body.checked.toString().split(',');
         for(var i = 0 ; i < messages.length; i++){
@@ -493,7 +497,7 @@ module.exports = {
         };
         res.redirect('/stores/messages');
     },
-
+    //messages sent from users
     messagesUsersIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
@@ -608,7 +612,6 @@ module.exports = {
             })
         }
     },
-
     messagesUsersMultipleDelete: (req,res)=>{       
         messages = req.body.checked.toString().split(',');
         for(var i = 0 ; i < messages.length; i++){
@@ -619,7 +622,6 @@ module.exports = {
         };
         res.redirect('/stores/messages');
     },
-
     messagesShow: (req,res)=>{
         //content
         res.render('3_stores/messages_show', {
@@ -630,11 +632,15 @@ module.exports = {
         //receivers
 
     },
-    //stores - delete
     messagesDelete: (req,res)=>{
         req.message.destroy();
         res.redirect('/stores/messages');
     },
+
+    /***********************
+          stores/comments
+    ***********************/
+
 
     findComment: (req,res,next)=>{
         db.Comment.findById(req.params.comment_id)
@@ -656,8 +662,7 @@ module.exports = {
                 next();
             });
         });
-    },
-    
+    },    
     commentsIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
@@ -665,6 +670,7 @@ module.exports = {
         delete q.page; 
 
         let type={};
+        //make include model for each post / notice / product.
         if(q.type=='A'){
             type.model = db.Post;
             type.as = 'post';
@@ -750,17 +756,15 @@ module.exports = {
                         model: db.Comment,
                         as: 'children',
                     },
-                    type
+                    type //check which among post, notice, product
                 ]
             })
             .then(comments=>{
-                console.log('\n\n\n\n',comments);
                 objData = {comments:comments.rows, commentsCount:comments.count, firstday, q};
                 res.render('3_stores/comments_index', objData);
             })
         }
     },
-
     commentsMultipleDelete: (req,res)=>{       
         comments = req.body.checked.toString().split(',');
         for(var i = 0 ; i < comments.length; i++){
@@ -771,7 +775,6 @@ module.exports = {
         };
         res.redirect('/stores/comments');
     },
-
     commentsShow: (req,res)=>{
         objData = {
             comment: req.comment,
@@ -780,12 +783,15 @@ module.exports = {
         }
         res.render('3_stores/commentas_show.handlebars',objData);
     },
-    //stores - delete
     commentsDelete: (req,res)=>{
         req.comment.destroy();
         res.redirect('/stores/comments');
     },
-    
+
+    /***********************
+          stores/notices
+    ***********************/
+    //notice: post where noticeChk true
     findNotice: (req,res,next)=>{
         db.Post.findOne({
             where: {
@@ -808,7 +814,6 @@ module.exports = {
             next();
         })
     },
-
     noticesIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
@@ -868,7 +873,6 @@ module.exports = {
             })
         }
     },
-
     noticesMultipleDelete: (req,res)=>{       
         notices = req.body.checked.toString().split(',');
         for(var i = 0 ; i < notices.length; i++){
@@ -879,7 +883,6 @@ module.exports = {
         };
         res.redirect('/stores/notices');
     },
-
     noticesShow: (req,res)=>{
         objData = {notice:req.notice}
         res.render('3_stores/notices_show',objData);
@@ -891,7 +894,6 @@ module.exports = {
             res.redirect(`/stores/notices/${req.notice.id}`);
         }));
     },
-    //stores - delete
     noticesDelete: (req,res)=>{
         req.notice.destroy();
         res.redirect('/stores/notices');

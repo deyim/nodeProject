@@ -5,6 +5,7 @@ const perPage = 3;
 const dateFunctions = require('../../lib/date_functions');
 var today = new Date();
 var yesterday = new Date();
+
 module.exports = {
     salesAllIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
@@ -310,7 +311,6 @@ module.exports = {
             }) 
         }      
         else{
-            console.log('\n\n\n\n',q.url);
             db.Withdrawl.findAndCountAll({
                 where:{
                     [Op.and]:
