@@ -12,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0
     }
-  }, {});
+  }, {
+    paranoid:true
+  });
   StoreUsers.associate = function(models) {
     // associations can be defined here
   };

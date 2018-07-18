@@ -47,10 +47,8 @@ app.get('/', (req,res)=>{
     res.render('index', {layout: false, message: errorMsg});
 });
 
-app.get('/main', (req,res)=>{
-    res.render('dashboard');
-});
 
+const dashboardRoutes = require('./routes/dashboard_routes')();
 const authRoutes = require('./routes/auth_routes')(passport);
 const membersRoutes = require('./routes/1_members_routes')();
 const storesRoutes = require('./routes/2_stores_routes')();
@@ -58,6 +56,7 @@ const ordersRoutes = require('./routes/3_orders_routes')();
 const salesRoutes = require('./routes/4_sales_routes')();
 const sitesRoutes = require('./routes/5_sites_routes')();
 const categoriesRoutes = require('./routes/6_categories_routes')();
+app.use('/main',dashboardRoutes);
 app.use('/auth', authRoutes);
 app.use('/members', membersRoutes);
 app.use('/stores', storesRoutes);

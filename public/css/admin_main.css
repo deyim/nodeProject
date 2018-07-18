@@ -1,0 +1,290 @@
+.main_sec01{
+	width:100%;
+	border:1px solid #e5e5e5;
+	box-sizing:border-box;
+	margin-top:40px;
+	padding:30px 0px 30px 0px;
+	display:inline-block;
+}
+
+.main_sec01 li{
+	width:25%;
+	border-right:1px solid #e5e5e5;
+	box-sizing:border-box;
+	display:inline-block;
+	float:left;
+	padding:0px 15px 0px 15px;
+}
+
+
+.main_sec01 li:last-child{
+	border-right:0px solid #e5e5e5;
+}
+
+.main_sec01 li .icon{
+	width:62px;
+	display:inline-block;
+	vertical-align:middle;
+}
+
+.main_sec01 li .title{
+	font-size:16px;
+	display:inline-block;
+	vertical-align:middle;
+	margin-left:5px;
+}
+
+.main_sec01 li .num{
+	font-size:24px;
+	display:inline-block;
+	vertical-align:middle;
+	float:right;
+	font-family:'sinkinsans','Noto_kr';
+	padding-top:12px;
+}
+
+.main_sec02{
+	width:100%;
+	display:inlilne-block;
+	margin-top:20px;
+}
+
+.main_sec02 .box{
+	width:32%;
+	border:1px solid #e5e5e5;
+	box-sizing:border-box;
+	display:inline-block;
+	float:left;
+	margin-left:2%;
+	padding:15px;
+}
+
+.main_sec02 .box:first-child{
+	margin-left:0px;
+}
+
+.main_sec02 .box .title{
+	width:100%;
+	padding-bottom:10px;
+	border-bottom:1px solid #e5e5e5;
+	font-size:18px;
+}
+
+.main_sec02 .box .list{
+	width:100%;
+	margin-top:20px;
+}
+
+.main_sec02 .box .list li{
+	width:100%;
+	display:inline-block;
+	margin-top:20px;
+}
+
+.main_sec02 .box .list li:first-child{
+	margin-top:0px;
+}
+
+.main_sec02 .box .list li .cont_name{
+	display:inline-block;
+	float:left;
+	font-size:15px;
+	color:#616161;
+}
+
+
+.main_sec02 .box .list li .cont_number{
+	display:inline-block;
+	float:right;
+	font-size:15px;
+}
+
+.main_sec02 .box .list li .cont_number span{
+	font-size:13px;
+	background-color:#4b69ad;
+	color:#fff;
+	width:100%;
+	padding:5px 7px 5px 7px;
+	margin-right:3px;
+	border-radius:100%;
+	-moz-border-radius:100%;
+	-webkit-border-radius:100%;
+}
+
+
+
+.main_sec03{
+	width:100%;
+	display:inline-block;
+	margin-top:80px;
+}
+
+.main_sec03 .infoarea{
+	width:100%;
+	display:inline-block;
+}
+
+.main_sec03 .infoarea .month{
+	width:220px;
+	display:inlilne-block;
+	float:right;
+	box-sizing:border-box;
+	padding:10px;
+	border:1px solid #e5e5e5;
+}
+
+.inputstyle{
+	width:100%;
+	border:0px solid #e5e5e5;
+}
+
+
+.main_sec03 .graph_box{
+	width:100%;
+	box-sizing:border-box;
+	border:1px solid #e5e5e5;
+	margin-top:20px;
+}
+
+.main_sec03 .graph_box .circle_area{
+	width:100%;
+	display:inline-block;
+	padding:30px 0px 30px 0px;
+	border-bottom:1px solid #e5e5e5;
+}
+
+.main_sec03 .graph_box .circle_area li{
+	width:50%;
+	border-right:1px solid #e5e5e5;
+	box-sizing:border-box;
+	display:inline-block;
+	float:left;
+	padding:0px 20px 0px 20px;
+}
+
+.main_sec03 .graph_box .circle_area li:last-child{
+	border-right:0px solid #e5e5e5;
+}
+
+
+.main_sec03 .graph_box .circle_area li .circle_graph{
+	width:125px;
+	display:Inline-block;
+	vertical-align:middle;
+}
+
+.main_sec03 .graph_box .circle_area li .textarea{
+	display:Inline-block;
+	vertical-align:middle;
+	margin-left:20px;
+}
+
+.main_sec03 .graph_box .circle_area li .textarea .title{
+	font-size:16px;
+}
+
+.main_sec03 .graph_box .circle_area li .textarea .number{
+	font-size:38px;
+	font-weight:bold;
+	color:#4b69ad;
+	font-family:'sinkinsans','Noto_kr'
+}
+
+
+.main_sec03 .graph_box .bar_graph{
+	width:100%;
+	padding:30px 15px 30px 15px;
+	box-sizing:border-box;
+}
+
+.main_sec03 .graph_box .bar_graph img{
+	width:100%;
+}
+
+
+.main_sec04{
+	width:100%;
+	display:inline-block;
+	margin-top:80px;
+}
+
+
+.main_sec04 .board_box{
+	width:49%;
+	border:1px solid #e5e5e5;
+	box-sizing:border-box;
+	padding:15px;
+	margin-left:2%;
+	display:inline-block;
+	float:left;
+	padding:15px;
+}
+
+.main_sec04 .board_box:first-child{
+	margin-left:0%;
+}
+
+
+
+
+.main_sec04 .board_box .title{
+	width:100%;
+	padding-bottom:10px;
+	border-bottom:1px solid #e5e5e5;
+	font-size:18px;
+}
+
+.main_sec04 .board_box .list{
+	width:100%;
+	margin-top:20px;
+}
+
+
+.main_sec04 .board_box .list li{
+	width:100%;
+	display:inline-block;
+	margin-top:8px;
+}
+
+.main_sec04 .board_box .list li:first-child{
+	margin-top:0px;
+}
+
+.main_sec04 .board_box .list li .board_name{
+	font-size:14px;
+	display:Inline-block;
+	float:left;
+	color:#959595;
+	
+}
+
+.main_sec04 .board_box .list li .board_title{
+	font-size:14px;
+	display:Inline-block;
+	float:left;
+	margin-left:10px;
+	color:#b5b5b5;
+}
+
+
+.main_sec04 .board_box .list li .board_date{
+	font-size:14px;
+	display:Inline-block;
+	float:right;
+	color:#b5b5b5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

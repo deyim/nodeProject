@@ -29,10 +29,9 @@ app.get('/', (req,res)=>{
     req.session.message = [];
     res.render('index', {layout: false, message: errorMsg});
 });
-app.get('/main', (req,res)=>{
-    res.render('dashboard');
-});
 
+
+const dashboardRoutes = require('./routes/dashboard_routes')();
 const authRoutes = require('./routes/auth_routes')(passport);
 const membersRoutes = require('./routes/1_members_routes')();
 const approvalsRoutes = require('./routes/2_approvals_routes')();
@@ -44,6 +43,7 @@ const codesRoutes = require('./routes/7_codes_routes')();
 const categoriesRoutes = require('./routes/8_categories_routes')();
 const contentsRoutes = require('./routes/9_contents_routes')();
 const countsRoutes = require('./routes/10_counts_routes')();
+app.use('/main',dashboardRoutes);
 app.use('/auth', authRoutes);
 app.use('/members', membersRoutes);
 app.use('/approvals', approvalsRoutes);

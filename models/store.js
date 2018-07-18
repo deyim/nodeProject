@@ -61,6 +61,7 @@ module.exports = (sequelize, DataTypes) => {
     Store.hasMany(models.Product, {as: 'products', foreignKey: 'storeId'});
     Store.belongsTo(models.Provider, {as: 'provider', foreignKey: 'providerId'});
     Store.hasOne(models.Approval, {as: 'approval', foreignKey: 'storeId'});
+    Store.hasMany(models.StoreVisit, {as: 'storevisits', foreignKey: 'storeId'});
     Store.belongsToMany(models.User, {
       through: 'StoreUsers',
       as: 'users',

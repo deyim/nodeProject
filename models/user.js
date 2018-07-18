@@ -69,7 +69,9 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Post, {as: 'posts', foreignKey: 'authorId'});
     User.hasMany(models.Comment, {as: 'comments', foreignKey: 'authorId'});
     // User.hasMany(models.Commentb, {as: 'commentbs', foreignKey: 'authorId'});
-
+    User.hasMany(models.Visiting, {as: 'visitings', foreignKey: 'userId'});
+    User.hasMany(models.Viewcount, {as: 'viewcounts', foreignKey: 'userId'});
+    User.hasMany(models.StoreVisit, {as: 'storevisits', foreignKey: 'userId'});
   };
 
   User.validPassword = function(password, passwd, done, user){

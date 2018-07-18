@@ -1,206 +1,168 @@
+<link rel="stylesheet" type="text/css" href="/css/admin_main.css" />
 <div class="cont">
-			<div class="titlearea">
-				<div class="title">DASHBOARD</div>
-			</div>
+	<div class="titlearea">
+		<div class="title">DASHBOARD</div>
+	</div>
+		
+	<ul class="main_sec01">
+		<li>
+			<div class="icon"><img src="./images/sec01_icon01.png"></div>
+			<div class="title">결제건수</div>
+			<div class="num">{{newOrders}}</div>
+		</li>
+		
+		<li>
+			<div class="icon"><img src="./images/sec01_icon02.png"></div>
+			<div class="title">결제금액</div>
+			<div class="num">{{sales}}</div>
+		</li>
+		
+		<li>
+			<div class="icon"><img src="./images/sec01_icon03.png"></div>
+			<div class="title">취소/환불요청</div>
+			<div class="num">{{canceled}}</div>
+		</li>
+		
+		<li>
+			<div class="icon"><img src="./images/sec01_icon04.png"></div>
+			<div class="title">취소/환불금액</div>
+			<div class="num">{{cancelSales}}</div>
+		</li>
+	</ul>
+	
+	<div class="main_sec02">
+		<div class="box">
+			<div class="title">주문처리현황01</div>
 			
-			<ul class="main_sec01">
+			<ul class="list">
 				<li>
-					<div class="icon"><img src="./images/sec01_icon01.png"></div>
-					<div class="title">결제건수</div>
-					<div class="num">6</div>
+					<div class="cont_name">입금확인중</div>
+					<div class="cont_number"><span>{{ordered}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="icon"><img src="./images/sec01_icon02.png"></div>
-					<div class="title">결제금액</div>
-					<div class="num">280.</div>
+					<div class="cont_name">신규주문</div>
+					<div class="cont_number"><span>{{paid}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="icon"><img src="./images/sec01_icon03.png"></div>
-					<div class="title">취소/환불요청</div>
-					<div class="num">2</div>
+					<div class="cont_name">미확인주문</div>
+					<div class="cont_number"><span>{{canceled}}</span>건</div>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="box">
+			<div class="title">주문처리현황02</div>
+			
+			<ul class="list">
+				<li>
+					<div class="cont_name">서비스이용중</div>
+					<div class="cont_number"><span>{{used}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="icon"><img src="./images/sec01_icon04.png"></div>
-					<div class="title">취소/환불금액</div>
-					<div class="num">0</div>
+					<div class="cont_name">구매확정</div>
+					<div class="cont_number"><span>{{final}}</span>건</div>
+				</li>
+				
+				<li>
+					<div class="cont_name">취소/환불</div>
+					<div class="cont_number"><span>{{canceled}}</span>건</div>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="box">
+			<div class="title">회원현황</div>
+			
+			<ul class="list">
+				<li>
+					<div class="cont_name">전체회원</div>
+					<div class="cont_number"><span>{{users}}</span>건</div>
+				</li>
+				
+				<li>
+					<div class="cont_name">신규가입</div>
+					<div class="cont_number"><span>{{newUsers}}</span>건</div>
+				</li>
+				
+				<li>
+					<div class="cont_name">탈퇴회원</div>
+					<div class="cont_number"><span>{{droppedUsers}}</span>건</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	
+	<div class="main_sec03">
+		<div class="infoarea">
+			<div class="month">
+				<select class="inputstyle">
+					<option>DAILY</option>
+					<option>MONTHLY</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="graph_box">
+			<ul class="circle_area">
+				<li>
+					<div class="textarea">
+						<div class="title">방문자수</div>
+						<div class="number">{{visitings}}</div>
+					</div>
+				</li>
+				
+				<li>
+					<div class="textarea">
+						<div class="title">상품조회</div>
+						<div class="number">{{views}}</div>
+					</div>
 				</li>
 			</ul>
 			
-			<div class="main_sec02">
-				<div class="box">
-					<div class="title">주문처리현황01</div>
-					
-					<ul class="list">
-						<li>
-							<div class="cont_name">입금확인중</div>
-							<div class="cont_number"><span>02</span>건</div>
-						</li>
-						
-						<li>
-							<div class="cont_name">신규주문</div>
-							<div class="cont_number"><span>03</span>건</div>
-						</li>
-						
-						<li>
-							<div class="cont_name">미확인주문</div>
-							<div class="cont_number"><span>04</span>건</div>
-						</li>
-					</ul>
-				</div>
-				
-				<div class="box">
-					<div class="title">주문처리현황02</div>
-					
-					<ul class="list">
-						<li>
-							<div class="cont_name">입금확인중</div>
-							<div class="cont_number"><span>02</span>건</div>
-						</li>
-						
-						<li>
-							<div class="cont_name">신규주문</div>
-							<div class="cont_number"><span>03</span>건</div>
-						</li>
-						
-						<li>
-							<div class="cont_name">미확인주문</div>
-							<div class="cont_number"><span>04</span>건</div>
-						</li>
-					</ul>
-				</div>
-				
-				<div class="box">
-					<div class="title">회원현황</div>
-					
-					<ul class="list">
-						<li>
-							<div class="cont_name">전체회원</div>
-							<div class="cont_number"><span>02</span>건</div>
-						</li>
-						
-						<li>
-							<div class="cont_name">신규가입</div>
-							<div class="cont_number"><span>03</span>건</div>
-						</li>
-						
-						<li>
-							<div class="cont_name">탈퇴회원</div>
-							<div class="cont_number"><span>04</span>건</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-			
-			
-			<div class="main_sec03">
-				<div class="infoarea">
-					<div class="month">
-						<select class="inputstyle">
-							<option>MONTH</option>
-							<option>DAY</option>
-							<option>YEAR</option>
-						</select>
-					</div>
-				</div>
-				
-				<div class="graph_box">
-					<ul class="circle_area">
-						<li>
-							<div class="circle_graph"><img src="./images/graph01.png"></div>
-							<div class="textarea">
-								<div class="title">방문자수</div>
-								<div class="number">3,452</div>
-							</div>
-						</li>
-						
-						<li>
-							<div class="circle_graph"><img src="./images/graph02.png"></div>
-							<div class="textarea">
-								<div class="title">상품조회</div>
-								<div class="number">1,232</div>
-							</div>
-						</li>
-					</ul>
-					
-					<div class="bar_graph">
-						<img src="./images/graph03.png">
-					</div>
-				</div>
-			</div>
-			
-			<div class="main_sec04">
-				<div class="board_box">
-					<div class="title">스토어공지</div>
-					<ul class="list">
-						<li>
-							<div class="board_name">스토어공지</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-						
-						<li>
-							<div class="board_name">스토어공지</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-						
-						<li>
-							<div class="board_name">스토어공지</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-						
-						<li>
-							<div class="board_name">스토어공지</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-						
-						<li>
-							<div class="board_name">스토어공지</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-					</ul>
-				</div>
-				
-				<div class="board_box">
-					<div class="title">스토어 FAQ</div>
-					<ul class="list">
-						<li>
-							<div class="board_name">스토어 FAQ</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-						
-						<li>
-							<div class="board_name">스토어 FAQ</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-						
-						<li>
-							<div class="board_name">스토어 FAQ</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-						
-						<li>
-							<div class="board_name">스토어 FAQ</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-						
-						<li>
-							<div class="board_name">스토어 FAQ</div>
-							<div class="board_title">스토어 공지 제목이 들어가는 곳 입니다</div>
-							<div class="board_date">2018.09.02</div>
-						</li>
-					</ul>
-				</div>
-			</div>
+			{{!-- <div class="bar_graph">
+				<img src="./images/graph03.png">
+			</div> --}}
 		</div>
 	</div>
+
+	<div class="main_sec04">
+		<div class="board_box">
+			<div class="titlearea">
+				<div class="boardtitle">스토어공지</div>
+				<div class="more"><a href="/sites/notices">더보기 +</a></div>
+			</div>
+			
+			<ul class="list">
+				
+				{{#each notices}}
+				<li>
+					<div class="board_name">{{typeChk this.type}}공지</div>
+					<div class="board_title"><a href="/sites/notices/{{this.id}}">{{this.title}}</a></div>
+					<div class="board_date">{{makeDate this.createdAt}}</div>
+				</li>
+				{{/each}}
+			</ul>
+		</div>
+		
+		<div class="board_box">
+			<div class="titlearea">
+				<div class="boardtitle">faq</div>
+				<div class="more"><a href="/sites/faqs">더보기 +</a></div>
+			</div>
+			<ul class="list">
+				{{#each faqs}}
+				<li>
+					<div class="board_name">{{typeChk this.type}} FAQ</div>
+					<div class="board_cate">{{this.faqcode.code}}</div>
+					<div class="board_title"><a href="/sites/faqs/{{this.id}}">{{this.title}}</a></div>
+					<div class="board_date">{{makeDate this.createdAt}}</div>
+				</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>
