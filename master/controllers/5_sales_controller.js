@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const Op = db.Sequelize.Op
 const perPage = 3;
 const dateFunctions = require('../../lib/date_functions');
-
+var today = new Date();
+var yesterday = new Date();
 module.exports = {
     salesAllIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
@@ -77,7 +78,6 @@ module.exports = {
                     sales += orders.rows[i].price;
                 }
                 objData.searchedSales = sales;
-                console.log('\n\n\n***',sales);
                 // objData = {orders:orders.rows, ordersCount: orders.count, firstday, q}
                 res.render('5_sales/all_index', objData);                           
             });   
@@ -237,7 +237,158 @@ module.exports = {
            
     },
     salesDistribute: (req,res)=>{
-        res.render('5_sales/distribute_index');   
+        var objData = {}       
+        yesterday.setDate(today.getDate()-1);
+
+        //query
+        let q = req.query;
+
+        //
+        if(Object.keys(req.query).length === 0){            
+            db.Withdrawl.findAndCountAll({
+                where: {
+                    withdrawnChk: false
+                },
+                include: [
+                    {
+                        model: db.Order,
+                        as: 'orders',
+                        include:[
+                            {
+                                model: db.OrderStatus,
+                                as: 'orderStatus',
+                                where: { 
+                                    finalChk: true 
+                                }
+                            },
+                            {
+                                model: db.Store,
+                                as: 'store',
+                            },
+                            {
+                                model: db.Ordercode,
+                                as: 'ordercode'
+                            },
+                            {
+                                model: db.Payinfo,
+                                as: 'payinfo',
+                                foreignKey: 'orderId'
+                            },
+                            {
+                                model: db.Product,
+                                as: 'product'
+                            },
+                            {
+                                model: db.ServiceUser,
+                                as: 'serviceUsers',
+                            },
+                            {
+                                model: db.User,
+                                as: 'buyer'
+                            }
+                        ]
+                    },   
+                    {
+                        model: db.Provider,
+                        as: 'provider',
+                        reqruired: true,
+                        include: [
+                            {
+                                model: db.Store,
+                                as: 'store',
+                                where: {
+                                    url:  q.url? { [Op.like]: `%${q.url}%` } : {[Op.regexp]: '^'},
+                                }
+                            }
+                        ]
+                    }         
+                ]
+            })
+            .then(withdrawls=>{
+                objData = {withdrawls:withdrawls.rows, withdrawlsCount:withdrawls.count, yesterday, q};
+                res.render('5_sales/distribute_index', objData);   
+            }) 
+        }      
+        else{
+            console.log('\n\n\n\n',q.url);
+            db.Withdrawl.findAndCountAll({
+                where:{
+                    [Op.and]:
+                    [
+                        {createdAt: {
+                            [Op.and]:[
+                                {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
+                                {[Op.lte]: q.enddate ? q.enddate : "2100-03-25"},
+                                ]
+                            }
+                        },  
+                    ]   
+                },
+                include: [
+                    {
+                        model: db.Order,
+                        as: 'orders',
+                        include:[
+                            {
+                                model: db.OrderStatus,
+                                as: 'orderStatus',
+                                where: { 
+                                    finalChk: true 
+                                }
+                            },
+                            {
+                                model: db.Store,
+                                as: 'store',
+                            },
+                            {
+                                model: db.Ordercode,
+                                as: 'ordercode'
+                            },
+                            {
+                                model: db.Payinfo,
+                                as: 'payinfo',
+                                foreignKey: 'orderId'
+                            },
+                            {
+                                model: db.Product,
+                                as: 'product'
+                            },
+                            {
+                                model: db.ServiceUser,
+                                as: 'serviceUsers',
+                            },
+                            {
+                                model: db.User,
+                                as: 'buyer'
+                            }
+                        ]
+                    },  
+                    {
+                        model: db.Provider,
+                        as: 'provider',
+                        reqruired: true,
+                        include: [
+                            {
+                                model: db.Store,
+                                as: 'store',
+                                where: {
+                                    url:  q.url? { [Op.like]: `%${q.url}%` } : {[Op.regexp]: '^'},
+                                }
+                            }
+                        ]
+                    }        
+                ]
+            })
+            .then(withdrawls=>{
+                objData = {withdrawls:withdrawls.rows, withdrawlsCount:withdrawls.count, yesterday, q};
+                res.render('5_sales/distribute_index', objData);   
+            })
+        }
+
+        // res.render('5_sales/distribute_index', objData);   
+    },
+    salesDistributedOrders:(req,res)=>{
+        ;
     },
     salesWithdrawl: (req,res)=>{
         res.render('5_sales/withdrawl_index');   

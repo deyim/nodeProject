@@ -9,7 +9,11 @@ module.exports = (sequelize, DataTypes) => {
     count: DataTypes.INTEGER,
     storeCost: DataTypes.INTEGER,
     pgCost: DataTypes.INTEGER,
-    childCount: DataTypes.INTEGER
+    childCount: DataTypes.INTEGER,
+    withdrawnChk: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {});
   Order.associate = function(models) {
     Order.hasOne(models.OrderStatus, {as: 'orderStatus', foreignKey: 'orderId'});
@@ -21,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     Order.hasMany(models.ServiceUser, {as: 'serviceUsers', foreignKey: 'orderId'});
     Order.hasOne(models.Payinfo, {as: 'payinfo', foreignKey: 'orderId'});
     Order.hasOne(models.CancelRequest, {as: 'cancelRequest'});
+    Order.belongsTo(models.Withdrawl, {as: 'withdrawl', foreignKey: 'withdrawlId'});
   };
   return Order;
 };

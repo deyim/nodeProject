@@ -7,6 +7,7 @@ module.exports = ()=>{
     route.get('/each', controller.salesEachReady);  
     route.get('/each/:store_url', controller.salesEachIndex);
     route.get('/distribute', controller.salesDistribute);
+    route.get('/distribute/:withdrawl_id', controller.salesDistributedOrders);
     route.get('/withdrawl', controller.salesWithdrawl);
     return route;
 }

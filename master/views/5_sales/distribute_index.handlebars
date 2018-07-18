@@ -4,47 +4,46 @@
         <div class="nav">매출/정산관리 > 정산내역 조회</div>
     </div>
     
-    
-    
     <div class="search_area">
+        <form method="GET">
         <table class="serach_box" cellpadding='0' cellspacing='0'>
             <tbody>
                 <tr>
                     <th>기간검색</th>
                     <td>
                         <div class="priod_box">
-                            <select class="inputstyle">
+                            <select class="inputstyle" name="">
                                 <option>전체</option>
                                 <option>구매확정일</option>
                                 <option>결제일</option>
                             </select>
                         </div>
-                    
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
+                   
+                        <div class="calendar_box"><input type="date" name="startdate" id="src_date" value={{makeDate yesterday}}><span><img src="/images/sub/calendar.jpg"></span></div>
                         <div>-</div>
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
+                        <div class="calendar_box"><input type="date" name="enddate" id="target_date" value={{makeDate yesterday}}><span><img src="/images/sub/calendar.jpg"></span></div>
                         <div class="priod_box">
                             <select class="inputstyle">
                                 <option>어제</option>
-                                <option>직접입력</option>
-                                
+                                <option>직접입력</option>                                
                             </select>
                         </div>
                     </td>
                     
-                    <td rowspan="2"><div class="serach_button">검색하기</div></td>
+                    <td rowspan="2"><div class="serach_button" onClick="">검색하기</div></td>
                 </tr>
                 
                 <tr>
-                    <th>기간검색</th>
+                    <th>스토어검색</th>
                     <td>
                         <div class="mem_inputbox">
-                            <input type="text" value="abcde" class="inputstyle"></input>
+                            <input type="text" name="url" class="inputstyle"></input>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
+        </form>
     </div>
     
     
@@ -80,9 +79,9 @@
                 
                 <tbody>
                     <tr>
-                        <td>123,000 원</td>
-                        <td>6,150 원</td>
-                        <td>116,850 원</td>
+                        <td>1000원</td>
+                        <td>500원</td>
+                        <td>200원</td>
                     </tr>
                 </tbody>
             </table>
@@ -134,9 +133,9 @@
                 
                 <tbody>
                     <tr>
-                        <td>222,123,000 원</td>
-                        <td>326,150 원</td>
-                        <td>444,116,850 원</td>
+                        <td>원</td>
+                        <td>원</td>
+                        <td>원</td>
                     </tr>
                 </tbody>
             </table>
@@ -150,14 +149,14 @@
         </div>
     
         <div class="list_info">
-            <div class="count">조회된 정산수 : 91건</div>
+            <div class="count">조회된 정산수 : {{withdrawlsCount}}건</div>
         </div>
         
         <div class="tablearea">
             <table class="sales_table" cellpadding="0" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>번호</th>
+                        {{!-- <th>번호</th> --}}
                         <th>스토어주소</th>
                         <th>일자</th>
                         <th>판매금액(A)</th>
@@ -168,15 +167,20 @@
                 </thead>
                 
                 <tbody>
+                    {{#each withdrawls}}
                     <tr>
-                        <th>05</th>
-                        <th>abcde</th>
-                        <th>2018-09-02</th>
-                        <th>121,444원</th>
-                        <th>121,444원</th>
-                        <th>121,444원</th>
+                        {{!-- <th></th> --}}
+                        <th>{{this.provider.store.url}}</th>
+                        <th>{{makeDate this.createdAt}}</th>
+                        <th>{{this.total}}</th>
+                        <th>{{plusTwo this.totalPgCost this.totalStoreCost}}</th>
+                        <th>{{minusTwo this.total this.totalPgCost this.totalStoreCost}}</th>
                         <th><div class="sales_view">보기</div></th>
                     </tr>
+
+
+
+                    {{/each}}
                 </tbody>
             </table>
         </div>
