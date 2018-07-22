@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     denyReason: DataTypes.TEXT
   }, {});
   CancelRequest.associate = function(models) {
-    // associations can be defined here
+    CancelRequest.belongsTo(models.Order, {as: 'order', foreignKey: 'orderId'});
   };
   return CancelRequest;
 };

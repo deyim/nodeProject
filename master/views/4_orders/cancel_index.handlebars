@@ -8,10 +8,13 @@
 	
 	
 	<div class="list_all">
+		<form method="POST">
 		<div class="list_info">
 			<div class="count">총 주문내역 : {{ordersCount}}건</div>
 			<ul class="message_button">
 				<li class="wh_button">엑셀다운로드</li>
+				<li class="lg_button cancelAllow">취소수락</li>
+				<li class="lg_button cancelDeny">취소거부</li>
 			</ul>
 		</div>
 		
@@ -40,8 +43,9 @@
 			<tbody>
 				
 				{{#each orders}}
+				
 				<tr>
-					<th><input type="checkbox"></input></th>
+					<th><input type="checkbox" name="checked" value={{this.id}}></input></th>
 					<th></th>
 					<td>
 						<div class="order_info_box">
@@ -71,16 +75,102 @@
 						{{this.buyer.username}}
 					</th>
 					
-					<th>{{this.store.url}}<br>{{cancelChk this.cancelChk}}<br>{{makeDate this.orderStatus.placeDate}}</th>
+					<th>{{cancelChk this.orderStatus.cancelChk}}<br>{{makeDate this.orderStatus.finalDate}}<br><span class="cancelReason">{{this.cancelRequest.cancelReason}}</span> </th>
 					
 				</tr>
+				<div class="cancelReason_alert" style="display:none;">
+					<div class="layer_back_area"></div>
+					<div class="layer_area">
+						<div class="showbox">
+							<div class="showbox_cetearea">
+								<div class="title">수정</div>
+								<div class="close"><img src="/images/sub/showbox_close.png"></div>
+							</div>                    
+							<input type="hidden" id="cancelId" value="{{this.cancelRequest.cancelReason}}">
+							<div class="showbox_contents">
+								취소사유:
+								<div id="cancelReason"></div>
+							</div>
+						</div>
+					</div>          
+				</div>
 				{{/each}}
 			</tbody>
 		</table>
-			
+			<div class="cancelAllow_alert" style="display:none;">
+                <div class="layer_back_area"></div>
+                <div class="layer_area">
+                    <div class="showbox">
+                        <div class="showbox_cetearea">
+                            <div class="title">수정</div>
+                            <div class="close"><img src="/images/sub/showbox_close.png"></div>
+                        </div>
+                    
+                    
+                        <div class="showbox_contents">
+                            취소를 수락하시겠습니가?
+                            <div class="bot_button">
+                                <div class="inline_wt_button" >
+                                    <input type="submit" name="cancelAllow" value="취소수락">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+			<div class="cancelDeny_alert" style="display:none;">
+                <div class="layer_back_area"></div>
+                <div class="layer_area">
+                    <div class="showbox">
+                        <div class="showbox_cetearea">
+                            <div class="title">수정</div>
+                            <div class="close"><img src="/images/sub/showbox_close.png"></div>
+                        </div>
+                    
+                    
+                        <div class="showbox_contents">
+                            취소를 거부하시겠습니까?
+                            <div class="bot_button">
+                                <div class="inline_wt_button" >
+                                    <input type="submit" name="cancelDeny" value="취소거부">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>			
+        </form>
 			{{>pages}}
 		</div>
 		
 		
 	</div>
 </div>
+
+<script>
+	$(document).ready(function(){
+		$(".cancelReason_alert").hide();
+		$(".cancelDeny_alert").hide();
+		$(".cancelAllow_alert").hide();
+	}); 
+	{{!-- $(function(){
+		$(".cancelReason").click(function(){			
+			let reason = $('#cancelId').val();
+			$('#cancelReason').html(reason);			
+			$(".cancelReason_alert").show();
+		});
+	}); --}}
+
+	$(function(){
+		$(".cancelDeny").click(function(){
+			$(".cancelDeny_alert").show();
+		});
+	});
+
+	$(function(){
+		$(".cancelAllow").click(function(){
+			$(".cancelAllow_alert").show();
+		});
+	});
+
+</script>

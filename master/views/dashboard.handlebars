@@ -7,14 +7,14 @@
 	<ul class="main_sec01">
 		<li>
 			<div class="icon"><img src="/images/sec01_icon01.png"></div>
-			<div class="title">결제건수</div>
+			<div class="title"><a href="/sales/all">결제건수</a></div>
 			<div class="num">{{newOrders}}</div>
 		</li>
 		
 		<li>
 			<div class="icon"><img src="/images/sec01_icon02.png"></div>
-			<div class="title">입금요청</div>
-			<div class="num">280</div>
+			<div class="title"><a href="/sales/withdrawl">입금요청</a></div>
+			<div class="num">0</div>
 		</li>
 	</ul>
 	
@@ -24,22 +24,22 @@
 			
 			<ul class="list">
 				<li>
-					<div class="cont_name">입금확인중</div>
+					<div class="cont_name"><a href="/orders/ordered">입금확인중</a></div>
 					<div class="cont_number"><span>{{ordered}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">신규주문</div>
+					<div class="cont_name"><a href="/orders/paid">신규주문</a> </div>
 					<div class="cont_number"><span>{{paid}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">취소주문</div>
+					<div class="cont_name"><a href="/orders/cancel">취소주문</a></div>
 					<div class="cont_number"><span>{{canceled}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">서비스이용중</div>
+					<div class="cont_name"><a href="/orders/used">서비스이용중</a></div>
 					<div class="cont_number"><span>{{used}}</span>건</div>
 				</li>
 			</ul>
@@ -50,17 +50,17 @@
 			
 			<ul class="list">
 				<li>
-					<div class="cont_name">전체매출건수</div>
+					<div class="cont_name"><a href="/sales/all">전체매출건수</a></div>
 					<div class="cont_number"><span>02</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">정산완료건수</div>
+					<div class="cont_name"><a href="/sales/each">정산완료건수</a></div>
 					<div class="cont_number"><span>03</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">입근신청건수</div>
+					<div class="cont_name"><a href="/sales/distribute">입금신청건수</a></div>
 					<div class="cont_number"><span>04</span>건</div>
 				</li>
 				
@@ -73,12 +73,12 @@
 			
 			<ul class="list">
 				<li>
-					<div class="cont_name">전체스토어</div>
+					<div class="cont_name"><a href="/members/stores">전체스토어</a></div>
 					<div class="cont_number"><span>{{stores}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">신규승인요청</div>
+					<div class="cont_name"><a href="/approvals/stores">신규승인요청</a></div>
 					<div class="cont_number"><span>{{prestores}}</span>건</div>
 				</li>
 				
@@ -90,7 +90,7 @@
 			
 			<ul class="list">
 				<li>
-					<div class="cont_name">전체회원</div>
+					<div class="cont_name"><a href="/members/users">전체회원</a></div>
 					<div class="cont_number"><span>{{users}}</span>명</div>
 				</li>
 				

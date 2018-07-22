@@ -24,8 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     Order.belongsTo(models.Ordercode, {as: 'ordercode'});
     Order.hasMany(models.ServiceUser, {as: 'serviceUsers', foreignKey: 'orderId'});
     Order.hasOne(models.Payinfo, {as: 'payinfo', foreignKey: 'orderId'});
-    Order.hasOne(models.CancelRequest, {as: 'cancelRequest'});
+    Order.hasOne(models.CancelRequest, {as: 'cancelRequest', foreignKey: 'orderId'});
     Order.belongsTo(models.Withdrawl, {as: 'withdrawl', foreignKey: 'withdrawlId'});
+    Order.belongsTo(models.Option, {as: 'option', foreignKey:'optionId'});
+  
   };
   return Order;
 };

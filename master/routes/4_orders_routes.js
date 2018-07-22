@@ -7,22 +7,27 @@ module.exports = ()=>{
     route.get('/users/:order_id', controller.orderServiceUsers);
    
     //입금확인중: ordered - index
-    route.get('/ordered', controller.orderedIndex);
+    route.get('/ordered', controller.orderedIndex)
+        .post('/ordered', controller.orderedStatusChange);
     
     //신규주문: paid - index
-    route.get('/paid', controller.paidIndex);
+    route.get('/paid', controller.paidIndex)
+        .post('/paid', controller.paidStatusChange);
    
     //발주확인: placed - index
-    route.get('/placed', controller.placedIndex);
+    route.get('/placed', controller.placedIndex)
+        .post('/placed', controller.placedStatusChange);
     
     //서비스 이용중: used - index
-    route.get('/used', controller.usedIndex);
+    route.get('/used', controller.usedIndex)    
+        .post('/used', controller.usedStatusChange);
     
     //구매화정: final - index
     route.get('/final', controller.finalIndex);
     
     //취소 환불: cancel - index
-    route.get('/cancel', controller.cancelIndex);
+    route.get('/cancel', controller.cancelIndex)
+        .post('/cancel', controller.cancelStatusChange);
 
     return route;
 }

@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     placeDate: DataTypes.DATE,
     finalChk: DataTypes.BOOLEAN,
     cashChk: DataTypes.BOOLEAN,
-    cancelChk: DataTypes.BOOLEAN
+    cancelChk: DataTypes.BOOLEAN,
+    finalDate: DataTypes.DATE,
+    denyChk: DataTypes.BOOLEAN,
+    cancelReqChk: DataTypes.BOOLEAN
   }, {});
   OrderStatus.associate = function(models) {
     OrderStatus.belongsTo(models.Order, {as: 'order', foreignKey: 'orderId'});

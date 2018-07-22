@@ -7,10 +7,12 @@
 			{{>order_query}}
 			
 			 <div class="list_all">
+				 <form method="POST">
 				<div class="list_info">
 					<div class="count">총 주문내역 : {{ordersCount}}건</div>
 					<ul class="message_button">
 						<li class="wh_button">엑셀다운로드</li>
+						<li class="lg_button cancelChk">예약취소</li>
 					</ul>
 				</div>
 				
@@ -58,8 +60,9 @@
 									<div class="textarea">
 										<div class="pro_title">{{this.product.title}}</div>
 										<ul class="option_list">
-											<li>예약일자 : {{this.startdate}}</li>
-											<li>선택옵션 : {{this.option}}</li>
+											<li>스토어주소 :  <a href="#">sosohang.com/{{this.store.url}}</a> </li>
+											<li>사용일자 : {{makeDate this.startDate}}</li>
+											<li>선택옵션 : {{this.option.title}}</li>
 										</ul>
 										<div class="info_view"><a href="/orders/users/{{this.id}}">서비스이용자 정보보기</a></div>
 									</div>
@@ -71,12 +74,33 @@
 								{{this.buyer.username}}
 							</th>
 							
-							<th>{{this.store.url}}<br>미확인</th>
+							<th>미확인</th>
 						</tr>
 						{{/each}}
 					</tbody>
 				</table>
-				
+				<div class="denyChk_alert" style="display:none;">
+					<div class="layer_back_area"></div>
+					<div class="layer_area">
+						<div class="showbox">
+							<div class="showbox_cetearea">
+								<div class="title">수정</div>
+								<div class="close"><img src="/images/sub/showbox_close.png"></div>
+							</div>
+						
+						
+							<div class="showbox_contents">
+								예약을 취소하겠습니까??
+								<div class="bot_button">
+									<div class="inline_wt_button" >
+										<input type="submit" name"denyChk" value="예약취소">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>          
+				</div>
+			</form>
 				{{>pages}}
 			</div>
 			

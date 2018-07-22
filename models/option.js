@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   Option.associate = function(models) {
     Option.hasMany(models.Price, {as:'prices', foreignKey: 'optionId'});
     Option.belongsTo(models.Product, {as: 'product', foreignKey: 'productId'});
+    Option.hasMany(models.Order, {as:'options', foreignKey: 'optionId'});
   };
   return Option;
 };

@@ -4,57 +4,164 @@ const Op = db.Sequelize.Op
 const perPage = 5;
 const dateFunctions = require('../../lib/date_functions');
 
+let noQueryInclude = [
+    {
+        model: db.Option,
+        as: 'option'
+    },
+    {
+        model: db.Store,
+        as: 'store',
+    },
+    {
+        model: db.Ordercode,
+        as: 'ordercode'
+    },
+    {
+        model: db.Payinfo,
+        as: 'payinfo',
+        foreignKey: 'orderId'
+    },
+    {
+        model: db.Product,
+        as: 'product'
+    },
+    {
+        model: db.ServiceUser,
+        as: 'serviceUsers',
+    },
+    {
+        model: db.User,
+        as: 'buyer'
+    }
+];
 
-// var makeObj = (order)=>{
-//     return new Promise (resolve=>{
-//         oneObj = new Object();
+var paidChkChangePromise = (i)=>{
+    db.OrderStatus.findOne({
+        include: [
+            {
+                model: db.Order,
+                required: true,
+                as: 'order',
+                where: {
+                    id: i
+                }
+            }
+        ]
+    })
+    .then(orderstatus=>{
+        orderstatus.update({
+            paidChk: true
+        }).then((orderstatus)=>{
+            return new Promise ((resolve)=>{
+            });
+        });
+    });     
+}
+
+var denyChkChangePromise = (i)=>{
+    db.OrderStatus.findOne({
+        include: [
+            {
+                model: db.Order,
+                required: true,
+                as: 'order',
+                where: {
+                    id: i
+                }
+            }
+        ]
+    })
+    .then(orderstatus=>{
+        orderstatus.update({
+            denyChk: true
+        }).then((status)=>{
+            db.CancelRequest.create({
+                orderId: i
+            })
+            .then(()=>{
+                return new Promise ((resolve)=>{
+                console.log(status);
+                })
+            });
+        });
         
-//         oneObj.order = order;
         
-//         order.getProduct()
-//         .then(product=>{
-//             oneObj.product = product;
-//         });
-        
-//         order.getOrdercode()
-//         .then(code=>{
-//             oneObj.ordercode = code; 
-//         });
+    });     
+}
 
-//         order.getServiceUsers()
-//         .then(users=>{
-//             oneObj.serviceUsers = users;
-//         })
+var cancelAllowPromise = (i)=>{
+    db.OrderStatus.findOne({
+        include: [
+            {
+                model: db.Order,
+                required: true,
+                as: 'order',
+                where: {
+                    id: i
+                }
+            }
+        ]
+    })
+    .then(orderstatus=>{
+        orderstatus.update({
+            cancelChk: true
+        }).then((orderstatus)=>{
+            return new Promise ((resolve)=>{
+            });
+        });
+    });     
+}
 
-//         order.getStore()
-//         .then(store=>{
-//             oneObj.store =store;
-//         });
-        
-//         order.getBuyer()
-//         .then(buyer=>{
-//             oneObj.buyer =buyer;
+var cancelDenyPromise = (i)=>{
+    db.OrderStatus.findOne({
+        include: [
+            {
+                model: db.Order,
+                required: true,
+                as: 'order',
+                where: {
+                    id: i
+                }
+            }
+        ]
+    })
+    .then(orderstatus=>{
+        orderstatus.update({
+            cancelChk: false
+        }).then((orderstatus)=>{
+            return new Promise ((resolve)=>{
+            });
+        });
+    });     
+}
 
-//         });
+async function paidChkChange(orders){
+    for(var i = 0 ; i < orders.length ; i++){
+        await paidChkChangePromise(orders[i]);
+    }    
+};
 
-//         setTimeout(()=>{
-//             resolve(oneObj);
-//         },300)
-//     })
-    
-// }
-// async function ordersToArray(orders){
-//     var ordersArray = [];
+async function denyChkChange(orders){
+    for(var i = 0 ; i < orders.length ; i++){
+        await denyChkChangePromise(orders[i]);
+    }    
+};
 
-//     for(var i = 0 ; i < orders.count ; i++){
-//         const myObj = await makeObj(orders.rows[i]);
-//         ordersArray.push(myObj);
-//     }    
+async function cancelAllow(orders){
+    for(var i = 0 ; i < orders.length ; i++){
+        await cancelAllowPromise(orders[i]);
+    }    
+};
 
-//     var myObj = {orders:ordersArray, ordersCount:orders.count};
-//     return myObj;
+async function cancelDeny(orders){
+    for(var i = 0 ; i < orders.length ; i++){
+        await cancelDenyPromise(orders[i]);
+    }    
+};
 
-// };
+
+
 
 module.exports = {  
     
@@ -96,49 +203,24 @@ module.exports = {
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
+        noQueryInclude.push({
+            model: db.OrderStatus,
+            as: 'orderStatus',
+            where: { 
+                paidChk: false, 
+                denyChk: false
+            }
+        });
         
         if(Object.keys(req.query).length === 0){            
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [
-                    {
-                        model: db.OrderStatus,
-                        as: 'orderStatus',
-                        where: { 
-                            paidChk: false 
-                        }
-                    },
-                    {
-                        model: db.Store,
-                        as: 'store',
-                    },
-                    {
-                        model: db.Ordercode,
-                        as: 'ordercode'
-                    },
-                    {
-                        model: db.Payinfo,
-                        as: 'payinfo',
-                        foreignKey: 'orderId'
-                    },
-                    {
-                        model: db.Product,
-                        as: 'product'
-                    },
-                    {
-                        model: db.ServiceUser,
-                        as: 'serviceUsers',
-                    },
-                    {
-                        model: db.User,
-                        as: 'buyer'
-                    }
-                ]
+                include: noQueryInclude                
             })
             .then(orders=>{
-                console.log(orders);
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/ordered_index', objData);
             })   
         }      
@@ -146,7 +228,7 @@ module.exports = {
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                where:{
+                where: {
                     [Op.and]:
                     [
                         {createdAt: {
@@ -163,7 +245,8 @@ module.exports = {
                         model: db.OrderStatus,
                         as: 'orderStatus',
                         where: { 
-                            paidChk: false 
+                            paidChk: false, 
+                            denyChk: false
                         }
                     },
                     {
@@ -210,11 +293,21 @@ module.exports = {
                 ]
             })
             .then(orders=>{
-                console.log(orders);
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/ordered_index', objData);
             })
         }
+    },
+
+    orderedStatusChange: (req,res)=> {
+        let orders = req.body.checked.toString().split(',');
+        if(req.body.paidChk){          
+            paidChkChange(orders);
+        }else if(req.body.denyChk){
+            denyChkChange(orders);
+        }
+        res.redirect('/orders/ordered');        
     },
 
     paidIndex: (req,res)=>{
@@ -224,49 +317,24 @@ module.exports = {
         let page = q.page||1;
         delete q.page;  
         let objData = {};
+        noQueryInclude.push({
+            model: db.OrderStatus,
+            as: 'orderStatus',
+            where: { 
+                paidChk: true,
+                placeDate: null
+            }
+        });
         if(Object.keys(req.query).length === 0){
             
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [
-                    {
-                        model: db.OrderStatus,
-                        as: 'orderStatus',
-                        where: { 
-                            paidChk: true,
-                            placeChk: false,
-                        },
-                    },
-                    {
-                        model: db.Store,
-                        as: 'store',
-                    },
-                    {
-                        model: db.Ordercode,
-                        as: 'ordercode'
-                    },
-                    {
-                        model: db.Payinfo,
-                        as: 'payinfo',
-                        foreignKey: 'orderId'
-                    },
-                    {
-                        model: db.Product,
-                        as: 'product'
-                    },
-                    {
-                        model: db.ServiceUser,
-                        as: 'serviceUsers',
-                    },
-                    {
-                        model: db.User,
-                        as: 'buyer'
-                    }
-                ]
+                include: noQueryInclude
             })
             .then(orders=>{
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/paid_index', objData);
             })   
         }      
@@ -280,7 +348,7 @@ module.exports = {
                         as: 'orderStatus',
                         where: { 
                             paidChk: true,
-                            placeChk: false,
+                            placeDate: null,
                         },
                     },
                     {
@@ -325,7 +393,7 @@ module.exports = {
                         }
                     }
                 ],
-                where:{
+                where: {
                     [Op.and]:
                     [
                         {createdAt: {
@@ -340,9 +408,16 @@ module.exports = {
             })
             .then(orders=>{
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/paid_index', objData);
             }) 
         }
+    },
+
+    paidStatusChange: (req,res)=>{
+        let orders = req.body.checked.toString().split(',');
+        denyChkChange(orders);
+        res.redirect('/orders/ordered');     
     },
 
     placedIndex: (req,res)=>{
@@ -351,50 +426,25 @@ module.exports = {
         let page = q.page||1;
         delete q.page;  
         let objData = {};
+        noQueryInclude.push({
+            model: db.OrderStatus,
+            as: 'orderStatus',
+            where: { 
+                paidChk: true,
+                placeDate: {
+                    [Op.ne]: null
+                }
+            }
+        });
         if(Object.keys(req.query).length === 0){            
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [
-                    {
-                        model: db.OrderStatus,
-                        as: 'orderStatus',
-                        where: { 
-                            paidChk: true,
-                            placeChk: true,
-                            // cancelChk: false,
-                        },
-                    },
-                    {
-                        model: db.Store,
-                        as: 'store',
-                    },
-                    {
-                        model: db.Ordercode,
-                        as: 'ordercode'
-                    },
-                    {
-                        model: db.Payinfo,
-                        as: 'payinfo',
-                        foreignKey: 'orderId'
-                    },
-                    {
-                        model: db.Product,
-                        as: 'product'
-                    },
-                    {
-                        model: db.ServiceUser,
-                        as: 'serviceUsers',
-                    },
-                    {
-                        model: db.User,
-                        as: 'buyer'
-                    }
-                ]
+                include: noQueryInclude
             })
             .then(orders=>{
-                console.log(orders);
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/placed_index', objData);
             })   
         }      
@@ -408,8 +458,9 @@ module.exports = {
                         as: 'orderStatus',
                         where: { 
                             paidChk: true,
-                            placeChk: true,
-                            // cancelChk: false
+                            placeDate: {
+                                [Op.ne]: null
+                            }
                         },
                     },
                     {
@@ -424,7 +475,7 @@ module.exports = {
                         as: 'ordercode',
                         where: {
                             code: q.ordercode? { [Op.like]: `%${q.ordercode}%` } : {[Op.regexp]: '^'}
-                        }
+                        } 
                     },
                     {
                         model: db.Payinfo,
@@ -454,7 +505,7 @@ module.exports = {
                         }
                     }
                 ],
-                where:{
+                where: {
                     [Op.and]:
                     [
                         {createdAt: {
@@ -465,15 +516,20 @@ module.exports = {
                             }
                         },  
                     ]   
-                },
+                }
             })
             .then(orders=>{
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/placed_index', objData);
             })  
         }
     },
 
+    placedStatusChange: (req,res)=>{
+
+    },
+    
     usedIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
@@ -483,6 +539,16 @@ module.exports = {
         let limit = new Date();
         let today = new Date();
         limit.setDate(limit.getDate()-3);
+        noQueryInclude.push({
+            model: db.OrderStatus,
+            as: 'orderStatus',
+            where: { 
+                paidChk: true, 
+                placeChk: true,
+                denyChk: false
+            }
+        });
+        
         if(Object.keys(req.query).length === 0){
             db.Order.findAndCountAll({
                 limit: perPage,
@@ -491,45 +557,11 @@ module.exports = {
                     startDate: {[Op.lte]: today},
                     endDate: {[Op.gte]: limit},
                 },
-                include: [
-                    {
-                        model: db.OrderStatus,
-                        as: 'orderStatus',
-                        where: { 
-                            paidChk: true,
-                            placeChk: true,
-                            cancelChk: false,                        
-                        },
-                    },
-                    {
-                        model: db.Store,
-                        as: 'store',
-                    },
-                    {
-                        model: db.Ordercode,
-                        as: 'ordercode'
-                    },
-                    {
-                        model: db.Payinfo,
-                        as: 'payinfo',
-                        foreignKey: 'orderId'
-                    },
-                    {
-                        model: db.Product,
-                        as: 'product'
-                    },
-                    {
-                        model: db.ServiceUser,
-                        as: 'serviceUsers',
-                    },
-                    {
-                        model: db.User,
-                        as: 'buyer'
-                    }
-                ]
+                include: noQueryInclude
             })
             .then(orders=>{
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/used_index', objData);
             }) 
         }      
@@ -543,7 +575,7 @@ module.exports = {
                     where: { 
                             paidChk: true,
                             placeChk: true,
-                            cancelChk: false
+                            denyChk: false
                         },
                     },
                     {
@@ -588,11 +620,9 @@ module.exports = {
                         }
                     }
                 ],
-                where:{
+                where: {
                     [Op.and]:
                     [
-                        {startDate: {[Op.lte]: today}},
-                        {endDate: {[Op.gte]: limit}},
                         {createdAt: {
                             [Op.and]:[
                                 {[Op.gte]: q.startdate ? q.startdate : "1900-03-25"},
@@ -605,18 +635,37 @@ module.exports = {
             })
             .then(orders=>{
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/used_index', objData);
             }) 
         }
+    
     },
 
+    usedStatusChange: (req,res)=>{
+
+    },
+
+
     finalIndex: (req,res)=>{
+        //************
+        //server computer change final status of DB when three days are past from enddate
+        //*************
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
         let page = q.page||1;
         delete q.page;  
         let objData = {};
         var limit = new Date();
+        noQueryInclude.push({
+            model: db.OrderStatus,
+            as: 'orderStatus',
+            where: { 
+                paidChk: true,
+                placeChk: true,
+                finalChk: true
+            }
+        });
         limit.setDate(limit.getDate()+3);
         if(Object.keys(req.query).length === 0){            
             db.Order.findAndCountAll({
@@ -625,45 +674,11 @@ module.exports = {
                 where: {
                     endDate: {[Op.lt]: limit},
                 },
-                include: [
-                    {
-                        model: db.OrderStatus,
-                        as: 'orderStatus',
-                        where: { 
-                            paidChk: true,
-                            placeChk: true,
-                            finalChk: true
-                        },
-                    },
-                    {
-                        model: db.Store,
-                        as: 'store',
-                    },
-                    {
-                        model: db.Ordercode,
-                        as: 'ordercode'
-                    },
-                    {
-                        model: db.Payinfo,
-                        as: 'payinfo',
-                        foreignKey: 'orderId'
-                    },
-                    {
-                        model: db.Product,
-                        as: 'product'
-                    },
-                    {
-                        model: db.ServiceUser,
-                        as: 'serviceUsers',
-                    },
-                    {
-                        model: db.User,
-                        as: 'buyer'
-                    }
-                ]
+                include: noQueryInclude
             })
             .then(orders=>{
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/final_index', objData);
             }) 
         }      
@@ -737,14 +752,16 @@ module.exports = {
                             }
                         },  
                     ]   
-                },
+                }
             })
             .then(orders=>{
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
                 res.render('4_orders/final_index', objData);
             }) 
         }
     },
+
 
     cancelIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
@@ -752,53 +769,33 @@ module.exports = {
         let page = q.page||1;
         delete q.page;  
         let objData = {};
+        noQueryInclude.push({
+            model: db.OrderStatus,
+            as: 'orderStatus',
+            where: { 
+                cancelReqChk: true 
+            }},
+            {
+                model: db.CancelRequest,
+                as: 'cancelRequest',
+                required: true
+            }
+        );
         if(Object.keys(req.query).length === 0){
             db.Order.findAndCountAll({
                 limit: perPage,
                 offset: perPage*(page-1),
-                include: [
-                    {
-                        model: db.OrderStatus,
-                        as: 'orderStatus',
-                        where: { 
-                            cancelChk: true
-                        },
-                    },
-                    {
-                        model: db.Store,
-                        as: 'store',
-                    },
-                    {
-                        model: db.Ordercode,
-                        as: 'ordercode'
-                    },
-                    {
-                        model: db.Payinfo,
-                        as: 'payinfo',
-                        foreignKey: 'orderId'
-                    },
-                    {
-                        model: db.Product,
-                        as: 'product'
-                    },
-                    {
-                        model: db.ServiceUser,
-                        as: 'serviceUsers',
-                    },
-                    {
-                        model: db.User,
-                        as: 'buyer'
-                    }
-                ]
+                include: noQueryInclude 
             })
             .then(orders=>{
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();noQueryInclude.pop();
                 res.render('4_orders/cancel_index', objData);
             }) 
         }      
         else{
             db.Order.findAll({
-                where:{
+                where: {
                     [Op.and]:
                     [
                         {createdAt: {
@@ -815,7 +812,7 @@ module.exports = {
                         model: db.OrderStatus,
                         as: 'orderStatus',
                         where: { 
-                            cancelChk: true
+                            cancelReqChk: true
                         },
                     },
                     {
@@ -863,8 +860,20 @@ module.exports = {
             })
             .then(orders=>{
                 objData = {orders:orders.rows, ordersCount:orders.count, firstday, q};
+                noQueryInclude.pop();
+                noQueryInclude.pop();
                 res.render('4_orders/cancel_index', objData);
             })   
         }
     },
+ 
+    cancelStatusChange: (req,res)=>{
+        let orders = req.body.checked.toString().split(',');
+        if(req.body.cancelAllow){          
+            cancelAllow(orders);
+        }else if(req.body.cancelDeny){
+            cancelDeny(orders);
+        }
+        res.redirect('/orders/cancel');  
+    }
 }

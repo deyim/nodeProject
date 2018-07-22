@@ -102,21 +102,46 @@ $(function(){
     $(".close").click(function(){
         $(".alert_modify").hide();
         $(".alert_delete").hide();
+        $(".order_view").hide();
+        $(".add_view").hide();
+        $(".message_show").hide();
+        $(".message_list").hide();
+        $(".message_list").hide();
+        $(".order_info_show").hide();
+        $(".message_window").hide();
+        $(".paidChk_alert").hide();
+        $(".denyChk_alert").hide();
+        $(".cancelReason_alert").hide();
+		$(".cancelDeny_alert").hide();
+		$(".cancelAllow_alert").hide();
+
     });
 });
 
+//master - orders
 $(function(){
     $("#order_code").click(function(){
         $(".order_view").show();
     });
 });
 
+$(document).ready(function(){
+    $(".paidChk_alert").hide();
+    $(".denyChk_alert").hide();
+}); 
 
 $(function(){
-    $(".close").click(function(){
-        $(".order_view").hide();
+    $(".paidChk").click(function(){
+        $(".paidChk_alert").show();
     });
 });
+
+$(function(){
+    $(".denyChk").click(function(){
+        $(".denyChk_alert").show();
+    });
+});
+
 
 $(function(){
    let periodType = $("#checkPeriodType").val();
@@ -134,13 +159,6 @@ $(function(){
 });
 
 
-$(function(){
-    $(".close").click(function(){
-        $(".add_view").hide();
-    });
-});
-
-
 //message index
 $(function(){
     $(".message_title").click(function(){
@@ -153,31 +171,12 @@ $(function(){
         $(".message_list").show();
     });
 });
-
-$(function(){
-    $(".close").click(function(){
-        $(".message_show").hide();
-    });
-});
-
-$(function(){
-    $(".close").click(function(){
-        $(".message_list").hide();
-    });
-});
-
 $(function(){
     $(".info_view").click(function(){
         $(".order_info_show").show();
     });
 });
 
-
-$(function(){
-    $(".close").click(function(){
-        $(".order_info_show").hide();
-    });
-});
 
 //admin - members index
 $(function(){
@@ -186,11 +185,6 @@ $(function(){
     });
 })
 
-$(function(){
-    $(".close").click(function(){
-        $(".message_window").hide();
-    });
-});
 
 //admin - members show
 

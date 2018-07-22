@@ -5,6 +5,7 @@ const perPage = 5;
 const dateFunctions = require('../../lib/date_functions');
 
 module.exports = {
+    //dashboard - 방문자 통계위한 수치는 서버 내에서 일/월별로 수집
     dashboardIndex: (req,res)=>{
         // var today = dateFunctions.getToday();
         var today = new Date();

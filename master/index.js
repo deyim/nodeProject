@@ -19,7 +19,12 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, './views'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
-
+// app.use(((req,res,next)=>{
+//     let q = req.query;
+//     let page = q.page || 1;
+//     delete q.page;
+//     next();
+// }))
 //error message
 app.get('/', (req,res)=>{
     var errorMsg = null;

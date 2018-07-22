@@ -5,20 +5,16 @@ module.exports = ()=>{
 
     //sites - banners
     route.get('/banners', controller.bannersIndex);
-    route.get('/banners/adstory/add', controller.adstoryAdd)
-        .post('/banners/adstory/add', controller.adstoryCreate);
+    route.post('/banners/adstory/add', controller.adstoryCreate);
     route.get('/banners/adstory/:adstory_id/delete/', controller.adstoryDelete);
 
-    route.get('/banners/adstore/add', controller.adstoreAdd)
-        .post('/banners/adstore/add', controller.adstoreCreate);
+    route.post('/banners/adstore/add', controller.adstoreCreate);
     route.get('/banners/adstore/:adstore_id/delete/', controller.adstoreDelete);
 
-    route.get('/banners/adnewstore/add', controller.adnewstoreAdd)
-        .post('/banners/adnewstore/add', controller.adnewstoreCreate);
+    route.post('/banners/adnewstore/add', controller.adnewstoreCreate);
     route.get('/banners/adnewstore/:adnewstore_id/delete/', controller.adnewstoreDelete);
 
-    route.get('/banners/adaffiliation/add', controller.adaffiliationAdd)
-        .post('/banners/adaffiliation/add', controller.adaffiliationCreate);
+    route.post('/banners/adaffiliation/add', controller.adaffiliationCreate);
     route.get('/banners/adaffiliation/:adaffiliation_id/delete/', controller.adaffiliationDelete);
 
     //sites - notices
