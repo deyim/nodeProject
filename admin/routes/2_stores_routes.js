@@ -12,7 +12,7 @@ module.exports = ()=>{
     route.get('/products/getproductcode', controller.productsGetProductcode);
     route.get('/products/updatenation', controller.productsUpdateNation);
     route.get('/products/updatecity', controller.productsUpdateCity);
-    route.get('/products/getunavailable', controller.productsGetUnavailables);
+    route.get('/products/deletecity', controller.deleteCity)
         //products - show
     route.get('/products/:product_id', controller.findProduct, controller.productsShow)
         .post('/products/:product_id/', controller.findProduct, controller.productsUpdate);

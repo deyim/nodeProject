@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     Product.hasMany(models.Price, {as: 'prices', foreignKey: 'productId'});
     Product.hasMany(models.Option, {as: 'options', foreignKey: 'productId'});
     Product.hasMany(models.Viewcount, {as:'viewcounts', foreignKey: 'productId'});
+    Product.hasMany(models.AttachedFile, {as:'attachedFiles', foreignKey: 'productId'});
     //city, nation, tag
     Product.belongsToMany(models.Nation, {
       through: 'ProductNations',

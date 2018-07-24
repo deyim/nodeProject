@@ -22,7 +22,7 @@
 					</td>
 				</tr>
 				
-				<tr>
+				<tr id="nation_city_choose">
 					<th>국가 / 도시선택 *</th>
 					<td colspan="3">
 						<div class="input_25box">
@@ -142,7 +142,7 @@
 							<div class="inline">옵션명</div>
 							<div class="input_80box"><input type="text" class="inputstyle" id="option_name"></input></div>
 							
-							<div class="dg_button" id="add_option_first">옵션추가</div>						
+							<div class="plus_button" id="add_option_first">옵션추가</div>						
 						</div>
 					</td>
 				</tr>
@@ -173,7 +173,7 @@
 								<div class="inline">원</div>
 								
 								<div class="plus_button remove_price" >
-									<img src="/images/sub/plus_option.png">	
+									<img src="/images/sub/minus_option.png">	
 								</div>
 								<div class="plus_button add_price" >
 									<img src="/images/sub/plus_option.png">	
@@ -191,7 +191,7 @@
 					<td colspan="3">
 						<div class="compulsory_img">
 							<div class="compulory_text">대표이미지</div>
-							<div class="image"><img src="/images/sub/ex_img.jpg"></div>
+							<div class="image"><img src=""></div>
 							<div class="buttonarea">
 								<div class="change">변경</div>
 								<div class="delete">삭제</div>
@@ -275,6 +275,7 @@
 		});
 	});
 
+//국가 선택에 따라 도시 바뀜
 	$(document).ready(function(){
 		$(document).on('change', '#nation_select', function(){
 			$.ajax({
@@ -284,7 +285,7 @@
 				},
 				success: function(result){
 					$("#nation").val(result.nation.nation);
-					$('.city_option').remove();
+					$('#city_options').empty();
 					$.each(result.cities, function (i, city) {
 						$('#city_options').append($('<option>', { 
 							value: city.id,
@@ -295,21 +296,34 @@
 		});
 	});
 
+//도시 추가
 	$(document).ready(function(){
 		 $(document).on('click', '#city_add', function(){
 			let elt = document.getElementById('city_options');   
     		let city = elt.options[elt.selectedIndex].text;
-			$('#cities').append("<div>"+city+"<span>X<span></div>");
+			$('#cities').append("<div class='appended_city city_delete'>"+city+"<span>X<span></div>");
 		});
 	}); 
 
+//국가 도시 선택 행 추가
 	$(document).ready(function(){
 		 $(document).on('click', '#nation_add', function(){
+			let toCopy = $('#nation_city_choose').clone();
+			$('#nation_city_choose').before(toCopy);
+			$('#nation_city_choose').find('#cities').empty();
 			
+
 		});
 	}); 
 
+//도시 삭제
+	$(document).ready(function(){
+		$(document).on('click', '.city_delete', function(){
+			$(this).remove();
+		});
+	}); 
 
+//안되는 날짜 고르기
 	$(document).ready(function(){
 		$("#unavailable").click(function(){
 			originalValue = $("#unavailables").val();
@@ -322,6 +336,7 @@
 			$("#unavailables").val(originalValue);
 		});
 	}); 
+
 
 	$(document).ready(function(){
 		$('#option_content').hide();

@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     Post.belongsTo(models.Store, {as: 'store', foreignKey: 'storeId'});
     Post.belongsTo(models.Board, {as: 'board'});
     Post.hasMany(models.Comment, {as: 'comments', foreignKey: 'postId'});
+    Post.hasMany(models.AttachedFile, {as:'attachedFiles', foreignKey: 'postId'});
   };
   return Post;
 };

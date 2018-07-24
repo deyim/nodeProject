@@ -54,7 +54,13 @@ module.exports = {
                 },
                 {
                     model: db.City,
-                    as: 'cities'
+                    as: 'cities',
+                    include: [
+                        {
+                            model: db.Nation,
+                            as: 'nation'
+                        }
+                    ]
                 }
             ]
         }).then(product=>{
@@ -207,7 +213,14 @@ module.exports = {
             objData.nations = nations;
         });
 
-        db.City.findAll()
+        db.City.findAll({
+            include: [
+                {
+                    model: db.Nation,
+                    as: 'nation'
+                }
+            ]
+        })
         .then(cities=>{
             objData.cities = cities;
             res.render('2_stores/products_show', objData);
@@ -315,8 +328,27 @@ module.exports = {
         });         
     },
 
-    productsGetUnavailables: (req,res)=>{
-
+    deleteCity: (req,res)=>{
+        console.log(req.query);
+        let cityId;
+        db.City.findOne({
+            where:{
+                city: req.query.city
+            }
+        }).then(city=>{
+            cityId = city.id
+            db.ProductCities.findOne({
+                where:{
+                    productId: req.query.product,
+                    cityId: cityId
+                },
+            }).then(relation=>{
+                console.log(relation);
+                relation.destroy();
+                res.json(relation);
+            });
+        })
+        
     },
 
     //stores - delete

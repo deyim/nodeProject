@@ -23,12 +23,16 @@ module.exports = {
             })
         })//결제금액
         .then(()=>{
+            let limit = new Date();
+            let today = new Date();
             db.Order.sum('price',{
                 where: {
+                    startDate: {[Op.lte]: today},
+                    endDate: {[Op.gte]: limit},
                     id: res.locals.store.id
                 }
             })
-            .then(sum=>{objData.sales = sum?sum:0;});
+            .then(sum=>{objData.newSales = sum?sum:0;});
         })//취소환불금액
         .then(()=>{
             db.Order.sum('price',{
@@ -47,8 +51,31 @@ module.exports = {
                 ]
             })
             .then(sum=>{
-                console.log(sum);
                 objData.cancelSales = sum? sum : 0;
+            });
+        })//취소환불금액 today
+        .then(()=>{
+            let limit = new Date();
+            let today = new Date();
+            db.Order.sum('price',{
+                where: {
+                    id: res.locals.store.id,
+                    startDate: {[Op.lte]: today},
+                    endDate: {[Op.gte]: limit},
+                },
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: {
+                            cancelChk: true
+                        },
+                        attributes: []
+                    }
+                ]
+            })
+            .then(sum=>{
+                objData.newCancelSales = sum? sum : 0;
             });
         })//방문자수 
         .then(()=>{
@@ -208,8 +235,10 @@ module.exports = {
             })
         })//취소/환불
         .then(()=>{
+            
             db.Order.count({
                 where:{
+                    
                     storeId: res.locals.store.id
                 },
                 include: [
@@ -223,6 +252,29 @@ module.exports = {
                 ]
             }).then(canceled=>{
                 objData.canceled = canceled? canceled : 0;
+                                   
+            })
+        }).//취소환불 today
+        then(()=>{
+            let limit = new Date();
+            let today = new Date();
+            db.Order.count({
+                where:{
+                    startDate: {[Op.lte]: today},
+                    endDate: {[Op.gte]: limit},
+                    storeId: res.locals.store.id
+                },
+                include: [
+                    {
+                        model: db.OrderStatus,
+                        as: 'orderStatus',
+                        where: { 
+                            cancelChk: true
+                        }
+                    },
+                ]
+            }).then(newCanceled=>{
+                objData.newCanceled = newCanceled? newCanceled : 0;
                                    
             })
         })//회원현황 - 전체회원
@@ -285,7 +337,10 @@ module.exports = {
                 ],         
             }).then(droppedUsers=>{
                 objData.droppedUsers = droppedUsers? droppedUsers : 0;
-                res.render('dashboard', objData); 
+                setTimeout(function () {
+                    res.render('dashboard', objData); 
+                  }, 100)
+                
             })
             
         })

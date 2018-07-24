@@ -62,8 +62,9 @@
 							<div class="textarea">
 								<div class="pro_title">{{this.product.title}}</div>
 								<ul class="option_list">
-									<li>예약일자 : {{this.startdate}}</li>
-									<li>선택옵션 : {{this.option}}</li>
+									<li>스토어주소 :  <a href="#">sosohang.com/{{this.store.url}}</a> </li>
+									<li>사용일자 : {{makeDate this.startDate}}</li>
+									<li>선택옵션 : {{this.option.title}}</li>
 								</ul>
 								<div class="info_view"><a href="/orders/users/{{this.id}}">서비스이용자 정보보기</a></div>
 							</div>

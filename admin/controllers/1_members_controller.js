@@ -198,7 +198,6 @@ module.exports = {
             }
         })
         .then(()=>{
-            console.log('\n\n\n**deleted');
             res.redirect("/members/users");
         })
     },

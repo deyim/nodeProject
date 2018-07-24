@@ -30,20 +30,21 @@
 				</tr>
 				
 				<tr>
-					<th rowspan="2">* 국가 / 도시선택</th>
+					<th rowspan="{{makeRows product.nations}}">* 국가 / 도시선택</th>
+					{{#each product.nations}}
 					<td colspan="3">
 						<div class="input_25box">
-							<select class="inputstyle">
-								{{#each nations}}
-								<option>{{this.nation}}</option>
+							<select class="inputstyle nation_option">
+								{{#each ../nations}}
+								<option value={{this.id}} {{selectNation ../this.nation this.nation}}>{{this.nation}}</option>
 								{{/each}}
 							</select>
 						</div>
 						
 						<div class="input_25box">
-							<select class="inputstyle">
-								{{#each cities}}
-								<option>{{this.city}}</option>
+							<select class="inputstyle city_option" id="city_select">
+								{{#each ../cities}}
+									{{{optionCities ../this.id this}}}
 								{{/each}}
 							</select>
 						</div>
@@ -54,12 +55,13 @@
 						</div>
 						
 						<div class="plus_boxarea">
-							<div>나폴리<span>X</span></div>
-							<div>밀라노<span>X</span></div>
-							<div>로마<span>X</span></div>
+							{{#each ../product.cities}}
+								{{{listCities ../this.id this}}}
+							{{/each}}
 						</div>
-					</td>
+					</td>					
 				</tr>
+				{{/each}}
 				
 				<tr>
 					<th>상품코드</th>
@@ -82,14 +84,15 @@
 						{{#each tags}}
 							<div class="input_12box"><input type="text" class="inputstyle" value=[{this.tag}}></input></div>
 						{{/each}}
+						<div class="input_12box"><input type="text" class="inputstyle"></input></div>
 					</td>
 				</tr>
 				
 				<tr>
 					<th>판매상태</th>
 					<td colspan="3">
-						<div class="inline"><input type="checkbox"></input> 판매중</div>
-						<div class="inline"><input type="checkbox"></input> 판매중지</div>
+						<div class="inline"><input type="checkbox" name="onSaleChk" value="true" {{ifTrue product.onSaleChk}}></input> 판매중</div>
+						<div class="inline"><input type="checkbox" name="onSaleChk" value="false" {{ifFalse product.onSaleChk}}></input> 판매중지</div>
 					</td>
 				</tr>
 				
@@ -121,8 +124,8 @@
 				<tr>
 					<th>상품특성</th>
 					<td colspan="3">
-						<div class="inline"><input type="checkbox"></input> 기간일자 상품</div>
-						<div class="inline"><input type="checkbox"></input> 단일일자 상품</div>
+						<div class="inline"><input type="checkbox" name="periodType" value="A" {{ifA product.periodType}}></input> 기간일자 상품</div>
+						<div class="inline"><input type="checkbox" name="periodType" value="B" {{ifB product.periodType}}></input> 단일일자 상품</div>
 					</td>
 				</tr>
 				
@@ -130,11 +133,9 @@
 					<th>옵션유형</th>
 					<td colspan="3">
 						<div class="listdg_button">
-							<div class="inline"><input type="checkbox"></input> 단일 옵션상품</div>
-							<div class="inline"><input type="checkbox"></input> 인원 옵션상품</div>
-						
-						
-							<div class="dg_button">옵션추가</div>
+							<div class="inline"><input type="checkbox" name="countType" value="A" {{ifA product.periodType}}></input> 단일 옵션상품</div>
+							<div class="inline"><input type="checkbox" name="countType" value="B" {{ifB product.periodType}}></input> 인원 옵션상품</div>
+
 						</div>
 					</td>
 				</tr>
@@ -149,8 +150,9 @@
 							<div class="inline">가격</div>
 							<div class="input_12box"><input type="text" class="inputstyle"></input></div>
 						
-						
-							<div class="dg_button">옵션삭제</div>
+							
+							<div class="plus_button">옵션추가</div>
+							<div class="plus_button">옵션삭제</div>
 						</div>
 					</td>
 				</tr>
@@ -228,23 +230,12 @@
 					</td>
 				</tr>
 				
-				<tr>
-					<td colspan="3">
-						<div class="listdg_button">
-							<div class="inline">
-								<div class="file_name">sosohang.jpg</div>
-								<div class="inline_dg_button">삭제</div>
-							</div>
-							<div class="inline_down_button">다운로드</div>
-						</div>
-					</td>
-				</tr>
 				
 				<tr>
 					<td colspan="3">
 						<div class="listdg_button">
 							<div class="inline">
-								<div class="file_name">사업자등록증.jpg</div>
+								<div class="file_name">파일이름</div>
 								<div class="inline_dg_button">삭제</div>
 							</div>
 							<div class="inline_down_button">다운로드</div>
@@ -266,7 +257,6 @@
 {{>editor_script}}
 
 <script>
-
 
 	$(document).ready(function(){
 		$("#codebutton").click(function(){
@@ -299,13 +289,28 @@
 							text : city.city 
 						}));
 					});
-					
-					//var optionTop = $s.find("option:contains('"+result.nation+"')").offset().top;
-					//var selectTop = $s.offset().top;
-					//$s.scrollTop($s.scrollTop()+optionTop-selectTop);
 			}});
 		});
 	});
+
+//city delete when click X
+	$(document).ready(function(){
+		 $(document).on('click', '.city_delete', function(){
+			let toDelete = $(this).text();
+			let product = {{{product.id}}}
+			toDelete = toDelete.replace('X','').trim();
+			$.ajax({
+				url: "/stores/products/deletecity", 
+				data: {
+					city: toDelete,
+					product: product
+				},
+				success: function(result){
+					console.log(",success, remove");
+					$(this).remove();
+			}});
+		});
+	}); 
 
 	 $(document).ready(function(){
 		 $(document).on('click', '.city_option', function(){

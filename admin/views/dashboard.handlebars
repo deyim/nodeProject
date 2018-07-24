@@ -7,26 +7,26 @@
 	<ul class="main_sec01">
 		<li>
 			<div class="icon"><img src="./images/sec01_icon01.png"></div>
-			<div class="title">결제건수</div>
+			<div class="title"><a href="/sales/all">결제건수</a> </div>
 			<div class="num">{{newOrders}}</div>
 		</li>
 		
 		<li>
 			<div class="icon"><img src="./images/sec01_icon02.png"></div>
-			<div class="title">결제금액</div>
-			<div class="num">{{sales}}</div>
+			<div class="title"><a href="/sales/all">결제금액</a></div>
+			<div class="num">{{newSales}}</div>
 		</li>
 		
 		<li>
 			<div class="icon"><img src="./images/sec01_icon03.png"></div>
-			<div class="title">취소/환불요청</div>
-			<div class="num">{{canceled}}</div>
+			<div class="title"><a href="/orders/canceled">취소/환불요청</a></div>
+			<div class="num"><a href="/orders/canceled">{{newCanceled}}</a> </div>
 		</li>
 		
 		<li>
 			<div class="icon"><img src="./images/sec01_icon04.png"></div>
-			<div class="title">취소/환불금액</div>
-			<div class="num">{{cancelSales}}</div>
+			<div class="title"><a href="/orders/canceled">취소/환불금액</a></div>
+			<div class="num">{{newCancelSales}}</div>
 		</li>
 	</ul>
 	
@@ -36,17 +36,17 @@
 			
 			<ul class="list">
 				<li>
-					<div class="cont_name">입금확인중</div>
+					<div class="cont_name"><a href="/orders/ordered">입금확인중</a></div>
 					<div class="cont_number"><span>{{ordered}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">신규주문</div>
+					<div class="cont_name"><a href="/orders/paid">신규주문</a></div>
 					<div class="cont_number"><span>{{paid}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">미확인주문</div>
+					<div class="cont_name"><a href="/orders/placed">발주확인</a></div>
 					<div class="cont_number"><span>{{canceled}}</span>건</div>
 				</li>
 			</ul>
@@ -57,17 +57,17 @@
 			
 			<ul class="list">
 				<li>
-					<div class="cont_name">서비스이용중</div>
+					<div class="cont_name"><a href="/orders/used">서비스이용중</a></div>
 					<div class="cont_number"><span>{{used}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">구매확정</div>
+					<div class="cont_name"><a href="/orders/final">구매확정</a></div>
 					<div class="cont_number"><span>{{final}}</span>건</div>
 				</li>
 				
 				<li>
-					<div class="cont_name">취소/환불</div>
+					<div class="cont_name"><a href="/orders/canceled">취소/환불</a></div>
 					<div class="cont_number"><span>{{canceled}}</span>건</div>
 				</li>
 			</ul>
@@ -78,7 +78,7 @@
 			
 			<ul class="list">
 				<li>
-					<div class="cont_name">전체회원</div>
+					<div class="cont_name"><a href="/members/users">전체회원</a></div>
 					<div class="cont_number"><span>{{users}}</span>건</div>
 				</li>
 				
