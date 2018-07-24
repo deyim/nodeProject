@@ -52,10 +52,12 @@
 				<tr>
 					<th>첨부파일 *</th>
 					<td colspan="3">
+						{{#each files}}
 						<div class="listdg_button">
-							<div class="inline">sosohang.jpg</div>
+							<div class="inline">{{this.filePath}}</div>
 							<div class="dg_button">다운로드</div>
 						</div>
+						{{/each}}
 					</td>
 				</tr>
 			</tbody>

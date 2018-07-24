@@ -8,7 +8,7 @@ module.exports = ()=>{
         .post('/products', controller.productsStatusChange);
     //products - add
     route.get('/products/add', controller.productsAdd)
-        .post('/products/create', controller.productsCreate);
+        .post('/products/add', controller.productsCreate);
     route.get('/products/getproductcode', controller.productsGetProductcode);
     route.get('/products/updatenation', controller.productsUpdateNation);
     route.get('/products/updatecity', controller.productsUpdateCity);
@@ -51,15 +51,18 @@ module.exports = ()=>{
     
     //comments - delete
     route.get('/comments/:comment_id/delete', controller.findComment, controller.commentsDelete);
-
-    //comments - index
+ 
+    //notice - index
     route.get('/notices', controller.noticesIndex)
         .post('/notices', controller.noticesMultipleDelete);
-    //comments - show
+
+    route.get('/notices/add', controller.noticesAdd)
+        .post('/notices/add', controller.noticeCreate);
+    //notice - show
     route.get('/notices/:notice_id', controller.findNotice, controller.noticesShow);
-    //comments - update
+    //notice - update
     route.post('/notices/:notice_id', controller.findNotice, controller.noticesUpdate);
-    //comments - delete
+    //notice - delete
     route.get('/notices/:notice_id/delete', controller.findNotice, controller.noticesDelete);
     
 

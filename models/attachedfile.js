@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   AttachedFile.associate = function(models) {
     // associations can be defined here
-    AttachedFile.belongsTo(models.Product, {as:"attachedFile", foreginKey:'productId'})
-    AttachedFile.belongsTo(models.Post,  {as:"attachedFile", foreginKey:'postId'})
+    AttachedFile.belongsTo(models.Product, {as:"product", foreginKey:'productId'})
+    AttachedFile.belongsTo(models.Post,  {as:"post", foreginKey:'postId'})
   };
   return AttachedFile;
 };

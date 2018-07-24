@@ -62,7 +62,7 @@
 						<th>10</th>
 						<th class="message_title"><a href="/stores/messages/{{this.id}}">{{this.content}}</a></th>
 						<th><a href="/stores/messages/receivers/{{this.id}}">발송대상</a></th>
-                        <th><a href="/stores/messages/{{this.id}}">{{this.createdAt}}</a></th>
+                        <th><a href="/stores/messages/{{this.id}}">{{makeDate this.createdAt}}</a></th>
 					</tr>
 					{{/each}}
             </tbody>

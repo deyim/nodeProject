@@ -5,6 +5,7 @@
 	</div>
 	
 	<div class="product_write">
+		<form method="POST">
 		<table cellpadding="0" cellspacing="0" class="de_table">
 			<tbody>
 				<tr>
@@ -129,8 +130,8 @@
 					<th>상품 유형</th>
 					<td colspan="3">
 						<div class="listdg_button">
-							<div class="inline"><input type="checkbox"></input> 단일 옵션상품</div>
-							<div class="inline"><input type="checkbox"></input> 인원 옵션상품</div>					
+							<div class="inline"><input type="checkbox" name="countType" value="A"></input> 단일 옵션상품</div>
+							<div class="inline"><input type="checkbox" name="countType" value="B"></input> 인원 옵션상품</div>					
 						</div>
 					</td>
 				</tr>
@@ -193,6 +194,7 @@
 							<div class="compulory_text">대표이미지</div>
 							<div class="image"><img src=""></div>
 							<div class="buttonarea">
+								<input type='file' id="imgInp">
 								<div class="change">변경</div>
 								<div class="delete">삭제</div>
 							</div>
@@ -205,6 +207,7 @@
 							</div>
 							<div class="buttonarea">
 								<div class="change">찾아보기</div>
+								<input type='file' id="imgInp">
 								
 							</div>
 						</div>
@@ -254,9 +257,10 @@
 	</div>
 	
 	<div class="bot_button">
-		<div class="bl_button">등록완료</div>
+		<div class="bl_button" onClick="submitContents(this);">등록완료</div>
 		<div class="wt_button">초기화</div>
 	</div>
+	</form>
 	
 </div>
 

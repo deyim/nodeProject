@@ -55,6 +55,132 @@ async function ordersToArray(orders){
 
 };
 
+var paidChkChangePromise = (i)=>{
+    db.OrderStatus.findOne({
+        include: [
+            {
+                model: db.Order,
+                required: true,
+                as: 'order',
+                where: {
+                    id: i
+                }
+            }
+        ]
+    })
+    .then(orderstatus=>{
+        orderstatus.update({
+            paidChk: true
+        }).then((orderstatus)=>{
+            return new Promise ((resolve)=>{
+            });
+        });
+    });     
+}
+
+var denyChkChangePromise = (i)=>{
+    db.OrderStatus.findOne({
+        include: [
+            {
+                model: db.Order,
+                required: true,
+                as: 'order',
+                where: {
+                    id: i
+                }
+            }
+        ]
+    })
+    .then(orderstatus=>{
+        orderstatus.update({
+            denyChk: true
+        }).then((status)=>{
+            db.CancelRequest.create({
+                orderId: i
+            })
+            .then(()=>{
+                return new Promise ((resolve)=>{
+                console.log(status);
+                })
+            });
+        });
+        
+        
+    });     
+}
+
+var cancelAllowPromise = (i)=>{
+    db.OrderStatus.findOne({
+        include: [
+            {
+                model: db.Order,
+                required: true,
+                as: 'order',
+                where: {
+                    id: i
+                }
+            }
+        ]
+    })
+    .then(orderstatus=>{
+        orderstatus.update({
+            cancelChk: true
+        }).then((orderstatus)=>{
+            return new Promise ((resolve)=>{
+            });
+        });
+    });     
+}
+
+var cancelDenyPromise = (i)=>{
+    db.OrderStatus.findOne({
+        include: [
+            {
+                model: db.Order,
+                required: true,
+                as: 'order',
+                where: {
+                    id: i
+                }
+            }
+        ]
+    })
+    .then(orderstatus=>{
+        orderstatus.update({
+            cancelChk: false
+        }).then((orderstatus)=>{
+            return new Promise ((resolve)=>{
+            });
+        });
+    });     
+}
+
+async function paidChkChange(orders){
+    for(var i = 0 ; i < orders.length ; i++){
+        await paidChkChangePromise(orders[i]);
+    }    
+};
+
+async function denyChkChange(orders){
+    for(var i = 0 ; i < orders.length ; i++){
+        await denyChkChangePromise(orders[i]);
+    }    
+};
+
+async function cancelAllow(orders){
+    for(var i = 0 ; i < orders.length ; i++){
+        await cancelAllowPromise(orders[i]);
+    }    
+};
+
+async function cancelDeny(orders){
+    for(var i = 0 ; i < orders.length ; i++){
+        await cancelDenyPromise(orders[i]);
+    }    
+};
+
+
+
 module.exports = {   
     orderServiceUsers: (req,res)=>{
         let order;
@@ -104,7 +230,8 @@ module.exports = {
                         model: db.OrderStatus,
                         as: 'orderStatus',
                         where: { 
-                            paidChk: false 
+                            paidChk: false, 
+                            denyChk: false
                         }
                     },
                     {
@@ -166,7 +293,8 @@ module.exports = {
                         model: db.OrderStatus,
                         as: 'orderStatus',
                         where: { 
-                            paidChk: false 
+                            paidChk: false, 
+                            denyChk: false
                         }
                     },
                     {
@@ -221,6 +349,15 @@ module.exports = {
         }
     },
 
+    orderedStatusChange: (req,res)=> {
+        let orders = req.body.checked.toString().split(',');
+      
+        if(req.body.denyChk){
+            denyChkChange(orders);
+        }
+        res.redirect('/orders/ordered');        
+    },
+
     paidIndex: (req,res)=>{
         // console.log('************\n\n\n\n\n******',req.query);
         let firstday = dateFunctions.getFirstday();
@@ -239,7 +376,7 @@ module.exports = {
                         as: 'orderStatus',
                         where: { 
                             paidChk: true,
-                            placeChk: false,
+                            placeDate: null
                         },
                     },
                     {
@@ -302,7 +439,7 @@ module.exports = {
                         as: 'orderStatus',
                         where: { 
                             paidChk: true,
-                            placeChk: false,
+                            placeDate: null
                         },
                     },
                     {
@@ -356,6 +493,12 @@ module.exports = {
         }
     },
 
+    paidStatusChange: (req,res)=>{
+        let orders = req.body.checked.toString().split(',');
+        denyChkChange(orders);
+        res.redirect('/orders/ordered');     
+    },
+
     placedIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
         let q = req.query;
@@ -373,8 +516,9 @@ module.exports = {
                         as: 'orderStatus',
                         where: { 
                             paidChk: true,
-                            placeChk: true,
-                            // cancelChk: false,
+                            placeDate: {
+                                [Op.ne]: null
+                            }
                         },
                     },
                     {
@@ -439,8 +583,9 @@ module.exports = {
                         as: 'orderStatus',
                         where: { 
                             paidChk: true,
-                            placeChk: true,
-                           // cancelChk: false
+                            placeDate: {
+                                [Op.ne]: null
+                            }
                         },
                     },
                     {
@@ -520,7 +665,7 @@ module.exports = {
                         where: { 
                             paidChk: true,
                             placeChk: true,
-                            cancelChk: false,                        
+                            denyChk: false                        
                         },
                     },
                     {
@@ -590,7 +735,7 @@ module.exports = {
                         where: { 
                             paidChk: true,
                             placeChk: true,
-                            cancelChk: false
+                            denyChk: false
                         },
                     },
                     {
@@ -800,10 +945,15 @@ module.exports = {
                 offset: perPage*(page-1),
                 include: [
                     {
+                        model: db.CancelRequest,
+                        as: 'cancelRequest',
+                        required: true
+                    },
+                    {
                         model: db.OrderStatus,
                         as: 'orderStatus',
                         where: { 
-                            cancelChk: true
+                            cancelReqChk: true 
                         },
                     },
                     {
@@ -863,8 +1013,13 @@ module.exports = {
                         model: db.OrderStatus,
                         as: 'orderStatus',
                         where: { 
-                            cancelChk: true
+                            cancelReqChk: true
                         },
+                    },
+                    {
+                        model: db.CancelRequest,
+                        as: 'cancelRequest',
+                        required: true
                     },
                     {
                         model: db.Product,
@@ -918,7 +1073,15 @@ module.exports = {
         }
     },
 
-
+    cancelStatusChange: (req,res)=>{
+        let orders = req.body.checked.toString().split(',');
+        if(req.body.cancelAllow){          
+            cancelAllow(orders);
+        }else if(req.body.cancelDeny){
+            cancelDeny(orders);
+        }
+        res.redirect('/orders/cancel');  
+    }
     // orderedShow: (req,res)=>{        
     //     res.render('3_orders/ordered_show', {order:req.order, today:Date.now()});
     // },

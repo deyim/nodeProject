@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(50)
     },
     content: DataTypes.TEXT,
-    attachedPath: DataTypes.STRING
+    attachedPath: DataTypes.STRING,
+    noticeChk: DataTypes.BOOLEAN
   }, {
     paranoid: true
   });

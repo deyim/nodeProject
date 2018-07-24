@@ -272,8 +272,24 @@ module.exports = {
     productsCreate: (req,res)=>{
         //store = res.locals.store.id
         //provider = req.user.id와 연결된 provider
+        console.log(req.body);
+
+        db.Product.create({
+            title: req.body.title,
+            periodType: req.body.periodType,
+            countType: req.body.countType,
+
+            // categoryId: req.body
+
+        }).then(product=>{
+            product.setTags();
+            product.setCities();
+            product.setNations();
+            // product.setOptions();
+            res.render("2_stores/products_add_completed", {product});
+        })
         
-        res.render("2_stores/products_add_completed");
+        
     },
     
     productsGetProductcode: (req,res)=>{
@@ -369,6 +385,11 @@ module.exports = {
             post.getAuthor()
             .then(author=>{
                 req.author=author;
+            })
+
+            post.getAttachedFiles()
+            .then(files => {
+                req.files = files;
             })
 
             // post.getCategory()
@@ -473,7 +494,7 @@ module.exports = {
 
     postsShow: (req,res)=>{
         let objData = {post:req.post,store:req.store,
-            author:req.author}
+            author:req.author, files:req.files}
         res.render('2_stores/posts_show', objData);
     },
     
@@ -549,15 +570,21 @@ module.exports = {
                             {
                                 model:db.User,
                                 as: 'receiver',
+                                required:true,
                                 where: {
                                     id: res.locals.user.id
                                 }
+                            },
+                            {
+                                model:db.User,
+                                as: 'sender',
                             }
                         ]                        
                     }
                 ]
             })
             .then(messages=>{
+                console.log(messages.rows[0].sentMessages[0]);
                 objData = {messages:messages.rows, messagesCount:messages.count, firstday, q}
                 res.render('2_stores/messages_received_index', objData);
             });   
@@ -776,25 +803,35 @@ module.exports = {
     },
 
     findComment: (req,res,next)=>{
-        db.Comment.findById(req.params.comment_id)
-        .then(comment=>{
-            if(!comment){
-                req.flash('error', '없는 댓글입니다.');
-                res.redirect('/members/comments');
-            }
-            req.comment = comment;
-            
-            comment.getPost()
-            .then(post=>{
-                req.post = post;
-            });
+        db.Comment.findOne({
+            include: [
+                {
+                    model: db.Store,
+                    as: 'store',
+                    where: {
+                        id: res.locals.store.id
+                    }
+                },
+                {
+                    model: db.User,
+                    required: true,
+                    as: 'author'
+                },
+                {
+                    model: db.Post,
+                    as: 'post'
+                },
+                {
+                    model: db.Product,
+                    as: 'product'
+                }
 
-            comment.getAuthor()
-            .then(author=>{
-                req.author = author;
-                next();
-            });
-        });
+            ]
+        })
+        .then(comment=>{
+            req.comment = comment;
+            next();
+        })
     },
     
     commentsIndex: (req,res)=>{
@@ -805,7 +842,23 @@ module.exports = {
         if(Object.keys(req.query).length === 0){
             db.Comment.findAndCountAll({
                 limit: perPage,
-                offset: perPage*(page-1)
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.User,
+                        required: true,
+                        as: 'author'
+                    },
+                    {
+                        model: db.Post,
+                        as: 'post'
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product'
+                    }
+    
+                ]
             })
             .then(comments=>{
                 objData = {comments:comments.rows, commentsCount:comments.count, firstday, q};
@@ -840,20 +893,15 @@ module.exports = {
                                 {nickname:{ [Op.like]: `%${q.nickname}%`}},
                             
                             ]
-                        },
-                        include: [
-                            {
-                                model: db.User,
-                                as: 'user',
-                                where: {
-                                    [Op.and]:
-                                    [
-                                        {username:{ [Op.like]: `%${q.username}%`}},
-                                    ]
-                                }
-                            }
-                        ]
-                        
+                        }                        
+                    },
+                    {
+                        model: db.Post,
+                        as: 'post'
+                    },
+                    {
+                        model: db.Product,
+                        as: 'product'
                     }
                 ]
             })
@@ -890,27 +938,15 @@ module.exports = {
     },
     
     findNotice: (req,res,next)=>{
-        db.Post.findById(req.params.notice_id)
-        .then(notice=>{
-            if(!notice){
-                req.flash('error', '없는 공지입니다.');
-                res.redirect('/stores/notices');
-            }
-            req.notice = notice;
-
-            notice.getAuthor()
-            .then(author=>{
-                req.author =author;
-            });
-
-            notice.getStore()
-            .then(store=>{
-                req.store = store;
-                next();
-            })
-            
-
-        });
+        db.Post.findOne({
+            where: {
+                noticeChk: true,
+                id: req.params.notice_id
+            },
+        }).then(post=>{
+            req.post = post;
+            next();
+        })
     },
 
     noticesIndex: (req,res)=>{
@@ -974,6 +1010,27 @@ module.exports = {
                 res.render('2_stores/notices_index', objData);
             })
         }
+    },
+
+    noticesAdd: (req,res)=>{
+        res.render('2_stores/notices_add');
+    },
+
+    noticeCreate: (req,res)=>{
+        db.Post.create({
+            
+            title: req.body.title,
+            content: req.body.content,
+            storeId: res.locals.store.id,
+            authorId: res.locals.user.id,
+            createdAt:Date.now(),
+            updatedAt: Date.now(),
+            noticeChk: true,
+        })
+        .then(notice=>{
+            console.log(notice);
+            res.redirect("/stores/notices");
+        })
     },
 
     noticesMultipleDelete: (req,res)=>{       

@@ -58,7 +58,7 @@
 	
 	<div class="list_all">
 		<div class="list_info">
-			<div class="count">총 댓글수 : 91건</div>
+			<div class="count">총 댓글수 : {{commentsCount}}건</div>
 			<ul class="message_button">
 				<li class="lg_button">선택댓글 삭제</li>
 			</ul>
@@ -78,28 +78,30 @@
 			</thead>
 			
 			<tbody>
-				<tr>
-					<th><input type="checkbox"></input></th>
-					<th>10</th>
-					<th>flywork@naver.com</th>
-					<th>flywork</th>
-					<td>
-						<div class="stext_info"><span class="blue_text">2018.05.11</span> 오후에 등록됨</div>
-						<div class="btext_cont">
-							댓글내용이 들어가는 곳 입니다. 댓글내용이 들어가는곳<br>
-							댓글내용이 들어가는 곳 입니다. <br>
-							댓글내용이 들어가는 곳 입니다. <br>
-						</div>
-					</td>
-					<td>
-						<div class="btext_cont">
-							파리여행중 맥주마시며 풍경사진 올려요~<br>
-						</div>
-						<div class="stext_info">2018.05.11 오후에 등록됨</div>
-					</td>
-					
-					<th><img src="../images/sub/delete_icon.jpg"></th>
-				</tr>
+				{{#each comments}}    
+                <tr>
+                    <th><input type="checkbox" name="checked" value={{this.id}} ></th>
+                    <th>10</th>
+                    <th>{{this.author.username}}</th>
+                    <th>{{this.author.nickname}}</th>
+                    <td>
+                        <div class="stext_info"><span class="blue_text">{{makeDate this.createdAt}}</span> 오후에 등록됨</div>
+                        <div class="btext_cont">
+                            {{this.content}}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btext_cont">
+                            <a href="/stores/posts/{{this.post.id}}">{{this.post.title}}</a>
+                            <a href="/stores/products/{{this.product.id}}">{{this.product.title}}</a>
+                        </div>                                            
+                            <div class="stext_info">댓글에 달린 댓글 {{length this.children}}개</div>
+                        
+                    </td>
+                    
+                    <th><a href="/stores/comments/{{this.id}}/delete"><img src="/images/sub/delete_icon.jpg"></a></th>
+                </tr>              
+                {{/each}}
 				
 			</tbody>
 		</table>

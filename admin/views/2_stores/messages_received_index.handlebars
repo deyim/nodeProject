@@ -51,7 +51,6 @@
 						<th><input type="checkbox"></input></th>
 						<th>번호</th>
 						<th>아이디</th>
-						<th>닉네임</th>
 						<th>쪽지내용</th>
 						<th>수신일자</th>
 					</tr>
@@ -62,10 +61,9 @@
 					<tr>
 						<th> <input type="checkbox" name="checked" value={{this.id}} ></th>
 						<th>10</th>
-						<th>honggildong@naver.com</th>
-						<th>flywork</th>
+						<th>{{senderUsername this.sentMessages}}</th>
 						<th class="message_title"><a href="/stores/messages/{{this.id}}">{{this.content}}</a></th>
-						<th>{{this.createdAt}}</th>
+						<th>{{makeDate this.createdAt}}</th>
 					</tr>
 					{{/each}}
 				</tbody>

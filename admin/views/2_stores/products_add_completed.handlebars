@@ -1,0 +1,16 @@
+<div class="product_complete">
+    <div class="complete_text">
+        상품등록이 완료 되었습니다.
+    </div>
+    
+    <div class="product_code">
+        상품코드 : {{product.productcode.code}}
+    </div>
+    
+    <div class="bot_button">
+        <div class="bl_button" onclick="document.location.href='/stores/products/{{product.id}}'">상품보기</div>
+        <div class="wt_button" onclick="document.location.href='/stores/products/{{product.id}}'">상품수정</div>
+        <div class="wt_button" onclick="document.location.href='/stores/products/add'">새상품 등록</div>
+    </div>
+
+</div>

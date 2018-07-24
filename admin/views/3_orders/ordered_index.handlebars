@@ -8,10 +8,12 @@
     {{>order_query}}
     
     <div class="list_all">
+        <form method="POST">
         <div class="list_info">
             <div class="count">총 주문내역 : {{ordersCount}}건</div>
             <ul class="message_button">
                 <li class="wh_button">엑셀다운로드</li>
+                <li class="lg_button denyChk">예약취소</li>
             </ul>
         </div>
         
@@ -19,9 +21,10 @@
         
             <colgroup>
                 <col style="width:3%;">
-                <col style="width:72%;">
-                <col style="width:12%;">
-                <col style="width:13%;">
+                <col style="width:5%;">
+                <col style="width:70%;">
+                <col style="width:11%;">
+                <col style="width:11%;">
                 
             </colgroup>
         
@@ -29,8 +32,9 @@
             <thead>
                 <tr>
                     <th><input type="checkbox" onclick="chooseAll()"></input></th>
+                    <th>번호</th>
                     <th>주문내역</th>
-                    <th>주문자 이름 / 아이디</th>
+                    <th>주문자 이름 /<br> 아이디</th>
                     <th>상태</th>
                     
                 </tr>
@@ -40,7 +44,8 @@
                 
                 {{#each orders}}
                 <tr>
-                    <th><input type="checkbox"></input></th>
+                    <th><input type="checkbox" name="checked" value={{this.id}}></input></th>
+                    <th></th>
                     <td>
                         <div class="order_info_box">
                             <div class="order_info">
@@ -56,7 +61,7 @@
                             <div class="textarea">
                                 <div class="pro_title">{{this.product.title}}</div>
                                 <ul class="option_list">
-                                    <li>예약일자 : {{this.startdate}}</li>
+                                    <li>예약일자 : {{makeDate this.startdate}}</li>
                                     <li>선택옵션 : {{this.option}}</li>
                                 </ul>
                                 <div class="info_view"><a href="/orders/users/{{this.id}}">서비스이용자 정보보기</a></div>
@@ -69,7 +74,7 @@
                         {{this.buyer.username}}
                     </th>
                     
-                    <th>{{this.store.url}}</th>
+                    <th>입금대기</th>
                     
                     {{!-- <th>{{#each serviceUsers}}{{this.korName}}{{/each}}</th> --}}
                    {{!-- {{this.store.url}}
@@ -107,7 +112,49 @@
                 {{/each}}
             </tbody>
         </table>
-        
+        <div class="paidChk_alert" style="display:none;">
+                <div class="layer_back_area"></div>
+                <div class="layer_area">
+                    <div class="showbox">
+                        <div class="showbox_cetearea">
+                            <div class="title">수정</div>
+                            <div class="close"><img src="/images/sub/showbox_close.png"></div>
+                        </div>
+                    
+                    
+                        <div class="showbox_contents">
+                            입금이 확인되었습니까?
+                            <div class="bot_button">
+                                <div class="inline_wt_button">
+                                    <input type="submit" name="paidChk" value="입금확인">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+            <div class="denyChk_alert" style="display:none;">
+                <div class="layer_back_area"></div>
+                <div class="layer_area">
+                    <div class="showbox">
+                        <div class="showbox_cetearea">
+                            <div class="title">수정</div>
+                            <div class="close"><img src="/images/sub/showbox_close.png"></div>
+                        </div>
+                    
+                    
+                        <div class="showbox_contents">
+                            예약을 취소하겠습니까??
+                            <div class="bot_button">
+                                <div class="inline_wt_button" >
+                                    <input type="submit" name="denyChk" value="예약취소">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+        </form>
         {{>pages}}
     </div>
     

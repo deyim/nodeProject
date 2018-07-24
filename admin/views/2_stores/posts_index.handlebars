@@ -60,7 +60,7 @@
 						<th><input type="checkbox" name="checked" value={{this.id}} ></th>
 						<th>1</th>
 						<th><a href="/stores/posts/{{this.id}}">{{this.title}}</a></th>
-						<th><a href="/stores/posts/{{this.id}}">{{this.content}}</a></th>
+						<th><a href="/stores/posts/{{this.id}}">{{deleteTags this.content}}</a></th>
 						<th>{{this.author.username}}</th>
 						<th>{{makeDate this.createdAt}}</th>
 					</tr>
