@@ -5,36 +5,123 @@ const perPage = 5;
 
 module.exports = {
     findStore: (req,res,next)=>{ 
-        db.Store.findById(res.locals.store.id)
-        .then(store=>{
-            if(!store){
-                req.flash('error', '없는 스토어입니다.');
-                res.redirect('/sites/store');
-            }
+        db.Store.findOne({
+            where: {
+                id: res.locals.store.id
+            },
+            include: [
+                {
+                    model: db.Provider,
+                    as: 'provider'
+                },
+                {
+                    model: db.User,
+                    as: 'users'
+                },
+                {
+                    model: db.Nation,
+                    as: 'nations'
+                },
+                {
+                    model: db.City,
+                    as: 'cities'
+                },
+                {
+                    model: db.StoreFile,
+                    as: 'storeFiles'
+                }
+            ]
+        }).then(store=>{
             req.store = store;
-            db.Provider.findById(store.provider_id)
-            .then(provider=>{
-                req.provider = provider;
-            })
-            db.User.findAll({
-                include: [{
-                  model: db.Store,
-                  as: 'stores',
-                  required: true,
-                  through: {attributes:[]}
-                }]
-            }).then(users=>{
-                req.users = users;
-                next();
-            })
+            next();
         })
         //회원 정보도 다 가져와야돼??
         
     },
 
     storeShow: (req,res)=>{
-        objData = {store:req.store, provider:req.provider, users:req.users};
-        res.render('5_sites/stores_show',objData);
+        
+        objData = {store:req.store, provider:req.store.provider, 
+            store_nations:req.store.nations, store_cities:req.store.cities};
+        db.Nation.findAll()
+        .then(nations=>{objData.nations = nations});
+        db.City.findAll()
+        .then(cities=>{objData.cities = cities; 
+            res.render('5_sites/stores_show',objData);
+        });
+        
+    },
+
+    storeUpdate: (req,res)=>{
+        if(req.body.storeLogoPath){
+            db.Store.findOne({
+                where: {
+                    id: res.locals.store.id
+                },
+            }).then(store=>{
+                store.update({
+                    storeLogoPath: req.body.storeLogoPath,
+                })
+                res.redirect('/sites/store');
+            })
+            
+        }
+        else if(req.body.storeImgPath){
+            db.Store.findOne({
+                where: {
+                    id: res.locals.store.id
+                },
+            }).then(store=>{
+                store.update({
+                    storeImgPath: req.body.storeImgPath,
+                })
+                res.redirect('/sites/store');
+            })
+        }
+        else{
+            db.Store.findOne({
+                where: {
+                    id: res.locals.store.id
+                },
+            }).then(store=>{
+                store.update({
+                    introduction: req.body.introduction,
+                   
+                })
+            })
+            .then(()=>{
+                db.Provider.findOne({
+                    include: [
+                        {
+                            model:db.Store,
+                            as: 'store',
+                            id: res.locals.store.id
+                        }
+                    ]
+                }).then(provider=>{
+                    provider.update({
+                        companyNumber: req.body.companyNumber,
+                        companyName: req.body.companyName,
+                        businessType: req.body.businessType,
+                        businessCategory: req.body.businessCategory,
+                        commuNumber: req.body.commuNumber,
+                        CEONumber: req.body.CEONumber,
+                        faxNumber: req.body.faxNumber,
+                        staffName: req.body.staffName,
+                        staffNumber: req.body.staffNumber,
+                        accountNumber: req.body.accountNumber,
+                        accountName: req.body.accountName,
+                        accountBank: req.body.accountBank,
+                        frNation: req.body.frNation,
+                        frCity: req.body.frCity,
+                        frPhone: req.body.frPhone
+
+                    })
+                })
+            })
+            res.redirect('/sites/store');
+        }
+        
     },
       
     findNotice: (req,res,next)=>{
@@ -57,7 +144,13 @@ module.exports = {
         if(Object.keys(req.query).length === 0){
             db.Notice.findAndCountAll({
                 limit: perPage,
-                offset: perPage*(page-1)
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.Noticecode,
+                        as: 'noticecode'
+                    }
+                ]
             })
             .then(notices=>{
                 // console.log('\n\n\n****',notices);
@@ -116,7 +209,13 @@ module.exports = {
         if(Object.keys(req.query).length === 0){
             db.Faq.findAndCountAll({
                 limit: perPage,
-                offset: perPage*(page-1)
+                offset: perPage*(page-1),
+                include: [
+                    {
+                        model: db.FAQcode,
+                        as: 'faqcode'
+                    }
+                ]
             })
             .then(faqs=>{
                 db.FAQcode.findAll({

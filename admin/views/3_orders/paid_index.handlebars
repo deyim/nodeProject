@@ -77,7 +77,7 @@
 					</th>
 					
 					<th>미확인<br>
-						<a class="wh_button voucher" id="{{this.id}}">[바우처첨부]</a>
+						<a class="wh_button fileUpload" id="{{this.id}}">[바우처첨부]</a>
 					</th>
 				</tr>
 				{{/each}}
@@ -85,7 +85,7 @@
 		</table>
 
 		{{!-- voucher첨부 popup --}}
-		<div class="add_voucher" style="display:none;">
+		<div class="fileUpload_alert" style="display:none;">
 			<div class="layer_back_area"></div>
 			<div class="layer_area">
 				<div class="showbox">
@@ -162,14 +162,6 @@
 </div>
 
 <script>
-
-	$(document).ready(function(){
-		$('.voucher').click(function(e){
-			$('.add_voucher input:hidden').val(e.target.id);
-			console.log($('.add_voucher input:hidden').val())
-		})
-	});
-
 	function addVoucher(order){
 		$.ajax({
 			url: "/orders/paid/", 

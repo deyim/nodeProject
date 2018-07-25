@@ -154,7 +154,7 @@ module.exports = {
 
     deleteMultipleUsers: (req,res)=>{
        
-        users = req.body.checked.toString().split(',');
+        users = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < users.length; i++){
             db.User.findById(users[i])
             .then(user=>{
@@ -294,7 +294,7 @@ module.exports = {
     },
     //delete multiple providers
     deleteMultipleProviders: (req,res)=>{       
-        providers = req.body.checked.toString().split(',');
+        providers = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < providers.length; i++){
             db.Provider.findById(providers[i])
             .then(provider=>{
@@ -456,7 +456,7 @@ module.exports = {
     //stores - delete multiple stores
     multipleStoresDelete: (req,res)=>{
        
-        stores = req.body.checked.toString().split(',');
+        stores = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < stores.length; i++){
             db.Store.findById(stores[i])
             .then(store=>{

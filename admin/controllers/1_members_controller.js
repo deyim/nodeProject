@@ -42,7 +42,7 @@ module.exports = {
     ***********************/
 
     sendMessages: (req,res)=>{
-        receivers = req.body.checked.split(',');
+        let receivers = req.body.checked? req.body.checked.toString().split(',') : [];
         db.Message.create({
             content: req.body.content
         })

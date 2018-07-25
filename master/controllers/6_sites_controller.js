@@ -218,7 +218,7 @@ module.exports = {
         res.redirect("/sites/notices");
     },
     noticeMultipleDelete: (req,res)=>{
-        let notices = req.body.checked.toString().split(',');
+        let notices = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < notices.length; i++){
             db.Notice.findById(notices[i])
             .then(notice=>{
@@ -337,7 +337,7 @@ module.exports = {
         res.redirect("/sites/faqs");
     },
     faqsMultipleDelete: (req,res)=>{
-        let faqs = req.body.checked.toString().split(',');
+        let faqs = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < faqs.length; i++){
             db.Faq.findById(faqs[i])
             .then(faq=>{
@@ -420,7 +420,7 @@ module.exports = {
         res.redirect('/sites/masters');
     },
     mastersMultipleDelete: (req,res)=>{
-        let masters = req.body.checked.toString().split(',');
+        let masters = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < masters.length; i++){
             db.Master.findById(masters[i])      
             .then(master=>{

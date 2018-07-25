@@ -176,7 +176,7 @@ module.exports = {
 
     //store multiple approval or deletion
     storesApproveOrDelete: (req,res)=>{
-        stores = req.body.checked.toString().split(',');
+        stores = req.body.checked? req.body.checked.toString().split(',') : [];    
         if(req.body.approve){
             for(var i = 0 ; i < stores.length; i++){
                 db.Store.findById(stores[i])

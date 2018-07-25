@@ -3,7 +3,8 @@ module.exports = ()=>{
     const route = express.Router();
     const controller = require('../controllers/5_sites_controller');
 
-    route.get('/store', controller.findStore, controller.storeShow);
+    route.get('/store', controller.findStore, controller.storeShow)
+        .post('/store', controller.storeUpdate);
 
     route.get('/notices', controller.noticesIndex);
     route.get('/notices/:notice_id', controller.findNotice, controller.noticeShow)

@@ -150,7 +150,7 @@ module.exports = {
     },
     //change status of onDisplayChk, onSaleChk
     productsStatusChange: (req,res)=>{
-        products = req.body.checked.toString().split(',');
+        products = req.body.checked? req.body.checked.toString().split(',') : [];    
         
         //differentiated by req.body's name
         if(req.body.offDisplay){
@@ -315,7 +315,7 @@ module.exports = {
     },
     //index->delete posts by checkboxes
     postsMultipleDelete: (req,res)=>{       
-        posts = req.body.checked.toString().split(',');
+        posts = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < posts.length; i++){
             db.Post.findById(posts[i])
             .then(post=>{
@@ -488,7 +488,7 @@ module.exports = {
         }
     },
     messagesMultipleDelete: (req,res)=>{       
-        messages = req.body.checked.toString().split(',');
+        messages = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < messages.length; i++){
             db.Message.findById(messages[i])
             .then(message=>{
@@ -613,7 +613,7 @@ module.exports = {
         }
     },
     messagesUsersMultipleDelete: (req,res)=>{       
-        messages = req.body.checked.toString().split(',');
+        messages = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < messages.length; i++){
             db.Message.findById(messages[i])
             .then(message=>{
@@ -766,7 +766,7 @@ module.exports = {
         }
     },
     commentsMultipleDelete: (req,res)=>{       
-        comments = req.body.checked.toString().split(',');
+        comments = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < comments.length; i++){
             db.Commentas.findById(comments[i])
             .then(comments=>{

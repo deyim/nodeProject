@@ -381,7 +381,7 @@ module.exports = {
     },
 
     orderedStatusChange: (req,res)=> {
-        let orders = req.body.checked.toString().split(',');
+        let orders = req.body.checked? req.body.checked.toString().split(',') : [];    
       
         if(req.body.denyChk){
             denyChkChange(orders);
@@ -525,7 +525,7 @@ module.exports = {
     },
 
     paidStatusChange: (req,res)=>{
-        let orders = req.body.checked.toString().split(',');
+        let orders = req.body.checked? req.body.checked.toString().split(',') : [];
         let denyReason = req.body.denyReason;
         if(req.body.placeChk){          
             placeChkChange(orders);
@@ -1139,7 +1139,7 @@ module.exports = {
     },
 
     cancelStatusChange: (req,res)=>{
-        let orders = req.body.checked.toString().split(',');
+        let orders = req.body.checked? req.body.checked.toString().split(',') : [];    
         if(req.body.cancelAllow){          
             cancelAllow(orders);
         }else if(req.body.cancelDeny){

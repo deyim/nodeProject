@@ -162,7 +162,8 @@ module.exports = {
     },
 
     productsStatusChange: (req,res)=>{
-        products = req.body.checked.toString().split(',');
+        let products = req.body.checked? req.body.checked.toString().split(',') : [];
+        
         if(req.body.delete){
             for(var i = 0 ; i < products.length; i++){
                 db.Product.findById(products[i])
@@ -481,8 +482,8 @@ module.exports = {
         }
     },
 
-    postsMultipleDelete: (req,res)=>{       
-        posts = req.body.checked.toString().split(',');
+    postsMultipleDelete: (req,res)=>{   
+        let posts = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < posts.length; i++){
             db.Post.findById(posts[i])
             .then(post=>{
@@ -755,7 +756,7 @@ module.exports = {
     },
     
     messagesMultipleDelete: (req,res)=>{       
-        messages = req.body.checked.toString().split(',');
+        messages = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < messages.length; i++){
             db.Message.findById(messages[i])
             .then(message=>{
@@ -913,7 +914,7 @@ module.exports = {
     },
 
     commentsMultipleDelete: (req,res)=>{       
-        comments = req.body.checked.toString().split(',');
+        comments = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < comments.length; i++){
             db.Commentas.findById(comments[i])
             .then(comments=>{
@@ -1034,7 +1035,7 @@ module.exports = {
     },
 
     noticesMultipleDelete: (req,res)=>{       
-        notices = req.body.checked.toString().split(',');
+        notices = req.body.checked? req.body.checked.toString().split(',') : [];    
         for(var i = 0 ; i < notices.length; i++){
             db.Commentas.findById(notices[i])
             .then(notices=>{

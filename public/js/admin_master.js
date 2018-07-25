@@ -115,7 +115,7 @@ $(function(){
 		$(".cancelDeny_alert").hide();
         $(".cancelAllow_alert").hide();
         $(".placeChk_alert").hide();
-        $(".add_voucher").hide();
+        $(".fileUpload_alert").hide();
 
     });
 });
@@ -131,12 +131,12 @@ $(document).ready(function(){
     $(".paidChk_alert").hide();
     $(".denyChk_alert").hide();
     $(".placeChk_alert").hide();
-    $(".add_voucher").hide();
+    $(".fileUpload_alert").hide();
 }); 
 
 $(function(){
-    $(".voucher").click(function(){
-        $(".add_voucher").show();
+    $(".fileUpload").click(function(){
+        $(".fileUpload_alert").show();
     });
 });
 
@@ -156,6 +156,14 @@ $(function(){
     $(".placeChk").click(function(){
         $(".placeChk_alert").show();
     });
+});
+
+$(document).ready(function(){
+    $('.fileUpload').click(function(e){
+        $('.fileUpload_alert #store_id').val(e.target.id[0]);
+        $('.fileUpload_alert #img_or_logo').attr('name',e.target.id.slice(2,));
+        $('.fileUpload_alert input:submit').attr('name',e.target.id.slice(2,));
+    })
 });
 
 
