@@ -45,6 +45,7 @@
 				{{#each orders}}
 				<tr>
 					<th><input type="checkbox"></input></th>
+					<th></th>
 					<td>
 						<div class="order_info_box">
 							<div class="order_info">
@@ -73,7 +74,9 @@
 						{{this.buyer.username}}
 					</th>
 					
-					<th>{{denyChk this.orderStatus.placeChk}}<br>{{makeDate this.orderStatus.placeDate}}</th>
+					<th>{{denyChk this.orderStatus.placeChk}}<br>{{makeDate this.orderStatus.placeDate}}<br>
+						
+					</th>
 					
 				</tr>
 				{{/each}}

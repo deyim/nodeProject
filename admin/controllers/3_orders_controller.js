@@ -55,6 +55,30 @@ async function ordersToArray(orders){
 
 };
 
+var placeChkChangePromise = (i)=>{
+    db.OrderStatus.findOne({
+        include: [
+            {
+                model: db.Order,
+                required: true,
+                as: 'order',
+                where: {
+                    id: i
+                }
+            }
+        ]
+    })
+    .then(orderstatus=>{
+        orderstatus.update({
+            placeChk: true,
+            placeDate: new Date()
+        }).then((orderstatus)=>{
+            return new Promise ((resolve)=>{
+            });
+        });
+    });     
+}
+
 var paidChkChangePromise = (i)=>{
     db.OrderStatus.findOne({
         include: [
@@ -78,7 +102,7 @@ var paidChkChangePromise = (i)=>{
     });     
 }
 
-var denyChkChangePromise = (i)=>{
+var denyChkChangePromise = (i,denyReason)=>{
     db.OrderStatus.findOne({
         include: [
             {
@@ -96,7 +120,8 @@ var denyChkChangePromise = (i)=>{
             denyChk: true
         }).then((status)=>{
             db.CancelRequest.create({
-                orderId: i
+                orderId: i,
+                denyReason: denyReason
             })
             .then(()=>{
                 return new Promise ((resolve)=>{
@@ -104,8 +129,6 @@ var denyChkChangePromise = (i)=>{
                 })
             });
         });
-        
-        
     });     
 }
 
@@ -124,7 +147,8 @@ var cancelAllowPromise = (i)=>{
     })
     .then(orderstatus=>{
         orderstatus.update({
-            cancelChk: true
+            cancelChk: true,
+            cancelReqChk: false
         }).then((orderstatus)=>{
             return new Promise ((resolve)=>{
             });
@@ -147,7 +171,8 @@ var cancelDenyPromise = (i)=>{
     })
     .then(orderstatus=>{
         orderstatus.update({
-            cancelChk: false
+            cancelChk: false,
+            cancelReqChk: false
         }).then((orderstatus)=>{
             return new Promise ((resolve)=>{
             });
@@ -155,15 +180,21 @@ var cancelDenyPromise = (i)=>{
     });     
 }
 
+async function placeChkChange(orders){
+    for(var i = 0 ; i < orders.length ; i++){
+        await placeChkChangePromise(orders[i]);
+    }    
+};
+
 async function paidChkChange(orders){
     for(var i = 0 ; i < orders.length ; i++){
         await paidChkChangePromise(orders[i]);
     }    
 };
 
-async function denyChkChange(orders){
+async function denyChkChange(orders, denyReason){
     for(var i = 0 ; i < orders.length ; i++){
-        await denyChkChangePromise(orders[i]);
+        await denyChkChangePromise(orders[i],denyReason);
     }    
 };
 
@@ -495,9 +526,43 @@ module.exports = {
 
     paidStatusChange: (req,res)=>{
         let orders = req.body.checked.toString().split(',');
-        denyChkChange(orders);
-        res.redirect('/orders/ordered');     
+        let denyReason = req.body.denyReason;
+        if(req.body.placeChk){          
+            placeChkChange(orders);
+        }else if(req.body.denyChk){
+            denyChkChange(orders,denyReason);
+        }else if(req.body.addVoucher){
+            db.Order.findOne({
+                where: {
+                    id: req.body.order_id,                    
+                }
+            }).then(order=>{
+                order.update({
+                    voucherPath: ''
+                })
+                .then(()=>{
+                    res.redirect("/orders/paid");
+                })
+            })
+        }
+        res.redirect('/orders/paid');     
     },
+
+    //aws 3 연결 후 update 필요
+    // addVoucher: (req,res)=>{
+    //     db.Order.findOne({
+    //         where: {
+    //             id: req.params.order_id
+    //         }
+    //     }).then(order=>{
+    //         order.update({
+    //             voucherPath: ''
+    //         })
+    //         .then(()=>{
+    //             res.redirect("/orders/paid");
+    //         })
+    //     })
+    // },
 
     placedIndex: (req,res)=>{
         let firstday = dateFunctions.getFirstday();
@@ -1080,7 +1145,7 @@ module.exports = {
         }else if(req.body.cancelDeny){
             cancelDeny(orders);
         }
-        res.redirect('/orders/cancel');  
+        res.redirect('/orders/canceled');  
     }
     // orderedShow: (req,res)=>{        
     //     res.render('3_orders/ordered_show', {order:req.order, today:Date.now()});

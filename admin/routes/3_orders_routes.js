@@ -14,6 +14,7 @@ module.exports = ()=>{
     //paid - index
     route.get('/paid', controller.paidIndex)
         .post('/paid', controller.paidStatusChange);
+    // route.get('/paid/:order_id/add_voucher', controller.addVoucher);
     //paid - show
     // route.get('/paid/:id', controller.paidShow);
 
@@ -36,7 +37,7 @@ module.exports = ()=>{
 
     //cancel - index
     route.get('/canceled', controller.cancelIndex)
-        .post('/cancel', controller.cancelStatusChange);
+        .post('/canceled', controller.cancelStatusChange);
     //cancel - show
     // route.get('/cancel/:id', controller.cancelShow);
    

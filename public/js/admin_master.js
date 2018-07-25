@@ -113,12 +113,14 @@ $(function(){
         $(".denyChk_alert").hide();
         $(".cancelReason_alert").hide();
 		$(".cancelDeny_alert").hide();
-		$(".cancelAllow_alert").hide();
+        $(".cancelAllow_alert").hide();
+        $(".placeChk_alert").hide();
+        $(".add_voucher").hide();
 
     });
 });
 
-//master - orders
+//admin,master - orders
 $(function(){
     $("#order_code").click(function(){
         $(".order_view").show();
@@ -128,7 +130,15 @@ $(function(){
 $(document).ready(function(){
     $(".paidChk_alert").hide();
     $(".denyChk_alert").hide();
+    $(".placeChk_alert").hide();
+    $(".add_voucher").hide();
 }); 
+
+$(function(){
+    $(".voucher").click(function(){
+        $(".add_voucher").show();
+    });
+});
 
 $(function(){
     $(".paidChk").click(function(){
@@ -139,6 +149,12 @@ $(function(){
 $(function(){
     $(".denyChk").click(function(){
         $(".denyChk_alert").show();
+    });
+});
+
+$(function(){
+    $(".placeChk").click(function(){
+        $(".placeChk_alert").show();
     });
 });
 

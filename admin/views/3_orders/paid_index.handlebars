@@ -12,7 +12,8 @@
 			<div class="count">총 주문내역 : {{ordersCount}}건</div>
 			<ul class="message_button">
 				<li class="wh_button">엑셀다운로드</li>
-				<li class="lg_button denyChk">예약취소</li>
+				<li class="lg_button denyChk">발주거부</li>
+				<li class="lg_button placeChk">발주승인</li>
 			</ul>
 		</div>
 		
@@ -71,58 +72,112 @@
 					
 					<th>
 						{{this.buyer.name}}<br>
-						{{this.buyer.username}}
+						{{this.buyer.username}}<br>
+						
 					</th>
 					
-					<th>미확인</th>
+					<th>미확인<br>
+						<a class="wh_button voucher" id="{{this.id}}">[바우처첨부]</a>
+					</th>
 				</tr>
 				{{/each}}
 			</tbody>
 		</table>
-		<div class="paidChk_alert" style="display:none;">
-                <div class="layer_back_area"></div>
-                <div class="layer_area">
-                    <div class="showbox">
-                        <div class="showbox_cetearea">
-                            <div class="title">수정</div>
-                            <div class="close"><img src="/images/sub/showbox_close.png"></div>
-                        </div>
-                    
-                    
-                        <div class="showbox_contents">
-                            입금이 확인되었습니까?
-                            <div class="bot_button">
-                                <div class="inline_wt_button">
-                                    <input type="submit" name="paidChk" value="입금확인">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>          
-            </div>
-            <div class="denyChk_alert" style="display:none;">
-                <div class="layer_back_area"></div>
-                <div class="layer_area">
-                    <div class="showbox">
-                        <div class="showbox_cetearea">
-                            <div class="title">수정</div>
-                            <div class="close"><img src="/images/sub/showbox_close.png"></div>
-                        </div>
-                    
-                    
-                        <div class="showbox_contents">
-                            예약을 취소하겠습니까??
-                            <div class="bot_button">
-                                <div class="inline_wt_button" >
-                                    <input type="submit" name="denyChk" value="예약취소">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>          
-            </div>
+
+		{{!-- voucher첨부 popup --}}
+		<div class="add_voucher" style="display:none;">
+			<div class="layer_back_area"></div>
+			<div class="layer_area">
+				<div class="showbox">
+					<div class="showbox_cetearea">
+						<div class="title">바우처첨부</div>
+						<div class="close"><img src="/images/sub/showbox_close.png"></div>
+					</div>
+				
+				
+					<div class="showbox_contents">
+						<input type="file"></input>
+						<input type="hidden" value="" id="order_id" name="order_id">
+						<br>**저작권에 유의해 주세요!!
+						<div class="bot_button">
+							<div class="inline_wt_button">
+								<input type="submit" name="addVoucher" value="바우처첨부">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>          
+		</div>
+
+		{{!-- 발주확인 popup --}}
+		<div class="placeChk_alert" style="display:none;">
+			<div class="layer_back_area"></div>
+			<div class="layer_area">
+				<div class="showbox">
+					<div class="showbox_cetearea">
+						<div class="title">발주확인</div>
+						<div class="close"><img src="/images/sub/showbox_close.png"></div>
+					</div>
+				
+				
+					<div class="showbox_contents">
+						발주를 승인하시겠습니까?
+						<div class="bot_button">
+							<div class="inline_wt_button">
+								<input type="submit" name="placeChk" value="발주승인">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>          
+		</div>
+       
+	    {{!-- 발주 거부 popup --}}
+	    <div class="denyChk_alert" style="display:none;">
+			<div class="layer_back_area"></div>
+			<div class="layer_area">
+				<div class="showbox">
+					<div class="showbox_cetearea">
+						<div class="title">발주취소</div>
+						<div class="close"><img src="/images/sub/showbox_close.png"></div>
+					</div>
+				
+				
+					<div class="showbox_contents">
+						발주를 취소하겠습니까??
+						<textarea name="denyReason" class="textareastyle" rows="5"></textarea>
+						<div class="bot_button">
+							<div class="inline_wt_button" >
+								<input type="submit" name="denyChk" value="예약취소">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>          
+		</div>
         </form>
 		{{>pages}}
 	</div>
 	
 </div>
+
+<script>
+
+	$(document).ready(function(){
+		$('.voucher').click(function(e){
+			$('.add_voucher input:hidden').val(e.target.id);
+			console.log($('.add_voucher input:hidden').val())
+		})
+	});
+
+	function addVoucher(order){
+		$.ajax({
+			url: "/orders/paid/", 
+			data: {
+				
+			},
+			success: function(result){
+				
+		}});
+	};
+</script>

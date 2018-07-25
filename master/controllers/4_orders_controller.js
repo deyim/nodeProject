@@ -105,7 +105,8 @@ var cancelAllowPromise = (i)=>{
     })
     .then(orderstatus=>{
         orderstatus.update({
-            cancelChk: true
+            cancelChk: true,
+            cancelReqChk: false
         }).then((orderstatus)=>{
             return new Promise ((resolve)=>{
             });
@@ -128,7 +129,8 @@ var cancelDenyPromise = (i)=>{
     })
     .then(orderstatus=>{
         orderstatus.update({
-            cancelChk: false
+            cancelChk: false,
+            cancelReqChk: false
         }).then((orderstatus)=>{
             return new Promise ((resolve)=>{
             });
@@ -416,6 +418,7 @@ module.exports = {
 
     paidStatusChange: (req,res)=>{
         let orders = req.body.checked.toString().split(',');
+        
         denyChkChange(orders);
         res.redirect('/orders/ordered');     
     },
@@ -814,6 +817,11 @@ module.exports = {
                         where: { 
                             cancelReqChk: true
                         },
+                    },
+                    {
+                        model: db.CancelRequest,
+                        as: 'cancelRequest',
+                        required: true
                     },
                     {
                         model: db.Product,
