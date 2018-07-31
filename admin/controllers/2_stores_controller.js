@@ -61,6 +61,16 @@ module.exports = {
                             as: 'nation'
                         }
                     ]
+                },
+                {
+                    model: db.Option,
+                    as:'options',
+                    include: [
+                        {
+                            model:db.Price,
+                            as:'prices'
+                        }
+                    ]
                 }
             ]
         }).then(product=>{

@@ -1,23 +1,24 @@
-<th><input type="checkbox"></input></th>
+<th><input type="checkbox" name="checked" value={{this.id}}></input></th>
+<th></th>
 <td>
     <div class="order_info_box">
         <div class="order_info">
-            주문번호 : {{this.ordercode.code}} ｜ 주문일자 : {{this.order.createdAt}}<br>
+            주문번호 : {{this.ordercode.code}} ｜ 주문일자 : {{makeDate this.createdAt}}<br>
             결제수단 : 무통장입금｜ 입금인 : {{this.buyer.username}}
         </div>
             
-        <div class="all_price">총 결제금액 {{this.order.price}}</div>
+        <div class="all_price">총 결제금액 {{this.price}}</div>
     </div>
     
     <div class="order_pro_info">
-        <div class="thum"><img src=""></div>
+        <div class="thum"><img src="{{this.product.imagePath}}"></div>
         <div class="textarea">
             <div class="pro_title">{{this.product.title}}</div>
             <ul class="option_list">
-                <li>예약일자 : {{this.order.startDate}}</li>
-                <li>선택옵션 : ....</li>
+                <li>예약일자 : {{makeDate this.startDate}}</li>
+                <li>선택옵션 : {{this.option.title}}<li>
             </ul>
-            <div class="info_view">서비스이용자 정보보기</div>
+            <div class="info_view"><a href="/orders/users/{{this.id}}">서비스이용자 정보보기</a></div>
         </div>
     </div>
 </td>

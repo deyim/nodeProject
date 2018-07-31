@@ -5,7 +5,9 @@ module.exports = ()=>{
 
     route.get('/all', controller.allIndex);
     route.get('/balance', controller.balanceIndex);
-    route.get('/withdraw', controller.withdrawIndex);
+    route.get('/withdraw', controller.withdrawlsIndex);
+
+    route.get('/withdraw/:withdraw_id', controller.withdrawlShow);
 
     return route; 
 }

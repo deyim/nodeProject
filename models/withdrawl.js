@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   var Withdrawl = sequelize.define('Withdrawl', {
     providerId: DataTypes.INTEGER,
     total: DataTypes.INTEGER,
+    totalCost: DataTypes.INTEGER,
     totalPgCost: DataTypes.INTEGER,
     totalStoreCost: DataTypes.INTEGER,
     ordersCnt: DataTypes.INTEGER,

@@ -50,8 +50,8 @@
         
         
         
-        <div class="search_area">
-            <form method="GET">
+    <div class="search_area">
+        <form method="GET">
             <table class="serach_box" cellpadding='0' cellspacing='0'>
                 <colgroup>
                     <col style="width:20%;">
@@ -75,13 +75,16 @@
                                 </select>
                             </div>
                         
-                            <div class="calendar_box">2018-09-02<span><img src="/images/sub/calendar.jpg"></span></div>
+                            <div class="calendar_box"><input type="date" name="startdate" id="src_date" value={{firstday}}><span><img src="/images/sub/calendar.jpg"></span></div>
                             <div>-</div>
-                            <div class="calendar_box">2018-09-02<span><img src="/images/sub/calendar.jpg"></span></div>
+                            <div class="calendar_box"><input type="date" name="enddate" id="target_date" value={{enddate}}><span><img src="/images/sub/calendar.jpg"></span></div>
                             <div class="priod_box">
-                                <select class="inputstyle">
-                                    <option>어제</option>
-                                    <option>직접선택</option>
+                                <select class="inputstyle" id="change_date">
+                                    <option value="0">전체기간</option>
+                                    <option value="1">1개월</option>
+                                    <option value="2">2개월</option>
+                                    <option value="3">3개월</option>
+                                    <option value="4">4개월</option>
                                 </select>
                             </div>
                         </td>
@@ -93,11 +96,11 @@
                         <th>주문상태</th>
                         <td>
                             <div class="mem_inputbox">
-                                <select class="inputstyle">
-                                    <option>전체</option>
-                                    <option>신규주문</option>
-                                    <option>서비스이용중</option>
-                                    <option>구매확정</option>
+                                <select class="inputstyle" name="status">
+                                    <option value="">전체</option>
+                                    <option value="paid">신규주문</option>
+                                    <option value="used">서비스이용중</option>
+                                    <option value="final">구매확정</option>
                                 </select>
                             </div>
                         </td>
@@ -122,10 +125,10 @@
                             </div>
                             
                             <div class="category_box">
-                                <select class="inputstyle">
+                                <select class="inputstyle" name="category">
                                     <option value="">선택안함</option> 
                                     {{#each categories}}
-                                        <option value={{this.id}} {{optionSelected ../q.category this.id}}>{{this.name}}</option> 
+                                        <option value={{this.engName}} {{optionSelected ../q.category this.id}}>{{this.name}}</option> 
                                     {{/each}}
                                 </select>
                             </div>
@@ -147,7 +150,7 @@
         </div>
     
         <div class="list_info">
-            <div class="count">조회된 주문건수 : {{ordersCount}}건 ｜ 조회된 주문금액 : {{searchedSales}}원</div>
+            <div class="count">조회된 주문건수 : {{query_ordersCount}}건 ｜ 조회된 주문금액 : {{query_searchedSales}}원</div>
             <ul class="message_button">
                 <li class="wh_button">엑셀다운로드</li>
             </ul>
@@ -156,28 +159,30 @@
         <table cellpadding="0" cellspacing="0" class="list_table">
             <colgroup>
                 <col style="width:3%;">
-                <col style="width:72%;">
-                <col style="width:12%;">
-                <col style="width:13%;">
+                <col style="width:5%;">
+                <col style="width:70%;">
+                <col style="width:11%;">
+                <col style="width:11%;">
                 
             </colgroup>
         
             <thead>
                 <tr>
                     <th><input type="checkbox"></input></th>
+                    <th>번호</th>
                     <th>주문내역</th>
-                    <th>주문자 이름 / 아이디</th>
+                    <th>주문자 이름 /<br> 아이디</th>
                     <th>상태</th>
                     
                 </tr>
             </thead>
             
             <tbody>
-                {{#each orders}}
+                {{#each query_orders}}
                 <tr>
                     {{>order_list}}
                     <th>
-                        [발주확인]
+                        {{checkStatus this.orderStatus}}
                     </th>
                     
                 </tr>

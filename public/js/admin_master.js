@@ -1,5 +1,9 @@
 //common
-
+$(function(){
+    $('.reload').click(function() {
+        location.reload();
+    });
+});
 //make numbers for list_table '번호'cell 
 $(document).ready(function(){
     var rows = $('.list_table > tbody > tr'); 
