@@ -64,7 +64,7 @@ module.exports = {
                 pgCost += orders.rows[i].pgCost;
                 realPrice += orders.rows[i].realPrice;
             }
-            objData.searchedSales = sales;
+            objData.sales = sales;
             objData.storeCost = storeCost;
             objData.pgCost = pgCost;
             objData.realPrice = realPrice;
@@ -282,7 +282,15 @@ module.exports = {
     },
 
     withdrawlsIndex: (req,res)=>{ 
-        res.render("4_sales/withdraw_index");
+        db.Withdrawl.findAndCountAll({
+            where: {
+                storeId: res.locals.store.id
+            }
+        }).then(withdrawls_=>{
+            objData = {withdrawls:withdrawls_.rows, withdrawlsCount:withdrawls_.count}
+            res.render("4_sales/withdrawls_index", objData);
+        })
+        
     },
 
     withdrawlShow: (req,res)=>{ 

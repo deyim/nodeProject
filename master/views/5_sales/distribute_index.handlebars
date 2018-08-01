@@ -19,13 +19,13 @@
                             </select>
                         </div>
                    
-                        <div class="calendar_box"><input type="date" name="startdate" id="src_date" value={{makeDate yesterday}}><span><img src="/images/sub/calendar.jpg"></span></div>
-                        <div>-</div>
-                        <div class="calendar_box"><input type="date" name="enddate" id="target_date" value={{makeDate yesterday}}><span><img src="/images/sub/calendar.jpg"></span></div>
-                        <div class="priod_box">
-                            <select class="inputstyle">
+                        <div class="calendar_box"><input type="date" name="startdate" id="src_date" value={{firstday}}><span><img src="/images/sub/calendar.jpg"></span></div>
+                            <div>-</div>
+                            <div class="calendar_box"><input type="date" name="enddate" id="target_date" value={{enddate}}><span><img src="/images/sub/calendar.jpg"></span></div>
+                            <div class="priod_box">
+                            <select class="inputstyle" >
                                 <option>어제</option>
-                                <option>직접입력</option>                                
+                                
                             </select>
                         </div>
                     </td>
@@ -79,9 +79,9 @@
                 
                 <tbody>
                     <tr>
-                        <td>1000원</td>
-                        <td>500원</td>
-                        <td>200원</td>
+                        <td> {{withdrawnTotal}}원</td>
+						<td> {{withdrawnTotalCost}}원</td>
+						<td> {{subtract withdrawnTotal withdrawnTotalCost}}원</td>
                     </tr>
                 </tbody>
             </table>
@@ -106,9 +106,9 @@
                 
                 <tbody>
                     <tr>
-                        <td>2,123,000 원</td>
-                        <td>1,6,150 원</td>
-                        <td>4,116,850 원</td>
+                       <td> {{settledTotal}}원</td>
+						<td> {{settledTotalCost}}원</td>
+						<td> {{subtract settledTotal settledTotalCost}}원</td>
                     </tr>
                 </tbody>
             </table>
@@ -133,9 +133,9 @@
                 
                 <tbody>
                     <tr>
-                        <td>원</td>
-                        <td>원</td>
-                        <td>원</td>
+                       <td> {{unsettledTotal}}원</td>
+						<td> {{unsettledTotalCost}}원</td>
+						<td> {{subtract unsettledTotal unsettledTotalCost}}원</td>
                     </tr>
                 </tbody>
             </table>
@@ -168,24 +168,60 @@
                 
                 <tbody>
                     {{#each withdrawls}}
-                    <tr>
-                        {{!-- <th></th> --}}
-                        <th>{{this.provider.store.url}}</th>
-                        <th>{{makeDate this.createdAt}}</th>
-                        <th>{{this.total}}</th>
-                        <th>{{plusTwo this.totalPgCost this.totalStoreCost}}</th>
-                        <th>{{minusTwo this.total this.totalPgCost this.totalStoreCost}}</th>
-                        <th><div class="sales_view">보기</div></th>
-                    </tr>
-
-
-
-                    {{/each}}
+					<tr>
+						{{!-- <th></th> --}}
+						<th>{{this.ordersCnt}}건</th>
+						<th>{{makeDate this.createdAt}}</th>
+						<th>{{this.total}}원</th>
+						<th>{{this.totalCost}}원</th>
+						<th>{{subtract this.total this.totalCost}}원</th>
+						<th><div class="sales_view" onclick="document.location.href='/sales/withdraw/{{this.id}}'">보기</div></th>
+						
+						
+					</tr>
+					{{/each}}
                 </tbody>
             </table>
         </div>
-    </div>
-    
-    
-    
+    </div>  
 </div>
+
+
+<script>
+    $(function(){
+        $(document).ready(function(){
+          $(".sales_ilst").hide();
+        });
+    });
+
+    $(function(){
+        $(".sales_view").click(function(){
+            $(".sales_ilst").show();
+        });
+    });
+    
+    
+    $(function(){
+        $(".close").click(function(){
+            $(".sales_ilst").hide();
+        });
+    });
+
+	function mainViewChg(no) {
+		for(i=1; i<=10; i++) {
+			$("#mainTitle_"+i).css("background-color", "#fff");
+			$("#mainTitle_"+i).css("color", "#777777");
+			$("#mainTitle_"+i).css("font-weight", "normal");
+			$("#mainView_"+i).css("display", "none");
+			$("#mainView_"+i).hide();
+		}
+		
+		$("#mainTitle_"+no).css("background-color", "#2c2c2c");
+		$("#mainTitle_"+no).css("color", "#fff");
+		$("#mainTitle_"+no).css("font-weight", "bold");
+		$("#mainView_"+no).css("display", "block");
+		$("#mainView_"+no).show();
+	}
+    
+    
+</script>

@@ -1,0 +1,45 @@
+<div class="cont">
+<div class="list_all">
+        <div class="search_title">
+            <div class="title">주문상세내역</div>
+        </div>
+        
+        <table cellpadding="0" cellspacing="0" class="list_table">
+            <colgroup>
+                <col style="width:3%;">
+                <col style="width:5%;">
+                <col style="width:70%;">
+                <col style="width:11%;">
+                <col style="width:11%;">
+                
+            </colgroup>
+        
+            <thead>
+                <tr>
+                    <th><input type="checkbox"></input></th>
+                    <th>번호</th>
+                    <th>주문내역</th>
+                    <th>주문자 이름 /<br> 아이디</th>
+                    <th>상태</th>
+                    
+                </tr>
+            </thead>
+            
+            <tbody>
+                {{#each orders}}
+                <tr>
+                    {{>order_list}}
+                    <th>
+                        [발주확인]
+                    </th>
+                    
+                </tr>
+                {{>service_users}}
+                {{/each}}
+            </tbody>
+        </table>
+        
+        {{>pages}}
+    </div>
+    </div>
+    

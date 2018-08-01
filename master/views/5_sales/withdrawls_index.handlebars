@@ -7,25 +7,26 @@
     
     
     <div class="search_area">
+        
         <table class="serach_box" cellpadding='0' cellspacing='0'>
             <tbody>
                 <tr>
                     <th>기간검색</th>
                     <td>
                         <div class="priod_box">
-                            <select class="inputstyle">
-                                <option>전체</option>
-                                <option>1개월</option>
-                                <option>2개월</option>
-                                <option>3개월</option>
-                                <option>4개월</option>
-                            </select>
+                            <select class="inputstyle" id="change_date">
+                                    <option value="0">전체기간</option>
+                                    <option value="1">1개월</option>
+                                    <option value="2">2개월</option>
+                                    <option value="3">3개월</option>
+                                    <option value="4">4개월</option>
+                                </select>
                         </div>
                     
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-                        <div>-</div>
-                        <div class="calendar_box">2018-09-02<span><img src="../images/sub/calendar.jpg"></span></div>
-                        <div class="priod_box">
+                         <div class="calendar_box"><input type="date" name="startdate" id="src_date" value={{firstday}}><span><img src="/images/sub/calendar.jpg"></span></div>
+                            <div>-</div>
+                            <div class="calendar_box"><input type="date" name="enddate" id="target_date" value={{enddate}}><span><img src="/images/sub/calendar.jpg"></span></div>
+                            <div class="priod_box">
                             <select class="inputstyle">
                                 <option>어제</option>
                             </select>
@@ -38,9 +39,14 @@
                 <tr>
                     <th>구분</th>
                     <td>
-                        <div class="inline"><input type="checkbox"></input> 거래내역</div>
-                        <div class="inline"><input type="checkbox"></input> 입금신청</div>
-                        <div class="inline"><input type="checkbox"></input> 입금완료</div>
+                       <div class="mem_inputbox">
+                                <select class="inputstyle" name="status">
+                                    <option value="">전체</option>
+                                    <option value="paid">신규주문</option>
+                                    <option value="used">서비스이용중</option>
+                                    <option value="final">구매확정</option>
+                                </select>
+                            </div>
                     </td>
                 </tr>
             </tbody>
@@ -59,7 +65,7 @@
         </div>
     
         <div class="list_info" id="mar_t20">
-            <div class="count">조회된 정산수 : 91건</div>
+            <div class="count">조회된 정산수 : {{withdrawlsCount}}건</div>
             <ul class="message_button">
                 <li class="wh_button">엑셀다운로드</li>
             </ul>
@@ -78,13 +84,15 @@
                 </thead>
                 
                 <tbody>
+                    {{#each withdrawls}}
                     <tr>
                         <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th>{{this.store.url}}</th>
+                        <th>{{makeDate this.requestedDate}}</th>
+                        <th>{{this.total}}</th>
+                        <th>{{this.provider.accountNumber}}</th>
                     </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>

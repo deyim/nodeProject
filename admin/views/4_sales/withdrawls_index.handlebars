@@ -1,55 +1,11 @@
 <div class="cont">
     <div class="titlearea">
-        <div class="title">전체 매출내역 조회</div>
-        <div class="nav">매출/정산관리 > 전체 매출내역 조회</div>
+        <div class="title">입금신청 조회</div>
+        <div class="nav">매출/정산관리 > 입금신청 조회</div>
     </div>
     
     
-     <div class="search_area">
-        
-        <div class="search_title">
-            <div class="title">매출현황</div>
-            <div class="stitle">*전일자 기준으로 확정된 정산금액으로 실제 송금액과는 차이가 있을 수 있습니다.</div>
-        </div>
-        
-            <table class="sales_box" cellpadding='0' cellspacing='0'>
-                
-                <tbody>
-                    <tr>
-                        <th>총 결제금액</th>
-                        <td class="plus_price">{{sales}}원</td>
-                        <td>사이트내에서 결제된 금액입니다</td>
-                    </tr>
-                    
-                    <tr>
-                        <th>총 주문건수</th>
-                        <td class="plus_price">{{ordersCount}}원</td>
-                        <td>사이트내에서 구매된 총 건수입니다.</td>
-                    </tr>
-                    
-                    <tr>
-                        <th>정산수수료</th>
-                        <td class="plus_price">{{storeCost}}원</td>
-                        <td>주문건의 정산수수료 금액입니다.</td>
-                    </tr>
-                    
-                    <tr>
-                        <th>결제대행수수료</th>
-                        <td class="minus_price">{{pgCost}} 원</td>
-                        <td>결제 대행사에서 차감한 결제대행수수료 금액입니다.</td>
-                    </tr>
-                    
-                    <tr>
-                        <th>정산예정금액</th>
-                        <td class="plus_price">{{realPrice}}원</td>
-                        <td> 운영사가 스토어에게 정산해주어야 할 정산금액입니다.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        
-        
+    
     <div class="search_area">
         <form method="GET">
             <table class="serach_box" cellpadding='0' cellspacing='0'>
@@ -117,7 +73,7 @@
                         </td>
                     </tr>
                     
-                    <tr>
+                    {{!-- <tr>
                         <th>카테고리</th>
                         <td colspan="3">
                             <div class="category_box">
@@ -134,80 +90,167 @@
                             </div>
                             
                         </td>
-                    </tr>
+                    </tr> --}}
                     
                 </tbody>
             </table>
         </form>
+        
     </div>
-    
-    
     
     
     <div class="list_all">
         <div class="search_title">
-            <div class="title">주문상세내역</div>
+            <div class="title">거래내역현황</div>
         </div>
     
-        <div class="list_info">
-            <div class="count">조회된 주문건수 : {{query_ordersCount}}건 ｜ 조회된 주문금액 : {{query_searchedSales}}원</div>
+        <div class="list_info" id="mar_t20">
+            <div class="count">조회된 정산수 : {{withdrawlsCount}}건</div>
             <ul class="message_button">
                 <li class="wh_button">엑셀다운로드</li>
             </ul>
         </div>
         
-        <table cellpadding="0" cellspacing="0" class="list_table">
-            <colgroup>
-                <col style="width:3%;">
-                <col style="width:5%;">
-                <col style="width:70%;">
-                <col style="width:11%;">
-                <col style="width:11%;">
+        <div class="tablearea" id="mar_t20">
+            <table class="sales_table" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>주문건수</th>
+                        <th>일자</th>
+                        <th>판매금액(A)</th>
+                        <th>공제금액(B)</th>
+                        <th>정산예정금액(A-B)</th>
+                        <th>상세내역</th>
+                        <th>입금신청</th>
+                    </tr>
+                </thead>
                 
-            </colgroup>
-        
-            <thead>
-                <tr>
-                    <th><input type="checkbox"></input></th>
-                    <th>번호</th>
-                    <th>주문내역</th>
-                    <th>주문자 이름 /<br> 아이디</th>
-                    <th>상태</th>
-                    
-                </tr>
-            </thead>
-            
-            <tbody>
-                {{#each query_orders}}
-                <tr>
-                    {{>order_list}}
-                    <th>
-                        {{checkStatus this.orderStatus}}
-                    </th>
-                    
-                </tr>
-                {{>service_users}}
-                {{/each}}
-            </tbody>
-        </table>
-        
-        {{>pages}}
-    </div>
-    
+                <tbody>
+					{{#each withdrawls}}
+                    <tr>
+                        <th>05</th>
+                        <th>{{this.ordersCnt}}건</th>
+                        <th>{{makeDate this.createdAt}}</th>
+                        <th>{{this.total}}원</th>
+                        <th>{{this.totalCost}}원</th>
+                        <th>{{subtract this.total this.totalCost}}원</th>
+                        <th><div class="sales_view" onclick="document.location.href='/sales/withdraw/{{this.id}}'">보기</div></th>
+                        <th>{{withdrawnStatus this.withdrawnChk this.requestedDate this.withdrawnDate}}</th>
+						{{!-- <th>{{wothdrawnStatus this.withdrawnChk}}<br>{{this.requested}}</th> --}}
+                    </tr>
+					{{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>			
 </div>
 
-<script type="text/javascript">
-    $(function(){
-        $(".info_view").click(function(){
-            $(".order_info_show").show();
-        });
-    });
-    
-    
-    $(function(){
-        $(".close").click(function(){
-            $(".order_info_show").hide();
-        });
-    });
-    
-</script>
+
+<div class="sales_ilst" style="display:none;">
+		<div class="layer_back_area"></div>
+		<div class="layer_area">
+			<div class="showbox">
+				<div class="showbox_cetearea">
+					<div class="title">매출내역</div>
+					<div class="close"><img src="../images/sub/showbox_close.png"></div>
+				</div>
+				
+				<div class="showbox_contents">
+					
+					<div class="contents">
+						<div class="list_all" style="border-top:0px; margin-top:-50px;">
+							<table cellpadding="0" cellspacing="0" class="list_table">
+								<colgroup>
+									<col style="width:3%;">
+									<col style="width:72%;">
+									<col style="width:12%;">
+									<col style="width:13%;">
+									
+								</colgroup>
+							
+								<thead>
+									<tr>
+										<th><input type="checkbox"></input></th>
+										<th>주문내역</th>
+										<th>주문자 이름 / 아이디</th>
+										<th>상태</th>
+										
+									</tr>
+								</thead>
+								
+								<tbody>
+									<tr>
+										<th><input type="checkbox"></input></th>
+										<td>
+											<div class="order_info_box">
+												<div class="order_info">
+													주문번호 : 8271-3817 ｜ 주문일자 : 2018.09.02<br>
+													결제수단 : 무통장입금｜ 입금인 : 김상현
+												</div>
+													
+												<div class="all_price">총 결제금액 1,450,000</div>
+											</div>
+											
+											<div class="order_pro_info">
+												<div class="thum02"><img src=""></div>
+												<div class="textarea">
+													<div class="pro_title">우리 다함께 파리여행을 떠나용~</div>
+													<ul class="option_list">
+														<li>예약일자 : 2018.09.09</li>
+														<li>선택옵션 : 파리여행픽업서비스</li>
+													</ul>
+													<div class="info_view">서비스이용자 정보보기</div>
+												</div>
+											</div>
+										</td>
+										
+										<th>
+											김성현<br>
+											flywork@naver.com
+										</th>
+										
+										<th>
+											[취소완료]<br>2018-09-02
+										</th>
+										
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+    <script>
+		(function($){
+			$(window).on("load",function(){
+				$(".menuarea").mCustomScrollbar();
+			});
+		})(jQuery);
+	</script>
+	
+	
+	
+	<script>
+	function mainViewChg(no) {
+		for(i=1; i<=10; i++) {
+			$("#mainTitle_"+i).css("background-color", "#fff");
+			$("#mainTitle_"+i).css("color", "#777777");
+			$("#mainTitle_"+i).css("font-weight", "normal");
+			$("#mainView_"+i).css("display", "none");
+			$("#mainView_"+i).hide();
+		}
+		
+		$("#mainTitle_"+no).css("background-color", "#2c2c2c");
+		$("#mainTitle_"+no).css("color", "#fff");
+		$("#mainTitle_"+no).css("font-weight", "bold");
+		$("#mainView_"+no).css("display", "block");
+		$("#mainView_"+no).show();
+	}
+	</script>
+	

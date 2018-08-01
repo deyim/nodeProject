@@ -11,6 +11,9 @@ module.exports = ()=>{
     route.get('/distribute', controller.salesDistribute);
     route.get('/distribute/:withdrawl_id', controller.salesDistributedOrders);
     
+    //distribute page 상세내역 보기 누를 시
+    route.get('/withdraw/:withdraw_id', controller.salesWithdrawlShow);
+
     route.get('/withdrawl', controller.salesWithdrawl);
     return route;
 }

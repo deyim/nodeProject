@@ -18,12 +18,30 @@ module.exports = {
         onDelete: 'SET NULL',
       })
     })
+    .then(()=>{
+      queryInterface.addColumn('Withdrawls', 'requestedDate', 
+      {
+        type: Sequelize.DATE
+      })
+    })
+    .then(()=>{
+      queryInterface.addColumn('Withdrawls', 'withdrawnDate', 
+      {
+        type: Sequelize.DATE
+      })
+    })
   },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.removeColumn('Withdrawls', 'totalCost')
     .then(()=>{
-      queryInterface.removeColumn('Withdrawls', 'storeId')
+      queryInterface.removeColumn('Withdrawls', 'storeId');
+    })
+    .then(()=>{
+      queryInterface.removeColumn('Withdrawls', 'requestedDate');
+    })
+    .then(()=>{
+      queryInterface.removeColumn('Withdrawls', 'withdrawnDate');
     })
   }
 };
